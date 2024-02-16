@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des réceptionnés
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-white my-5 mx-2 fs-1 fw-bold text-center">Liste des réceptionnés</h1>
+	<form method="get" action="{{ path('app_liste_receptionnes') }}">
+		<div class='border rounded-3 border-success border-2 m-1'>
+			<h2 class="text-white my-5 fs-1 fw-bold text-center">Recherche réceptionnés</h2>
+			<div class="m-3">
+				<label for="recherche-numero-receptionnes" class="form-label">
+					<span class='fs-1 fw-bold text-success'>N° RET ou RETSA</span>
+				</label>
+				<input type="text" class="form-control fs-1 fw-bold border-success border-2" id="recherche-numero-receptionnes" placeholder="entrez N°" name="recherche-numero-receptionnes">
+			</div>
+			<div class="m-3">
+				<label for="recherche-id-receptionnes" class="form-label">
+					<span class='fs-1 fw-bold text-success'>ID produit</span>
+				</label>
+				<input type="text" class="form-control fs-1 fw-bold border-success border-2" id="recherche-id-receptionnes" placeholder="entrez un ID" name="recherche-id-receptionnes">
+			</div>
+			<div class='d-flex justify-content-center my-4'>
+				<button type="submit" class="btn btn-outline-success border-2 rounded-5">
+					<span class='fs-2 fw-bold p-2'>Recherche</span>
+				</button>
+			</div>
+		</div>
+	</form>
+	<h3 class="text-white my-5 fs-1 fw-bold text-center">Résultats recherche</h3>
+	<div class="d-flex justify-content-center">
+		<div>
+        {% for retour in retours %}
+			<div class="card m-3 border-success border-3" style="width: 15rem;">
+				<div class="card-body">
+					<h5 class="card-title">
+						<span class='fs-1 fw-bold text-success'>{{ retour.numretour }}</span>
+					</h5>
+					<p class="card-text mb-2">
+						<span class='fs-1 fw-bold'>{{ retour.nomclient }} {{ retour.prenomclient }}</span>
+					</p>
+					<p class="card-text">
+						<span class='fs-1 fw-bold'>{{ retour.transporteur }}</span>
+					</p>
+                    {% for retourProduitReceptionne in retour.retourProduitReceptionnes %}
+					<p class="card-text">
+						<span class='fs-1 fw-bold'>{{ retourProduitReceptionne.idproduit }} * {{ retourProduitReceptionne.quantite }}</span>
+					</p>
+                    {% endfor %}
+				</div>
+			</div>
+            {% endfor %}
+		</div>
+	</div>
+{% endblock %}

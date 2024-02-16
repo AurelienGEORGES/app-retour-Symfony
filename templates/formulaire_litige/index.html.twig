@@ -1,0 +1,175 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire litige
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-white my-5 mx-2 fs-1 fw-bold text-center">Ajouter des produits à la reception
+		{{ numretour }}
+		avec litige</h1>
+	<form method="post" enctype="multipart/form-data" action="{{ path('app_formulaire_litige', {'id': id}) }}">
+		<div class="m-2">
+			<div class="input-group">
+				<label class="input-group-text" for="inputGroupFile01">photo 1</label>
+				<input type="file" accept="image/*" capture="camera" id="inputGroupFile01" class="form-control" name="photo1">
+			</div>
+		</div>
+		<div class="m-2">
+			<div class="input-group">
+				<label class="input-group-text" for="inputGroupFile02">photo 2</label>
+				<input type="file" accept="image/*" capture="camera" id="inputGroupFile02" class="form-control" name="photo2">
+			</div>
+		</div>
+		<div class="m-2">
+			<div class="input-group">
+				<label class="input-group-text" for="inputGroupFile03">photo 3</label>
+				<input type="file" accept="image/*" capture="camera" id="inputGroupFile03" class="form-control" name="photo3">
+			</div>
+		</div>
+		<div class="m-2">
+			<div class="input-group">
+				<label class="input-group-text" for="inputGroupFile04">photo 4</label>
+				<input type="file" accept="image/*" capture="camera" id="inputGroupFile04" class="form-control" name="photo4">
+			</div>
+		</div>
+		<div class="m-2">
+			<div class="input-group">
+				<label class="input-group-text" for="inputGroupFile05">photo 5</label>
+				<input type="file" accept="image/*" capture="camera" id="inputGroupFile05" class="form-control" name="photo5">
+			</div>
+		</div>
+		<div class="m-3">
+			<label for="transporteur-form-litige" class="form-label">
+				<span class='fs-1 fw-bold text-warning'>Transporteur</span>
+			</label>
+			<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="transporteur-form-litige" name="transporteur-form-litige">
+				<option value="{{ transporteur }}" class='fs-1 fw-bold'>{{ transporteur }}</option>
+				<option value="shenker" class='fs-1 fw-bold'>shenker</option>
+				<option value="dpd" class='fs-1 fw-bold'>dpd</option>
+				<option value="mazet" class='fs-1 fw-bold'>mazet</option>
+				<option value="geodis" class='fs-1 fw-bold'>geodis</option>
+				<option value="gls" class='fs-1 fw-bold'>gls</option>
+			</select>
+		</div>
+		<div class="m-3">
+			<label for="etat-form-litige" class="form-label">
+				<span class='fs-1 fw-bold text-warning'>Etat du colis</span>
+			</label>
+			<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="etat-form-litige" name="etat-form-litige">
+				<option value="brisé" class='fs-1 fw-bold'>brisé</option>
+				<option value="cassé" class='fs-1 fw-bold'>cassé</option>
+				<option value="tordu" class='fs-1 fw-bold'>tordu</option>
+				<option value="déchiré" class='fs-1 fw-bold'>déchiré</option>
+				<option value="abimé" class='fs-1 fw-bold'>abimé</option>
+			</select>
+		</div>
+		<div class="m-3">
+			<label for="commentaire-form-litige">
+				<span class='fs-1 fw-bold text-warning'>Commentaires</span>
+			</label>
+			<textarea class="form-control fs-2 fw-bold mt-3 border-warning border-2 " id="commentaire-form-litige" style="height: 150px; width: 15rem;" name="commentaire-form-litige"></textarea>
+		</div>
+		{% for retourProduit in retourProduits %}
+			<div class='border rounded-3 border-warning border-2 mx-1 my-4'>
+				<div class='d-flex justify-content-center my-3'>
+					<button type="button" class="btn btn-outline-warning mt-3 mb-2 border-2 rounded-5">
+						<span class='fs-2 fw-bold p-2'>Scan produit</span>
+					</button>
+				</div>
+				<div class="m-3">
+					<label for="id-form-litige_{{ retourProduit.id }}" class="form-label">
+						<span class='fs-1 fw-bold text-warning'>ID produit</span>
+					</label>
+					<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.idproduit }}" name="id-form-litige_{{ retourProduit.id }}">
+				</div>
+				<div class="m-3">
+					<label for="code-couleur-form-litige_{{ retourProduit.id }}" class="form-label">
+						<span class='fs-1 fw-bold text-warning'>Code couleur</span>
+					</label>
+					<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="code-couleur-form-litige_{{ retourProduit.id }}" name="code-couleur-form-litige_{{ retourProduit.id }}">
+						<option value="vert" class='fs-1 fw-bold'>vert</option>
+						<option value="jaune" class='fs-1 fw-bold'>jaune</option>
+						<option value="orange" class='fs-1 fw-bold'>orange</option>
+						<option value="rouge" class='fs-1 fw-bold'>rouge</option>
+						<option value="noir" class='fs-1 fw-bold'>noir</option>
+					</select>
+				</div>
+				<div class="m-3">
+					<div class="form-group">
+						<label for="quantite-form-litige_{{ retourProduit.id }}">
+							<span class='fs-1 fw-bold text-warning'>Quantité</span>
+						</label>
+						<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="quantite-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.quantite }}" name="quantite-form-litige_{{ retourProduit.id }}"/>
+					</div>
+				</div>
+				<div class='ms-3 my-5 d-flex justify-content-center'>
+					<button type="button" class="btn btn-outline-warning border-2 rounded-5">
+						<span class='fs-2 fw-bold p-2'>Supprimmer</span>
+					</button>
+				</div>
+			</div>
+		{% endfor %}
+		<div id="ajoutProduit"></div>
+		<div class="d-flex justify-content-center my-4">
+			<button type="button" class="btn btn-outline-warning m-2 border-2 rounded-5" onclick="ajoutProduit()">
+				<span class='fs-2 fw-bold p-2'>Ajouter produit</span>
+			</button>
+		</div>
+		<div class='ms-3 my-5 d-flex justify-content-center'>
+			<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
+				<span class='fs-2 fw-bold p-2'>Enregistrer</span>
+			</button>
+		</div>
+	</form>
+	<script type="text/javascript">
+		function ajoutProduit() {
+let container = document.createElement('div');
+container.className = 'border rounded-3 border-warning border-2 m-1';
+
+// Ajoutez les champs de formulaire au conteneur
+container.innerHTML = `
+        <div class='d-flex justify-content-center my-3'>
+            <button type="button" class="btn btn-outline-warning mt-3 mb-2 border-2 rounded-5">
+                <span class='fs-2 fw-bold p-2'>Scan produit</span>
+            </button>
+        </div>
+        <div class="m-3">
+        <label for="id-form-litige" class="form-label">
+					<span class='fs-1 fw-bold text-warning'>ID produit</span>
+				</label>
+				<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-litige" placeholder="remplir ou scanner" name="id-form-litige[]">
+			</div>
+			<div class="m-3">
+				<label for="code-couleur-form-litige" class="form-label">
+					<span class='fs-1 fw-bold text-warning'>Code couleur</span>
+				</label>
+				<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="code-couleur-form-litige" name="code-couleur-form-litige[]">
+					<option value="vert" class='fs-1 fw-bold'>vert</option>
+					<option value="jaune" class='fs-1 fw-bold'>jaune</option>
+					<option value="orange" class='fs-1 fw-bold'>orange</option>
+					<option value="rouge" class='fs-1 fw-bold'>rouge</option>
+					<option value="noir" class='fs-1 fw-bold'>noir</option>
+				</select>
+			</div>
+			<div class="m-3">
+				<div class="form-group">
+					<label for="quantite-form-litige">
+						<span class='fs-1 fw-bold text-warning'>Quantité</span>
+					</label>
+					<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="quantite-form-litige" placeholder="1" name="quantite-form-litige[]"/>
+				</div>
+			</div>
+        <div class='ms-3 my-5 d-flex justify-content-center'>
+            <button type="button" class="btn btn-outline-warning border-2 rounded-5">
+                <span class='fs-2 fw-bold p-2'>Supprimer</span>
+            </button>
+        </div>
+    `;
+
+// Ajoutez le conteneur au formulaire
+let formulaire = document.getElementById('ajoutProduit');
+formulaire.appendChild(container);
+}
+	</script>
+
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ListeStockController!
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-white my-5 fs-1 fw-bold text-center">Liste du stock</h1>
+	<div class="border border-2 border-light rounded-3 mx-2 my-5">
+		<h2 class="text-white my-5 fs-1 fw-bold text-center">Import du stock</h2>
+		<a class='text-white m-3'>lien vers le modèle</a>
+		<div class="form-group m-3">
+			<div class="input-group">
+				<div class="custom-file">
+					<input type="file" class="form-control text-light" id="exampleFile" aria-describedby="fileHelp"/>
+				</div>
+				<p id="fileHelp" class="text-light">Format pris en charge csv.</p>
+			</div>
+		</div>
+	</div>
+	<div class='border rounded-3 border-info border-2 mx-2 my-5'>
+		<h3 class="text-white my-5 fs-1 fw-bold text-center">Recherche produit</h3>
+		<form method="get" action="{{ path('app_liste_stock') }}">
+			<div class="m-3">
+				<label for="recherche-stock-code-couleur" class="form-label">
+					<span class='fs-1 fw-bold text-info'>Code couleur</span>
+				</label>
+				<select class="form-select w-75 fs-1 fw-bold border-info border-2" id="recherche-stock-code-couleur" name="recherche-stock-code-couleur">
+					<option value="" class='fs-1 fw-bold'>choisir</option>
+					<option value="vert" class='fs-1 fw-bold'>vert</option>
+					<option value="jaune" class='fs-1 fw-bold'>jaune</option>
+					<option value="orange" class='fs-1 fw-bold'>orange</option>
+					<option value="rouge" class='fs-1 fw-bold'>rouge</option>
+					<option value="noir" class='fs-1 fw-bold'>noir</option>
+				</select>
+			</div>
+			<div class="m-3">
+				<label for="recherche-stock-id-produit" class="form-label">
+					<span class='fs-1 fw-bold text-info'>ID produit</span>
+				</label>
+				<input type="text" class="form-control fs-1 fw-bold border-info border-2" id="recherche-stock-id-produit" placeholder="ID" name="recherche-stock-id-produit">
+			</div>
+			<div class='d-flex justify-content-center mb-4'>
+				<button type="submit" class="btn btn-outline-info my-2 border-2 rounded-5">
+					<span class='fs-2 fw-bold p-2'>Rechercher</span>
+				</button>
+			</div>
+		</form>
+	</div>
+	<h4 class="text-white my-5 fs-1 fw-bold text-center">Résultat de la recherche</h4>
+	<div class="d-flex justify-content-center mb-5">
+		<div>
+			<div class="d-flex flex-column">
+				{% for stockProduitsReceptionne in stockProduitsReceptionnes %}
+					{% if stockProduitsReceptionne.codecouleur == 'vert' %}
+						<div>
+							<p class='fs-2 fw-bold p-2 text-center' style="background-color: green; color: black;">
+								{{ stockProduitsReceptionne.idproduit }}
+								*
+								{{ stockProduitsReceptionne.quantite }}</p>
+						</div>
+					{% endif %}
+					{% if stockProduitsReceptionne.codecouleur == 'orange' %}
+						<div>
+							<p class='fs-2 fw-bold p-2 text-center' style="background-color: orange; color: black;">
+								{{ stockProduitsReceptionne.idproduit }}
+								*
+								{{ stockProduitsReceptionne.quantite }}</p>
+						</div>
+					{% endif %}
+					{% if stockProduitsReceptionne.codecouleur == 'jaune' %}
+						<div>
+							<p class='fs-2 fw-bold p-2 text-center' style="background-color: yellow; color: black;">
+								{{ stockProduitsReceptionne.idproduit }}
+								*
+								{{ stockProduitsReceptionne.quantite }}</p>
+						</div>
+					{% endif %}
+					{% if stockProduitsReceptionne.codecouleur == 'rouge' %}
+						<div>
+							<p class='fs-2 fw-bold p-2 text-center' style="background-color: red; color: black;">
+								{{ stockProduitsReceptionne.idproduit }}
+								*
+								{{ stockProduitsReceptionne.quantite }}</p>
+						</div>
+					{% endif %}
+					{% if stockProduitsReceptionne.codecouleur == 'noir' %}
+						<div>
+							<p class='fs-2 fw-bold p-2 text-center' style="background-color: black; color: white;">
+								{{ stockProduitsReceptionne.idproduit }}
+								*
+								{{ stockProduitsReceptionne.quantite }}</p>
+						</div>
+					{% endif %}
+				{% endfor %}
+				{% for stockProduitsLibre in stockProduitsLibres %}
+					{% if stockProduitsLibre.codecouleur == 'vert' %}
+						<div>
+							<p class='fs-2 fw-bold p-2 text-center' style="background-color: green; color: black;">
+								{{ stockProduitsLibre.idproduit }}
+								*
+								{{ stockProduitsLibre.quantite }}
+							</p>
+						</div>
+					{% endif %}
+					{% if stockProduitsLibre.codecouleur == 'orange' %}
+						<div>
+							<p class='fs-2 fw-bold p-2 text-center' style="background-color: orange; color: black;">
+								{{ stockProduitsLibre.idproduit }}
+								*
+								{{ stockProduitsLibre.quantite }}
+							</p>
+						</div>
+					{% endif %}
+					{% if stockProduitsLibre.codecouleur == 'jaune' %}
+						<div>
+							<p class='fs-2 fw-bold p-2 text-center' style="background-color: yellow; color: black;">
+								{{ stockProduitsLibre.idproduit }}
+								*
+								{{ stockProduitsLibre.quantite }}
+							</p>
+						</div>
+					{% endif %}
+					{% if stockProduitsLibre.codecouleur == 'rouge' %}
+						<div>
+							<p class='fs-2 fw-bold p-2 text-center' style="background-color: red; color: black;">
+								{{ stockProduitsLibre.idproduit }}
+								*
+								{{ stockProduitsLibre.quantite }}
+							</p>
+						</div>
+					{% endif %}
+					{% if stockProduitsLibre.codecouleur == 'noir' %}
+						<div>
+							<p class='fs-2 fw-bold p-2 text-center' style="background-color: black; color: white;">
+								{{ stockProduitsLibre.idproduit }}
+								*
+								{{ stockProduitsLibre.quantite }}
+							</p>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
