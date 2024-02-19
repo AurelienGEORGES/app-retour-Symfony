@@ -12,8 +12,8 @@
 				<label for="choix-couleur-palette" class="form-label">
 					<span class='fs-1 fw-bold text-warning' id="choix-palette">Choix couleur palette</span>
 				</label>
-				<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="choix-couleur-palette" name="choix-couleur-palette">
-					<option class='fs-1 fw-bold'>choisir</option>
+				<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="choix-couleur-palette" name="choix-couleur-palette" required>
+					<option value="" class='fs-1 fw-bold'>choisir</option>
 					<option value="vert" class='fs-1 fw-bold'>vert</option>
 					<option value="jaune" class='fs-1 fw-bold'>jaune</option>
 					<option value="orange" class='fs-1 fw-bold'>orange</option>
@@ -25,8 +25,8 @@
 				<label for="choix-depot-palette" class="form-label">
 					<span class='fs-1 fw-bold text-warning'>Choix Depot</span>
 				</label>
-				<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="choix-depot-palette" name="choix-depot-palette">
-					<option class='fs-1 fw-bold'>choisir</option>
+				<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="choix-depot-palette" name="choix-depot-palette" required>
+					<option value="" class='fs-1 fw-bold'>choisir</option>
 					<option value="aberial" class='fs-1 fw-bold'>Abérial</option>
 					<option value="phylea" class='fs-1 fw-bold'>Phyléa</option>
 				</select>
@@ -100,10 +100,10 @@
 					<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
 						<div class="container p-0 m-0">
 							<div class="form-check p-0 m-0">
-								<label class="form-check-label m-0" for="CheckboxListe_{{ stockProduitsReceptionne.id }}">
-									<span class='fs-1 fw-normal text-white'>qte max</span>
+								<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduitsReceptionne.id }}">
+									<span class='fs-1 fw-normal text-white ms-1'>qte max</span>
 								</label>
-								<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ stockProduitsReceptionne.id }}" onchange='selectMaxQteReceptionne({{ stockProduitsReceptionne.quantite }}, {{ stockProduitsReceptionne.id }})'>
+								<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduitsReceptionne.id }}" onchange='selectMaxQteReceptionne({{ stockProduitsReceptionne.quantite }}, {{ stockProduitsReceptionne.id }})'>
 							</div>
 						</div>
 						<div>
@@ -131,10 +131,10 @@
 					<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
 						<div class="container p-0 m-0">
 							<div class="form-check p-0 m-0">
-								<label class="form-check-label m-0" for="CheckboxListe_{{ stockProduitsReceptionne.id }}">
+								<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduitsReceptionne.id }}">
 									<span class='fs-1 fw-normal text-white'>qte max</span>
 								</label>
-								<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ stockProduitsReceptionne.id }}" onchange='selectMaxQteReceptionne({{ stockProduitsReceptionne.quantite }}, {{ stockProduitsReceptionne.id }})'>
+								<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduitsReceptionne.id }}" onchange='selectMaxQteReceptionne({{ stockProduitsReceptionne.quantite }}, {{ stockProduitsReceptionne.id }})'>
 							</div>
 						</div>
                         <div>
@@ -162,10 +162,10 @@
 					<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
 						<div class="container p-0 m-0">
 							<div class="form-check p-0 m-0">
-								<label class="form-check-label m-0" for="CheckboxListe_{{ stockProduitsReceptionne.id }}">
+								<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduitsReceptionne.id }}">
 									<span class='fs-1 fw-normal text-white'>qte max</span>
 								</label>
-								<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ stockProduitsReceptionne.id }}" onchange='selectMaxQteReceptionne({{ stockProduitsReceptionne.quantite }}, {{ stockProduitsReceptionne.id }})'>
+								<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduitsReceptionne.id }}" onchange='selectMaxQteReceptionne({{ stockProduitsReceptionne.quantite }}, {{ stockProduitsReceptionne.id }})'>
 							</div>
 						</div>
                         <div>
@@ -193,10 +193,10 @@
 					<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
 						<div class="container p-0 m-0">
 							<div class="form-check p-0 m-0">
-								<label class="form-check-label m-0" for="CheckboxListe_{{ stockProduitsReceptionne.id }}">
+								<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduitsReceptionne.id }}">
 									<span class='fs-1 fw-normal text-white'>qte max</span>
 								</label>
-								<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ stockProduitsReceptionne.id }}" onchange='selectMaxQteReceptionne({{ stockProduitsReceptionne.quantite }}, {{ stockProduitsReceptionne.id }})'>
+								<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduitsReceptionne.id }}" onchange='selectMaxQteReceptionne({{ stockProduitsReceptionne.quantite }}, {{ stockProduitsReceptionne.id }})'>
 							</div>
 						</div>
                         <div>
@@ -225,9 +225,9 @@
 						<div class="container p-0 m-0">
 							<div class="form-check p-0 m-0">
 								<label class="form-check-label m-0" for="CheckboxListe_{{ stockProduitsReceptionne.id }}">
-									<span class='fs-1 fw-normal text-white'>qte max</span>
+									<span class='fs-1 fw-normal text-white m-1'>qte max</span>
 								</label>
-								<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ stockProduitsReceptionne.id }}" onchange='selectMaxQteReceptionne({{ stockProduitsReceptionne.quantite }}, {{ stockProduitsReceptionne.id }})'>
+								<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduitsReceptionne.id }}" onchange='selectMaxQteReceptionne({{ stockProduitsReceptionne.quantite }}, {{ stockProduitsReceptionne.id }})'>
 							</div>
 						</div>
                         <div>
@@ -257,10 +257,10 @@
 					<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
 						<div class="container p-0 m-0">
 							<div class="form-check p-0 m-0">
-								<label class="form-check-label m-0" for="CheckboxListe_{{ stockProduitsLibre.id }}">
+								<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduitsLibre.id }}">
 									<span class='fs-1 fw-normal text-white'>qte max</span>
 								</label>
-								<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ stockProduitsLibre.id }}" onchange='selectMaxQteLibre({{ stockProduitsLibre.quantite }}, {{ stockProduitsLibre.id }})'>
+								<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduitsLibre.id }}" onchange='selectMaxQteLibre({{ stockProduitsLibre.quantite }}, {{ stockProduitsLibre.id }})'>
 							</div>
 						</div>
                         <div>
@@ -289,10 +289,10 @@
 					<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
 						<div class="container p-0 m-0">
 							<div class="form-check p-0 m-0">
-								<label class="form-check-label m-0" for="CheckboxListe_{{ stockProduitsLibre.id }}">
+								<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduitsLibre.id }}">
 									<span class='fs-1 fw-normal text-white'>qte max</span>
 								</label>
-								<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ stockProduitsLibre.id }}" onchange='selectMaxQteLibre({{ stockProduitsLibre.quantite }}, {{ stockProduitsLibre.id }})'>
+								<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduitsLibre.id }}" onchange='selectMaxQteLibre({{ stockProduitsLibre.quantite }}, {{ stockProduitsLibre.id }})'>
 							</div>
 						</div>
                         <div>
@@ -321,10 +321,10 @@
 					<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
 						<div class="container p-0 m-0">
 							<div class="form-check p-0 m-0">
-								<label class="form-check-label m-0" for="CheckboxListe_{{ stockProduitsLibre.id }}">
+								<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduitsLibre.id }}">
 									<span class='fs-1 fw-normal text-white'>qte max</span>
 								</label>
-								<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ stockProduitsLibre.id }}" onchange='selectMaxQteLibre({{ stockProduitsLibre.quantite }}, {{ stockProduitsLibre.id }})'>
+								<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduitsLibre.id }}" onchange='selectMaxQteLibre({{ stockProduitsLibre.quantite }}, {{ stockProduitsLibre.id }})'>
 							</div>
 						</div>
                         <div>
@@ -352,10 +352,10 @@
 					<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
 						<div class="container p-0 m-0">
 							<div class="form-check p-0 m-0">
-								<label class="form-check-label m-0" for="CheckboxListe_{{ stockProduitsLibre.id }}">
+								<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduitsLibre.id }}">
 									<span class='fs-1 fw-normal text-white'>qte max</span>
 								</label>
-								<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ stockProduitsLibre.id }}" onchange='selectMaxQteLibre({{ stockProduitsLibre.quantite }}, {{ stockProduitsLibre.id }})'>
+								<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduitsLibre.id }}" onchange='selectMaxQteLibre({{ stockProduitsLibre.quantite }}, {{ stockProduitsLibre.id }})'>
 							</div>
 						</div>
                         <div>
@@ -380,10 +380,10 @@
 					<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
 						<div class="container p-0 m-0">
 							<div class="form-check p-0 m-0">
-								<label class="form-check-label m-0" for="CheckboxListe_{{ stockProduitsLibre.id }}">
+								<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduitsLibre.id }}">
 									<span class='fs-1 fw-normal text-white'>qte max</span>
 								</label>
-								<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ stockProduitsLibre.id }}" onchange='selectMaxQteLibre({{ stockProduitsLibre.quantite }}, {{ stockProduitsLibre.id }})'>
+								<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduitsLibre.id }}" onchange='selectMaxQteLibre({{ stockProduitsLibre.quantite }}, {{ stockProduitsLibre.id }})'>
 							</div>
 						</div>
                         <div>

@@ -64,7 +64,7 @@ class ListeBordereauxController extends AbstractController
             $retours = $entityManager->getRepository(Retour::class)->findAll();
         }
 
-        if ($request->isMethod('GET')) {
+        if ($request->isMethod('GET') && !empty($request->query->get('bordereau')) && !empty($request->query->all('liste', []))) {
             $bordereauId = $request->query->get('bordereau');
             $linkedRetours = $request->query->all('liste', []);
 
@@ -82,6 +82,9 @@ class ListeBordereauxController extends AbstractController
                         if ($retour) {
                             // Définir le Bordereau associé au Retour
                             $retour->setBordereau($bordereau);
+                            $retourToModified = $retour->getNumRetour();
+                            $chaine = preg_replace('/^NT/', 'RETSA', $retourToModified);
+                            $retour->setNumRetour($chaine);
 
                             // Enregistrer les modifications dans la base de données
                             $entityManager->persist($retour);
@@ -90,6 +93,11 @@ class ListeBordereauxController extends AbstractController
 
                     // Exécuter les modifications
                     $entityManager->flush();
+
+                    $this->addFlash(
+                        'notice',
+                        'Le bordereau a bien été lié aux attendus ou sans attendus!'
+                    );
                 }
             }
         }

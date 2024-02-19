@@ -47,14 +47,17 @@ class ListeReceptionnesController extends AbstractController
         }
 
         $retourProduitsReceptionnes = [];
+        $retourProduits = [];
         foreach ($retours as $retour) {
             $retourProduitsReceptionnes = array_merge($retourProduitsReceptionnes, $retour->getRetourProduitReceptionnes()->toArray());
+            $retourProduits = array_merge($retourProduits, $retour->getRetourProduits()->toArray());
         }
 
         return $this->render('liste_receptionnes/index.html.twig', [
             'controller_name' => 'ListeReceptionnesController',
             'retours' => $retours,
-            'retourProduitsReceptionnes' => $retourProduitsReceptionnes
+            'retourProduitsReceptionnes' => $retourProduitsReceptionnes,
+            '$retourProduits' => $retourProduits
         ]);
     }
 }

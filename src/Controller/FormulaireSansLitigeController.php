@@ -17,7 +17,7 @@ class FormulaireSansLitigeController extends AbstractController
     #[Route('/formulaire/sans/litige/{id}', name: 'app_formulaire_sans_litige')]
     public function index($id, EntityManagerInterface $entityManager, Request $request): Response
     {
-        
+
         $retour = $entityManager->getRepository(Retour::class)->find($id);
         $retourObj = $entityManager->getRepository(Retour::class)->find($retour->getId());
         $numretour = $retour->getNumRetour();
@@ -25,24 +25,38 @@ class FormulaireSansLitigeController extends AbstractController
         $retourProduits = array_merge($retour->getRetourProduits()->toArray());
 
         if ($request->isMethod('POST')) {
-        
+
             $retourTraite = $entityManager->getRepository(Retour::class)->find($id);
             $currentDate = new \DateTime();
             $retourTraite->setDateTraitement($currentDate);
             $numRetourTraite = $retourTraite->getNumRetour();
-            $retourTraite->setNumretour($numRetourTraite.'-01');
+            if (substr($numRetourTraite, -3) === '-01') {
+                $numRetourTraite = substr_replace($numRetourTraite, '-02', -3);
+            } else if (substr($numRetourTraite, -3) === '-02') {
+                $numRetourTraite = substr_replace($numRetourTraite, '-03', -3);
+            } else if (substr($numRetourTraite, -3) === '-03') {
+                $numRetourTraite = substr_replace($numRetourTraite, '-04', -3);
+            } else {
+                $numRetourTraite .= '-01';
+            }
+            $retourTraite->setNumretour($numRetourTraite);
             $entityManager->persist($retourTraite);
-
             foreach ($retourProduits as $retourProduit) {
-                $idProduitReceptionnes = $request->request->get('id-form-sans-litige_' . $retourProduit->getId());
-                $codeCouleur = $request->request->get('code-couleur-form-sans-litige_' . $retourProduit->getId());
-                $quantite = $request->request->get('quantite-form-sans-litige_' . $retourProduit->getId());
-                $retourProduit = new RetourProduitReceptionnes();
-                $retourProduit->setIdproduit($idProduitReceptionnes);
-                $retourProduit->setCodeCouleur($codeCouleur);
-                $retourProduit->setQuantite($quantite);
-                $retourProduit->setRetour($retourObj);
-                $entityManager->persist($retourProduit);
+                if (
+                    !empty($request->request->get('id-form-sans-litige_' . $retourProduit->getId()))
+                    && !empty($request->request->get('id-form-sans-litige_' . $retourProduit->getId()))
+                    && !empty($request->request->get('quantite-form-sans-litige_' . $retourProduit->getId()))
+                ) {
+                    $idProduitReceptionnes = $request->request->get('id-form-sans-litige_' . $retourProduit->getId());
+                    $codeCouleur = $request->request->get('code-couleur-form-sans-litige_' . $retourProduit->getId());
+                    $quantite = $request->request->get('quantite-form-sans-litige_' . $retourProduit->getId());
+                    $retourProduit = new RetourProduitReceptionnes();
+                    $retourProduit->setIdproduit($idProduitReceptionnes);
+                    $retourProduit->setCodeCouleur($codeCouleur);
+                    $retourProduit->setQuantite($quantite);
+                    $retourProduit->setRetour($retourObj);
+                    $entityManager->persist($retourProduit);
+                }
             }
 
             $idProduits = $request->request->all('id-form-sans-litige', []);
@@ -60,6 +74,10 @@ class FormulaireSansLitigeController extends AbstractController
 
             $entityManager->flush();
 
+            $this->addFlash(
+                'notice',
+                'Le formulaire a bien été enregistré!'
+            );
         }
 
         return $this->render('formulaire_sans_litige/index.html.twig', [

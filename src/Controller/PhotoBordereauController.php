@@ -48,12 +48,17 @@ class PhotoBordereauController extends AbstractController
             $photoBordereau = new Bordereau();
             $photoBordereau->setPhoto1($photoPath);
             $photoBordereau->setCommentaire($commentaire);
-            $photoBordereau->setNumBordereau('test');
+            $photoBordereau->setNumBordereau('bordereau_'.$now->format('Y-m-d_H-i-s'));
             $photoBordereau->setDateReception(now());
 
             // Enregistrez l'entité dans la base de données
             $entityManager->persist($photoBordereau);
             $entityManager->flush();
+
+            $this->addFlash(
+                'notice',
+                'Le formulaire a bien été enregistré!'
+            );
         }
         return $this->render('photo_bordereau/index.html.twig', [
             'controller_name' => 'PhotoBordereauController',

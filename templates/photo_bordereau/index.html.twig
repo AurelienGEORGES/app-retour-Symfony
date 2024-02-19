@@ -4,13 +4,18 @@
 {% endblock %}
 
 {% block body %}
+	{% for message in app.flashes('notice') %}
+		<div class="flash-notice">
+			<p class="text-warning my-5 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
+		</div>
+	{% endfor %}
 	<form method="post" enctype="multipart/form-data" action="{{ path('app_photo_bordereau') }}">
 		<h1 class="text-white my-5 fs-1 fw-bold text-center">Faire une photo du bordereau</h1>
 		<div class="my-3 mx-2">
 			<div class='d-flex flex-column'>
 				<div class="input-group mx-1">
-					<label class="input-group-text" for="inputGroupFile01">Upload</label>
-					<input type="file" accept="image/*" capture="camera" id="photoInput" class="form-control" name="photo">
+					<label class="input-group-text" for="photoInput">Upload</label>
+					<input type="file" accept="image/*" capture="camera" id="photoInput" class="form-control" name="photo" required />
 				</div>
 			</div>
 		</div>

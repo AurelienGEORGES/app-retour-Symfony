@@ -4,6 +4,11 @@
 {% endblock %}
 
 {% block body %}
+	{% for message in app.flashes('notice') %}
+		<div class="flash-notice">
+			<p class="text-warning my-5 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
+		</div>
+	{% endfor %}
 	<h1 class="text-white my-5 mx-2 fs-1 fw-bold text-center">Ajouter des produits à la reception
 		{{ numretour }}
 		avec litige</h1>
@@ -80,13 +85,13 @@
 					<label for="id-form-litige_{{ retourProduit.id }}" class="form-label">
 						<span class='fs-1 fw-bold text-warning'>ID produit</span>
 					</label>
-					<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.idproduit }}" name="id-form-litige_{{ retourProduit.id }}">
+					<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.idproduit }}" name="id-form-litige_{{ retourProduit.id }}" required>
 				</div>
 				<div class="m-3">
 					<label for="code-couleur-form-litige_{{ retourProduit.id }}" class="form-label">
 						<span class='fs-1 fw-bold text-warning'>Code couleur</span>
 					</label>
-					<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="code-couleur-form-litige_{{ retourProduit.id }}" name="code-couleur-form-litige_{{ retourProduit.id }}">
+					<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="code-couleur-form-litige_{{ retourProduit.id }}" name="code-couleur-form-litige_{{ retourProduit.id }}" required>
 						<option value="vert" class='fs-1 fw-bold'>vert</option>
 						<option value="jaune" class='fs-1 fw-bold'>jaune</option>
 						<option value="orange" class='fs-1 fw-bold'>orange</option>
@@ -99,11 +104,11 @@
 						<label for="quantite-form-litige_{{ retourProduit.id }}">
 							<span class='fs-1 fw-bold text-warning'>Quantité</span>
 						</label>
-						<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="quantite-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.quantite }}" name="quantite-form-litige_{{ retourProduit.id }}"/>
+						<input type="number" min="1" class="form-control fs-1 fw-bold border-warning border-2" id="quantite-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.quantite }}" name="quantite-form-litige_{{ retourProduit.id }}" required/>
 					</div>
 				</div>
 				<div class='ms-3 my-5 d-flex justify-content-center'>
-					<button type="button" class="btn btn-outline-warning border-2 rounded-5">
+					<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
 						<span class='fs-2 fw-bold p-2'>Supprimmer</span>
 					</button>
 				</div>
@@ -137,13 +142,13 @@ container.innerHTML = `
         <label for="id-form-litige" class="form-label">
 					<span class='fs-1 fw-bold text-warning'>ID produit</span>
 				</label>
-				<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-litige" placeholder="remplir ou scanner" name="id-form-litige[]">
+				<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-litige" placeholder="remplir ou scanner" name="id-form-litige[]" required>
 			</div>
 			<div class="m-3">
 				<label for="code-couleur-form-litige" class="form-label">
 					<span class='fs-1 fw-bold text-warning'>Code couleur</span>
 				</label>
-				<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="code-couleur-form-litige" name="code-couleur-form-litige[]">
+				<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="code-couleur-form-litige" name="code-couleur-form-litige[]" required>
 					<option value="vert" class='fs-1 fw-bold'>vert</option>
 					<option value="jaune" class='fs-1 fw-bold'>jaune</option>
 					<option value="orange" class='fs-1 fw-bold'>orange</option>
@@ -156,11 +161,11 @@ container.innerHTML = `
 					<label for="quantite-form-litige">
 						<span class='fs-1 fw-bold text-warning'>Quantité</span>
 					</label>
-					<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="quantite-form-litige" placeholder="1" name="quantite-form-litige[]"/>
+					<input type="number" min="1" class="form-control fs-1 fw-bold border-warning border-2" id="quantite-form-litige" placeholder="1" name="quantite-form-litige[]" required/>
 				</div>
 			</div>
         <div class='ms-3 my-5 d-flex justify-content-center'>
-            <button type="button" class="btn btn-outline-warning border-2 rounded-5">
+            <button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
                 <span class='fs-2 fw-bold p-2'>Supprimer</span>
             </button>
         </div>
@@ -169,6 +174,13 @@ container.innerHTML = `
 // Ajoutez le conteneur au formulaire
 let formulaire = document.getElementById('ajoutProduit');
 formulaire.appendChild(container);
+}
+
+function supprimerProduit(event) { // Récupérer l'élément parent du bouton sur lequel on a cliqué
+var produitElement = event.target.closest('.border');
+
+// Supprimer l'élément parent
+produitElement.remove();
 }
 	</script>
 

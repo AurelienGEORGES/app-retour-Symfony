@@ -31,28 +31,24 @@ class FormulaireLitigeController extends AbstractController
             $photo5 = $request->files->get('photo5');
 
             if ($photo1) {
-
                 $fileName = 'litige_' . $numretour . '_photo1.jpeg';
                 $photoPath1 = '/litiges/photos/' . $fileName;
                 $photo1->move($this->getParameter('kernel.project_dir') . '/public/litiges/photos/', $fileName);
             }
 
             if ($photo2) {
-
                 $fileName = 'litige_' . $retour->getNumRetour() . '_photo2.jpeg';
                 $photoPath2 = '/litiges/photos/' . $fileName;
                 $photo2->move($this->getParameter('kernel.project_dir') . '/public/litiges/photos/', $fileName);
             }
 
             if ($photo3) {
-
                 $fileName = 'litige_' . $retour->getNumRetour() . '_photo3.jpeg';
                 $photoPath3 = '/litiges/photos/' . $fileName;
                 $photo3->move($this->getParameter('kernel.project_dir') . '/public/litiges/photos/', $fileName);
             }
 
             if ($photo4) {
-
                 $fileName = 'litige_' . $retour->getNumRetour() . '_photo4.jpeg';
                 $photoPath4 = '/litiges/photos/' . $fileName;
                 $photo4->move($this->getParameter('kernel.project_dir') . '/public/litiges/photos/', $fileName);
@@ -66,14 +62,23 @@ class FormulaireLitigeController extends AbstractController
 
             $retourObj = $entityManager->getRepository(Retour::class)->find($retour->getId());
 
-            //$transporteur = $request->request->get('transporteur-form-litige');
+            $transporteur = $request->request->get('transporteur-form-litige');
             $etat = $request->request->get('etat-form-litige');
             $commentaire = $request->request->get('commentaire-form-litige');
 
             $retourTraite = $entityManager->getRepository(Retour::class)->find($id);
-            //$entity->setTransporteur($transporteur);
+            $retourTraite->setTransporteur($transporteur);
             $numRetourTraite = $retourTraite->getNumRetour();
-            $retourTraite->setNumRetour($numRetourTraite.'-01');
+            if (substr($numRetourTraite, -3) === '-01') {
+                $numRetourTraite = substr_replace($numRetourTraite, '-02', -3);
+            } else if (substr($numRetourTraite, -3) === '-02') {
+                $numRetourTraite = substr_replace($numRetourTraite, '-03', -3);
+            } else if (substr($numRetourTraite, -3) === '-03') {
+                $numRetourTraite = substr_replace($numRetourTraite, '-04', -3);
+            } else {
+                $numRetourTraite .= '-01';
+            }
+            $retourTraite->setNumretour($numRetourTraite);
             $retourTraite->setEtat($etat);
             $retourTraite->setCommentaire($commentaire);
             $currentDate = new \DateTime();
@@ -96,15 +101,21 @@ class FormulaireLitigeController extends AbstractController
             $entityManager->persist($retourTraite);
 
             foreach ($retourProduits as $retourProduit) {
-                $idProduitReceptionnes = $request->request->get('id-form-litige_' . $retourProduit->getId());
-                $codeCouleur = $request->request->get('code-couleur-form-litige_' . $retourProduit->getId());
-                $quantite = $request->request->get('quantite-form-litige_' . $retourProduit->getId());
-                $retourProduit = new RetourProduitReceptionnes();
-                $retourProduit->setIdproduit($idProduitReceptionnes);
-                $retourProduit->setCodeCouleur($codeCouleur);
-                $retourProduit->setQuantite($quantite);
-                $retourProduit->setRetour($retourObj);
-                $entityManager->persist($retourProduit);
+                if (
+                    !empty($request->request->get('id-form-litige_' . $retourProduit->getId()))
+                    && !empty($request->request->get('id-form-litige_' . $retourProduit->getId()))
+                    && !empty($request->request->get('quantite-form-litige_' . $retourProduit->getId()))
+                ) {
+                    $idProduitReceptionnes = $request->request->get('id-form-litige_' . $retourProduit->getId());
+                    $codeCouleur = $request->request->get('code-couleur-form-litige_' . $retourProduit->getId());
+                    $quantite = $request->request->get('quantite-form-litige_' . $retourProduit->getId());
+                    $retourProduit = new RetourProduitReceptionnes();
+                    $retourProduit->setIdproduit($idProduitReceptionnes);
+                    $retourProduit->setCodeCouleur($codeCouleur);
+                    $retourProduit->setQuantite($quantite);
+                    $retourProduit->setRetour($retourObj);
+                    $entityManager->persist($retourProduit);
+                }
             }
 
             $idProduits = $request->request->all('id-form-litige', []);
@@ -119,8 +130,14 @@ class FormulaireLitigeController extends AbstractController
                 $produit->setRetour($retourObj);
                 $entityManager->persist($produit);
             }
-            
+
             $entityManager->flush();
+
+            $this->addFlash(
+                'notice',
+                'Le formulaire a bien été enregistré!'
+            );
+
         }
 
         return $this->render('formulaire_litige/index.html.twig', [

@@ -30,26 +30,42 @@
 	<h3 class="text-white my-5 fs-1 fw-bold text-center">Résultats recherche</h3>
 	<div class="d-flex justify-content-center">
 		<div>
-        {% for retour in retours %}
-			<div class="card m-3 border-success border-3" style="width: 15rem;">
-				<div class="card-body">
-					<h5 class="card-title">
-						<span class='fs-1 fw-bold text-success'>{{ retour.numretour }}</span>
-					</h5>
-					<p class="card-text mb-2">
-						<span class='fs-1 fw-bold'>{{ retour.nomclient }} {{ retour.prenomclient }}</span>
-					</p>
-					<p class="card-text">
-						<span class='fs-1 fw-bold'>{{ retour.transporteur }}</span>
-					</p>
-                    {% for retourProduitReceptionne in retour.retourProduitReceptionnes %}
-					<p class="card-text">
-						<span class='fs-1 fw-bold'>{{ retourProduitReceptionne.idproduit }} * {{ retourProduitReceptionne.quantite }}</span>
-					</p>
-                    {% endfor %}
+			{% for retour in retours %}
+				<div class="card m-3 border-success border-3" style="width: 15rem;">
+					<div class="card-body">
+						<h5 class="card-title m-0">
+							<span class='fs-1 fw-bold text-success'>{{ retour.numretour }}</span>
+						</h5>
+						<p class="card-text m-0">
+							<span class='fs-1 fw-bold'>{{ retour.nomclient }}
+								{{ retour.prenomclient }}</span>
+						</p>
+						<p class="card-text m-0">
+							<span class='fs-1 fw-bold'>{{ retour.transporteur }}</span>
+						</p>
+						<p class="card-text m-0">
+							<span class='fs-1 fw-bold text-success'>Produits réceptionnés</span>
+						</p>
+						{% for retourProduitReceptionne in retour.retourProduitReceptionnes %}
+							<p class="card-text m-0">
+								<span class='fs-1 fw-bold'>{{ retourProduitReceptionne.idproduit }}
+									*
+									{{ retourProduitReceptionne.quantite }}</span>
+							</p>
+						{% endfor %}
+                        <p class="card-text m-0">
+							<span class='fs-1 fw-bold text-success'>Produits de l'attendu ou du sans attendu</span>
+						</p>
+                        {% for retourProduit in retour.retourProduits %}
+							<p class="card-text m-0">
+								<span class='fs-1 fw-bold'>{{ retourProduit.idproduit }}
+									*
+									{{ retourProduit.quantite }}</span>
+							</p>
+						{% endfor %}
+					</div>
 				</div>
-			</div>
-            {% endfor %}
+			{% endfor %}
 		</div>
 	</div>
 {% endblock %}

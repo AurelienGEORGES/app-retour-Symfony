@@ -131,7 +131,8 @@ class CreationPaletteController extends AbstractController
             }
         }
 
-        $request->getSession()->set('produits_selectionnes', $produitsSelectionnes);
+
+        //$request->getSession()->set('produits_selectionnes', $produitsSelectionnes);
 
         if (!empty($request->query->get('choix-couleur-palette')) && !empty($request->query->get('choix-depot-palette'))) {
 
@@ -149,10 +150,27 @@ class CreationPaletteController extends AbstractController
                 $paletteProduit->setPalette($palette);
                 $entityManager->persist($paletteProduit);
             }
-            $entityManager->flush();
             
             $produitsSelectionnes = array();
+
+            $stockProduitsReceptionnes = $entityManager->getRepository(RetourProduitReceptionnes::class)->findAll();
+            foreach ($stockProduitsReceptionnes as $stockProduitsReceptionne)
+            if ( $stockProduitsReceptionne->getQuantite() === 0 ) {
+                $entityManager->remove($stockProduitsReceptionne);
+            }
+
+            $stockProduitsLibres = $entityManager->getRepository(ProduitLibre::class)->findAll();
+            foreach ($stockProduitsLibres as $stockProduitsLibre)
+            if ( $stockProduitsLibre->getQuantite() === 0 ) {
+                $entityManager->remove($stockProduitsLibre);
+            }
+
+            $entityManager->flush();
+            $stockProduitsLibres = $entityManager->getRepository(ProduitLibre::class)->findAll();
+            $stockProduitsReceptionnes = $entityManager->getRepository(RetourProduitReceptionnes::class)->findAll();
         }
+
+        $request->getSession()->set('produits_selectionnes', $produitsSelectionnes);
 
         return $this->render('creation_palette/index.html.twig', [
             'controller_name' => 'CreationPaletteController',

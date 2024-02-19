@@ -4,6 +4,11 @@
 {% endblock %}
 
 {% block body %}
+	{% for message in app.flashes('notice') %}
+		<div class="flash-notice">
+			<p class="text-warning my-5 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
+		</div>
+	{% endfor %}
 	<h1 class="text-white my-5 fs-1 fw-bold text-center">Liste des bordereaux</h1>
 	<form method="get" action="{{ path('app_liste_bordereaux') }}">
 		<div class='border rounded-3 border-warning border-2 m-3'>
@@ -133,7 +138,7 @@
 		</div>
 	{% endfor %}
 	<form method="get" action="{{ path('app_liste_bordereaux') }}" id="lienForm">
-		<div class='mt-1 d-flex justify-content-center'>
+		<div class='my-3 d-flex justify-content-center'>
 			<button type="submit" class="btn btn-outline-primary border-2">
 				<span class='fs-2 fw-bold p-3'>Lier</span>
 			</button>
