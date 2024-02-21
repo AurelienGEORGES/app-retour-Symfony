@@ -4,3 +4,17 @@ body {
   background-color: $background-color !important;
 }
 
+.scan video {
+    height: 150px !important;
+    width: 200px !important; /* Définissez la hauteur de la vidéo selon vos besoins */
+}
+
+.scan video {
+    height: 150px !important;
+    width: 200px !important; /* Définissez la hauteur de la vidéo selon vos besoins */
+}
+
+.drawingBuffer {
+    display: none;
+}
+

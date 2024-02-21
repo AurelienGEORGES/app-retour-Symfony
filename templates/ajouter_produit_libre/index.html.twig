@@ -12,10 +12,15 @@
 	<h1 class="text-white my-5 fs-1 fw-bold text-center">Ajouter produit libre</h1>
 	<form method="post" action="{{ path('app_ajouter_produit_libre') }}">
 		<div class='border-info border border-2 m-3 rounded-3'>
-			<div class='d-flex justify-content-center'>
-				<button type="button" class="btn btn-outline-info mt-5 mb-2 border-2 rounded-5">
-					<span class='fs-2 fw-bold p-2'>Scan produit</span>
-				</button>
+			<div class='d-flex justify-content-center flex-column'>
+				<div class='d-flex justify-content-center'>
+					<button type="button" class="btn btn-outline-info mt-5 mb-2 border-2 rounded-5" onclick="load_quagga()">
+						<span class='fs-2 fw-bold p-2'>Scan produit</span>
+					</button>
+				</div>
+				<div class='d-flex justify-content-center'>
+					<div id='scan' class='d-flex justify-content-center flex-column scan'></div>
+				</div>
 			</div>
 			<div class="m-3">
 				<label for="form-produit-libre-id" class="form-label">
@@ -62,4 +67,32 @@
 			</div>
 		</div>
 	</form>
+	<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.js"></script>
+	<script type="text/javascript">
+		function load_quagga() {
+if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+Quagga.init({
+inputStream: {
+name: "Live",
+type: "LiveStream",
+target: document.querySelector('#scan')
+},
+decoder: {
+readers: ["ean_reader"]
+}
+}, function (err) {
+if (err) {
+console.log(err);
+return
+}
+console.log("Initialization finished. Ready to start");
+Quagga.start();
+});
+Quagga.onDetected(function (data) {
+document.querySelector('#form-produit-libre-id').value = data.codeResult.code;
+Quagga.stop();
+});
+}
+}
+	</script>
 {% endblock %}

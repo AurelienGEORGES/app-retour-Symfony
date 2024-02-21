@@ -76,10 +76,15 @@
 		</div>
 		{% for retourProduit in retourProduits %}
 			<div class='border rounded-3 border-warning border-2 mx-1 my-4'>
-				<div class='d-flex justify-content-center my-3'>
-					<button type="button" class="btn btn-outline-warning mt-3 mb-2 border-2 rounded-5">
-						<span class='fs-2 fw-bold p-2'>Scan produit</span>
-					</button>
+				<div class='d-flex justify-content-center flex-column'>
+					<div class='d-flex justify-content-center'>
+						<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga({{ retourProduit.id }})">
+							<span class='fs-2 fw-bold p-2'>Scan produit</span>
+						</button>
+					</div>
+					<div class='d-flex justify-content-center'>
+						<div id='scan_{{ retourProduit.id }}' class='d-flex justify-content-center flex-column scan mt-3'></div>
+					</div>
 				</div>
 				<div class="m-3">
 					<label for="id-form-litige_{{ retourProduit.id }}" class="form-label">
@@ -127,22 +132,26 @@
 		</div>
 	</form>
 	<script type="text/javascript">
-		function ajoutProduit() {
+		let compteur = 1;
+function ajoutProduit() {
 let container = document.createElement('div');
-container.className = 'border rounded-3 border-warning border-2 m-1';
-
-// Ajoutez les champs de formulaire au conteneur
+container.className = 'border rounded-3 border-warning border-2 mx-1 my-4';
 container.innerHTML = `
-        <div class='d-flex justify-content-center my-3'>
-            <button type="button" class="btn btn-outline-warning mt-3 mb-2 border-2 rounded-5">
-                <span class='fs-2 fw-bold p-2'>Scan produit</span>
-            </button>
-        </div>
+        <div class='d-flex justify-content-center flex-column m-3'>
+					<div class='d-flex justify-content-center'>
+						<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga_on_add_product(${compteur})">
+							<span class='fs-2 fw-bold p-2'>Scan produit</span>
+						</button>
+					</div>
+					<div class='d-flex justify-content-center'>
+						<div id='scan_${compteur}' class='d-flex justify-content-center flex-column scan mt-3'></div>
+					</div>
+				</div>
         <div class="m-3">
         <label for="id-form-litige" class="form-label">
 					<span class='fs-1 fw-bold text-warning'>ID produit</span>
 				</label>
-				<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-litige" placeholder="remplir ou scanner" name="id-form-litige[]" required>
+				<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-litige_${compteur}" placeholder="remplir ou scanner" name="id-form-litige[]" required>
 			</div>
 			<div class="m-3">
 				<label for="code-couleur-form-litige" class="form-label">
@@ -174,6 +183,7 @@ container.innerHTML = `
 // Ajoutez le conteneur au formulaire
 let formulaire = document.getElementById('ajoutProduit');
 formulaire.appendChild(container);
+compteur++;
 }
 
 function supprimerProduit(event) { // Récupérer l'élément parent du bouton sur lequel on a cliqué
@@ -183,5 +193,57 @@ var produitElement = event.target.closest('.border');
 produitElement.remove();
 }
 	</script>
-
+	<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.js"></script>
+	<script type="text/javascript">
+		function load_quagga(idInput) {
+if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+Quagga.init({
+inputStream: {
+name: "Live",
+type: "LiveStream",
+target: document.querySelector('#scan_' + idInput)
+},
+decoder: {
+readers: ["ean_reader"]
+}
+}, function (err) {
+if (err) {
+console.log(err);
+return
+}
+console.log("Initialization finished. Ready to start");
+Quagga.start();
+});
+Quagga.onDetected(function (data) {
+document.querySelector('#id-form-litige_' + idInput).value = data.codeResult.code;
+Quagga.stop();
+});
+}
+}
+function load_quagga_on_add_product(compteur) {
+if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+Quagga.init({
+inputStream: {
+name: "Live",
+type: "LiveStream",
+target: document.querySelector('#scan_' + compteur)
+},
+decoder: {
+readers: ["ean_reader"]
+}
+}, function (err) {
+if (err) {
+console.log(err);
+return
+}
+console.log("Initialization finished. Ready to start");
+Quagga.start();
+});
+Quagga.onDetected(function (data) {
+document.querySelector('#id-form-litige_' + compteur).value = data.codeResult.code;
+Quagga.stop();
+});
+}
+}
+	</script>
 {% endblock %}

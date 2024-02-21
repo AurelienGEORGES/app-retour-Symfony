@@ -44,11 +44,11 @@
 					<img width='300px' height='300px' class="mt-2 img-fluid" src="{{ asset(bordereau.photo1) }}"/>
 				</div>
 				<!-- Bouton pour ouvrir la modal -->
-				<button type="button" class="btn btn-outline-primary m-2 border-2 rounded-5" data-bs-toggle="modal" data-bs-target="#imageModal">
+				<button type="button" class="btn btn-outline-primary m-2 border-2 rounded-5" data-bs-toggle="modal" data-bs-target="#imageModal_{{ bordereau.id }}">
 					<span class='fs-2 fw-normal'>Ouvrir l'image</span>
 				</button>
 				<!-- Modal -->
-				<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+				<div class="modal fade" id="imageModal_{{ bordereau.id }}" tabindex="-1" aria-labelledby="imageModalLabel_{{ bordereau.id }}" aria-hidden="true">
 					<div class="modal-dialog modal-dialog-centered modal-xl">
 						<div class="modal-content">
 							<div class="modal-header">

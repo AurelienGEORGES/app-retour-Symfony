@@ -9,13 +9,29 @@
 			<p class="text-warning my-5 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
 		</div>
 	{% endfor %}
+
 	<form method="post" enctype="multipart/form-data" action="{{ path('app_photo_bordereau') }}">
 		<h1 class="text-white my-5 fs-1 fw-bold text-center">Faire une photo du bordereau</h1>
+		<div class='d-flex justify-content-center flex-column my-3'>
+			<div class="my-3 d-flex justify-content-center">
+				<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="openCamera()">
+					<span class='fs-2 fw-bold p-2'>Ouvrir caméra</span>
+				</button>
+			</div>
+            <div class="scan d-flex justify-content-center">
+				<video id="video" width="640" height="480"></video>
+				<canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+			</div>
+			<div class="my-3 d-flex justify-content-center">
+				<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="takePhoto()">
+					<span class='fs-2 fw-bold p-2'>Prendre photo</span>
+				</button>
+			</div>
+		</div>
 		<div class="m-1">
 			<div class='d-flex flex-column'>
 				<div class="input-group">
-					<label class="input-group-text" for="photoInput">Photo</label>
-					<input type="file" accept="image/*" capture="camera" id="photoInput" class="form-control m-0" name="photo" required />
+					<input type="file" accept="image/*" capture="camera" id="photoInput" class="form-control m-0" name="photo" required/>
 				</div>
 			</div>
 		</div>
@@ -35,4 +51,75 @@
 			</button>
 		</div>
 	</form>
+	<script type="text/javascript">
+
+		async function openCamera() {
+const video = document.getElementById('video');
+
+try {
+const stream = await navigator.mediaDevices.getUserMedia({video: true});
+video.srcObject = stream;
+video.play();
+} catch (error) {
+console.error('Error accessing the camera: ', error);
+}
+}
+
+async function takePhoto() {
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+
+try {
+const stream = await navigator.mediaDevices.getUserMedia({video: true});
+video.srcObject = stream;
+
+video.onloadedmetadata = () => {
+video.play();
+};
+
+document.body.appendChild(video);
+
+setTimeout(async () => {
+context.drawImage(video, 0, 0, canvas.width, canvas.height);
+const photo = canvas.toDataURL('image/png');
+console.log(photo);
+
+// Insérer l'image capturée dans l'input file
+const photoInput = document.getElementById('photoInput');
+const blob = await dataURItoBlob(photo);
+const file = new File([blob], "photo_bordereau_" + Date.now() + ".png", {type: "image/png"});
+
+// Créer une nouvelle liste de fichiers contenant le fichier capturé
+const fileList = new DataTransfer();
+fileList.items.add(file);
+
+// Affecter la liste de fichiers à l'input file
+photoInput.files = fileList.files;
+
+video.srcObject = null;
+video.parentNode.removeChild(video);
+
+// Vous pouvez ensuite envoyer la photo à un serveur ou la manipuler dans votre application.
+}, 100); // Vous pouvez ajuster ce délai selon vos besoins pour capturer la photo au bon moment.
+} catch (error) {
+console.error('Error accessing the camera: ', error);
+}
+}
+
+// Convertir les données de l'URL en objet Blob
+function dataURItoBlob(dataURI) {
+return new Promise((resolve) => {
+const byteString = atob(dataURI.split(',')[1]);
+const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+const ab = new ArrayBuffer(byteString.length);
+const ia = new Uint8Array(ab);
+for (let i = 0; i < byteString.length; i++) {
+ia[i] = byteString.charCodeAt(i);
+}
+const blob = new Blob([ab], {type: mimeString});
+resolve(blob);
+});
+}
+	</script>
 {% endblock %}
