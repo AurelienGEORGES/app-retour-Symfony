@@ -60,6 +60,7 @@ class ListeBordereauxController extends AbstractController
                 $criteria['transporteur'] = $data['transporteur'];
             }
             $retours = $entityManager->getRepository(Retour::class)->findByCriteria($criteria);
+            
         } else {
             $retours = $entityManager->getRepository(Retour::class)->findAll();
         }

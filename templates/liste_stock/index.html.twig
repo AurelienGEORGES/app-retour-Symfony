@@ -50,92 +50,45 @@
 	<div class="d-flex justify-content-center mb-5">
 		<div>
 			<div class="d-flex flex-column">
-				{% for stockProduitsReceptionne in stockProduitsReceptionnes %}
-					{% if stockProduitsReceptionne.codecouleur == 'vert' %}
+				{% for stockProduit in stockProduits %}
+					{% if stockProduit.codecouleur == 'vert' %}
 						<div>
 							<p class='fs-2 fw-bold p-2 text-center' style="background-color: green; color: black;">
-								{{ stockProduitsReceptionne.idproduit }}
+								{{ stockProduit.idproduit }}
 								*
-								{{ stockProduitsReceptionne.quantite }}</p>
+								{{ stockProduit.quantite }}</p>
 						</div>
 					{% endif %}
-					{% if stockProduitsReceptionne.codecouleur == 'orange' %}
+					{% if stockProduit.codecouleur == 'orange' %}
 						<div>
 							<p class='fs-2 fw-bold p-2 text-center' style="background-color: orange; color: black;">
-								{{ stockProduitsReceptionne.idproduit }}
+								{{ stockProduit.idproduit }}
 								*
-								{{ stockProduitsReceptionne.quantite }}</p>
+								{{ stockProduit.quantite }}</p>
 						</div>
 					{% endif %}
-					{% if stockProduitsReceptionne.codecouleur == 'jaune' %}
+					{% if stockProduit.codecouleur == 'jaune' %}
 						<div>
 							<p class='fs-2 fw-bold p-2 text-center' style="background-color: yellow; color: black;">
-								{{ stockProduitsReceptionne.idproduit }}
+								{{ stockProduit.idproduit }}
 								*
-								{{ stockProduitsReceptionne.quantite }}</p>
+								{{ stockProduit.quantite }}</p>
 						</div>
 					{% endif %}
-					{% if stockProduitsReceptionne.codecouleur == 'rouge' %}
+					{% if stockProduit.codecouleur == 'rouge' %}
 						<div>
 							<p class='fs-2 fw-bold p-2 text-center' style="background-color: red; color: black;">
-								{{ stockProduitsReceptionne.idproduit }}
+								{{ stockProduit.idproduit }}
 								*
-								{{ stockProduitsReceptionne.quantite }}</p>
+								{{ stockProduit.quantite }}</p>
 						</div>
 					{% endif %}
-					{% if stockProduitsReceptionne.codecouleur == 'noir' %}
+					{% if stockProduit.codecouleur == 'noir' %}
 						<div>
 							<p class='fs-2 fw-bold p-2 text-center' style="background-color: black; color: white;">
-								{{ stockProduitsReceptionne.idproduit }}
+								{{ stockProduit.idproduit }}
 								*
-								{{ stockProduitsReceptionne.quantite }}</p>
-						</div>
-					{% endif %}
-				{% endfor %}
-				{% for stockProduitsLibre in stockProduitsLibres %}
-					{% if stockProduitsLibre.codecouleur == 'vert' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: green; color: black;">
-								{{ stockProduitsLibre.idproduit }}
-								*
-								{{ stockProduitsLibre.quantite }}
-							</p>
-						</div>
-					{% endif %}
-					{% if stockProduitsLibre.codecouleur == 'orange' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: orange; color: black;">
-								{{ stockProduitsLibre.idproduit }}
-								*
-								{{ stockProduitsLibre.quantite }}
-							</p>
-						</div>
-					{% endif %}
-					{% if stockProduitsLibre.codecouleur == 'jaune' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: yellow; color: black;">
-								{{ stockProduitsLibre.idproduit }}
-								*
-								{{ stockProduitsLibre.quantite }}
-							</p>
-						</div>
-					{% endif %}
-					{% if stockProduitsLibre.codecouleur == 'rouge' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: red; color: black;">
-								{{ stockProduitsLibre.idproduit }}
-								*
-								{{ stockProduitsLibre.quantite }}
-							</p>
-						</div>
-					{% endif %}
-					{% if stockProduitsLibre.codecouleur == 'noir' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: black; color: white;">
-								{{ stockProduitsLibre.idproduit }}
-								*
-								{{ stockProduitsLibre.quantite }}
-							</p>
+								{{ stockProduit.quantite }}</p>
 						</div>
 					{% endif %}
 				{% endfor %}

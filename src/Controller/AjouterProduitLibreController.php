@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Stock;
 use App\Entity\ProduitLibre;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,8 +30,18 @@ class AjouterProduitLibreController extends AbstractController
                 $produitLibre->setQuantite($quantite);
                 $produitLibre->setTransporteur($transporteur);
                 $entityManager->persist($produitLibre);
+                $stock = new Stock();
+                $stock->setIdProduit($idProduitLibre);
+                $stock->setQuantite($quantite);
+                $stock->setCodeCouleur($codeCouleur);
+                $entityManager->persist($stock);
             }      
             $entityManager->flush();
+
+            $this->addFlash(
+                'notice',
+                'Le produit libre a bien été enregistré!'
+            );
 
         return $this->render('ajouter_produit_libre/index.html.twig', [
             'controller_name' => 'AjouterProduitLibreController',

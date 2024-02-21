@@ -4,6 +4,11 @@
 {% endblock %}
 
 {% block body %}
+	{% for message in app.flashes('notice') %}
+		<div class="flash-notice">
+			<p class="text-warning my-5 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
+		</div>
+	{% endfor %}
 	<h1 class="text-white my-5 fs-1 fw-bold text-center">Ajouter produit libre</h1>
 	<form method="post" action="{{ path('app_ajouter_produit_libre') }}">
 		<div class='border-info border border-2 m-3 rounded-3'>

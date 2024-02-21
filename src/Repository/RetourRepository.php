@@ -52,7 +52,8 @@ class RetourRepository extends ServiceEntityRepository
 
         // Ajoutez les conditions de recherche en fonction des critères fournis
         foreach ($criteria as $field => $value) {
-            $qb->andWhere("r.$field = :$field")->setParameter($field, $value);
+            // $qb->andWhere("r.$field = :$field")->setParameter($field, $value);
+            $qb->andWhere("r.$field LIKE :$field")->setParameter($field, "%$value%");
         }
 
         // Vous pouvez ajouter d'autres conditions, tri, etc. si nécessaire

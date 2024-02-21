@@ -34,21 +34,20 @@
 	{% for retour in retours %}
 		<div class="d-flex justify-content-center">
 			<div>
-				<div class="card m-1 border-primary border-3" style="width: 15rem;">
+				<div class="card m-1 border-primary border-3">
 					<div class="card-body">
-						<div class="container p-0 m-0">
-							{# <div class="form-check p-0 m-0">
-								<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ retour.id }}" onchange='isCheckedListe({{ retour.id }})'> #}
-								<label class="form-check-label m-0" for="CheckboxListe_{{ retour.id }}">
-									<span class='fs-1 fw-normal'>{{ retour.numretour }}</span>
-								</label>
-							{# </div> #}
-						</div>
-                        {% if retour.bordereau.numbordereau %}
-                        <p class="card-text m-0">
-							<span class='fs-1 fw-normal'>{{ retour.bordereau.numbordereau }}</span>
+						<p class="card-text m-0">
+							<span class='fs-1 fw-normal'>{{ retour.numretour }}</span>
 						</p>
-                        {% endif %}
+						{% if retour.bordereau is defined and retour.bordereau.numbordereau is defined %}
+							<p class="card-text m-0">
+								<span class='fs-2 fw-normal'>{{ retour.bordereau.numbordereau }}</span>
+							</p>
+						{% else %}
+							<p class="card-text m-0">
+								<span class='fs-2 fw-normal'>pas de bordereau.</span>
+							</p>
+						{% endif %}
 						<p class="card-text m-0">
 							<span class='fs-1 fw-normal'>{{ retour.prenomclient}}
 								{{ retour.nomclient}}</span>

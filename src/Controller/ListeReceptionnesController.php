@@ -46,18 +46,50 @@ class ListeReceptionnesController extends AbstractController
             $retours = $entityManager->getRepository(Retour::class)->findAll();
         }
 
+        $retourComplet = [];
         $retourProduitsReceptionnes = [];
         $retourProduits = [];
+
         foreach ($retours as $retour) {
-            $retourProduitsReceptionnes = array_merge($retourProduitsReceptionnes, $retour->getRetourProduitReceptionnes()->toArray());
-            $retourProduits = array_merge($retourProduits, $retour->getRetourProduits()->toArray());
+
+            $receptionnesAcomparer = [];
+            $produitsReceptionnes = $retour->getRetourProduitReceptionnes();
+            foreach ($produitsReceptionnes as $produitReceptionne) {
+                $retourProduitsReceptionnes[] = $produitReceptionne;
+                $idProduit = $produitReceptionne->getIdProduit();
+                $quantite = $produitReceptionne->getQuantite();
+
+                if (isset($receptionnesAcomparer[$idProduit])) {
+                    $receptionnesAcomparer[$idProduit] += $quantite;
+                } else {
+                    $receptionnesAcomparer[$idProduit] = $quantite;
+                }
+            }
+
+            $produitsAcomparer = [];
+            $produits = $retour->getRetourProduits();
+            foreach ($produits as $produit) {
+                $retourProduits[] = $produit;
+                $idProduit = $produit->getIdProduit();
+                $quantite = $produit->getQuantite();
+                $produitsAcomparer[$idProduit] = $quantite;
+            }
+            ksort($produitsAcomparer);
+            ksort($receptionnesAcomparer);
+
+            if ($receptionnesAcomparer === $produitsAcomparer) {
+                $retourComplet[] = true;
+            } else {
+                $retourComplet[] = false;
+            }
         }
 
         return $this->render('liste_receptionnes/index.html.twig', [
             'controller_name' => 'ListeReceptionnesController',
             'retours' => $retours,
             'retourProduitsReceptionnes' => $retourProduitsReceptionnes,
-            '$retourProduits' => $retourProduits
+            '$retourProduits' => $retourProduits,
+            'retourComplet' => $retourComplet
         ]);
     }
 }

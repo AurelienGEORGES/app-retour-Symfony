@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Stock;
 use App\Entity\Retour;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\RetourProduitReceptionnes;
@@ -56,6 +57,11 @@ class FormulaireSansLitigeController extends AbstractController
                     $retourProduit->setQuantite($quantite);
                     $retourProduit->setRetour($retourObj);
                     $entityManager->persist($retourProduit);
+                    $stock = new Stock();
+                    $stock->setIdProduit($idProduitReceptionnes);
+                    $stock->setQuantite($quantite);
+                    $stock->setCodeCouleur($codeCouleur);
+                    $entityManager->persist($stock);
                 }
             }
 
@@ -70,6 +76,18 @@ class FormulaireSansLitigeController extends AbstractController
                 $produit->setQuantite($quantites[$index]);
                 $produit->setRetour($retourObj);
                 $entityManager->persist($produit);
+            }
+
+            $idStockProduits = $request->request->all('id-form-sans-litige', []);
+            $codeCouleursStock = $request->request->all('code-couleur-form-sans-litige', []);
+            $quantitesStock = $request->request->all('quantite-form-sans-litige', []);
+
+            foreach ($idStockProduits as $index => $idProduit) {
+                $stock = new Stock();
+                $stock->setIdProduit($idProduit);
+                $stock->setQuantite($quantitesStock[$index]); 
+                $stock->setCodeCouleur($codeCouleursStock[$index]); 
+                $entityManager->persist($stock);
             }
 
             $entityManager->flush();

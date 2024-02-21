@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Stock;
 use App\Entity\Retour;
-use App\Entity\RetourProduitReceptionnes;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\RetourProduitReceptionnes;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -115,6 +116,11 @@ class FormulaireLitigeController extends AbstractController
                     $retourProduit->setQuantite($quantite);
                     $retourProduit->setRetour($retourObj);
                     $entityManager->persist($retourProduit);
+                    $stock = new Stock();
+                    $stock->setIdProduit($idProduitReceptionnes);
+                    $stock->setQuantite($quantite);
+                    $stock->setCodeCouleur($codeCouleur);
+                    $entityManager->persist($stock);
                 }
             }
 
@@ -131,13 +137,24 @@ class FormulaireLitigeController extends AbstractController
                 $entityManager->persist($produit);
             }
 
+            $idStockProduits = $request->request->all('id-form-litige', []);
+            $codeCouleursStock = $request->request->all('code-couleur-form-litige', []);
+            $quantitesStock = $request->request->all('quantite-form-litige', []);
+
+            foreach ($idStockProduits as $index => $idProduit) {
+                $stock = new Stock();
+                $stock->setIdProduit($idProduit);
+                $stock->setQuantite($quantitesStock[$index]); 
+                $stock->setCodeCouleur($codeCouleursStock[$index]); 
+                $entityManager->persist($stock);
+            }
+
             $entityManager->flush();
 
             $this->addFlash(
                 'notice',
                 'Le formulaire a bien été enregistré!'
             );
-
         }
 
         return $this->render('formulaire_litige/index.html.twig', [

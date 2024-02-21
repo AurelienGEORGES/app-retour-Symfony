@@ -31,11 +31,20 @@
 	<div class="d-flex justify-content-center">
 		<div>
 			{% for retour in retours %}
-				<div class="card m-3 border-success border-3" style="width: 15rem;">
+				<div class="card m-1 border-success border-3">
 					<div class="card-body">
-						<h5 class="card-title m-0">
+						{% if retourComplet[loop.index0] %}
+							<p class="card-title m-0">
+								<span class='fs-1 fw-bold text-success'>Complet</span>
+							</p>
+						{% else %}
+							<p class="card-title m-0">
+								<span class='fs-1 fw-bold text-danger'>Incomplet</span>
+							</p>
+						{% endif %}
+						<p class="card-title m-0">
 							<span class='fs-1 fw-bold text-success'>{{ retour.numretour }}</span>
-						</h5>
+						</p>
 						<p class="card-text m-0">
 							<span class='fs-1 fw-bold'>{{ retour.nomclient }}
 								{{ retour.prenomclient }}</span>
@@ -53,10 +62,10 @@
 									{{ retourProduitReceptionne.quantite }}</span>
 							</p>
 						{% endfor %}
-                        <p class="card-text m-0">
+						<p class="card-text m-0">
 							<span class='fs-1 fw-bold text-success'>Produits de l'attendu ou du sans attendu</span>
 						</p>
-                        {% for retourProduit in retour.retourProduits %}
+						{% for retourProduit in retour.retourProduits %}
 							<p class="card-text m-0">
 								<span class='fs-1 fw-bold'>{{ retourProduit.idproduit }}
 									*
