@@ -16,17 +16,17 @@ class SearchRetourType extends AbstractType
         $builder
             ->add('numRetour', TextType::class, [
                 'label' => 'N° RET, RETSA, NT',
-                'attr' => ['class' => 'form-control fs-1 fw-bold border-primary border-3'],
+                'attr' => ['class' => 'form-control fs-1 fw-bold border-dark border-2'],
                 'required' => false,
             ])
             ->add('prenomClient', TextType::class, [
                 'label' => 'Prénom client',
-                'attr' => ['class' => 'form-control fs-1 fw-bold border-primary border-3'],
+                'attr' => ['class' => 'form-control fs-1 fw-bold border-dark border-2'],
                 'required' => false,
             ])
             ->add('nomClient', TextType::class, [
                 'label' => 'Nom client',
-                'attr' => ['class' => 'form-control fs-1 fw-bold border-primary border-3'],
+                'attr' => ['class' => 'form-control fs-1 fw-bold border-dark border-2'],
                 'required' => false,
             ])
             ->add('transporteur', ChoiceType::class, [
@@ -38,7 +38,7 @@ class SearchRetourType extends AbstractType
                     'geodis' => 'geodis',
                     'gls' => 'gls',
                 ],
-                'attr' => ['class' => 'form-select fs-1 fw-bold border-primary border-2'],
+                'attr' => ['class' => 'form-select fs-2 fw-normal border-dark border-2'],
                 'required' => false,
                 'placeholder' => 'Sélectionnez',
             ]);

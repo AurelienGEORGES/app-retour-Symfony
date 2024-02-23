@@ -20,28 +20,29 @@ class AjouterProduitLibreController extends AbstractController
 
         if ($request->isMethod('POST')) {
 
-                $idProduitLibre = $request->request->get('form-produit-libre-id');
-                $codeCouleur = $request->request->get('form-produit-libre-code-couleur');
-                $quantite = $request->request->get('form-produit-libre-quantite');
-                $transporteur = $request->request->get('form-produit-libre-transporteur');
-                $produitLibre = new ProduitLibre();
-                $produitLibre->setIdproduit($idProduitLibre);
-                $produitLibre->setCodeCouleur($codeCouleur);
-                $produitLibre->setQuantite($quantite);
-                $produitLibre->setTransporteur($transporteur);
-                $entityManager->persist($produitLibre);
-                $stock = new Stock();
-                $stock->setIdProduit($idProduitLibre);
-                $stock->setQuantite($quantite);
-                $stock->setCodeCouleur($codeCouleur);
-                $entityManager->persist($stock);
-            }      
+            $idProduitLibre = $request->request->get('form-produit-libre-id');
+            $codeCouleur = $request->request->get('form-produit-libre-code-couleur');
+            $quantite = $request->request->get('form-produit-libre-quantite');
+            $transporteur = $request->request->get('form-produit-libre-transporteur');
+            $produitLibre = new ProduitLibre();
+            $produitLibre->setIdproduit($idProduitLibre);
+            $produitLibre->setCodeCouleur($codeCouleur);
+            $produitLibre->setQuantite($quantite);
+            $produitLibre->setTransporteur($transporteur);
+            $entityManager->persist($produitLibre);
+            $stock = new Stock();
+            $stock->setIdProduit($idProduitLibre);
+            $stock->setQuantite($quantite);
+            $stock->setCodeCouleur($codeCouleur);
+            $entityManager->persist($stock);
             $entityManager->flush();
 
             $this->addFlash(
                 'notice',
                 'Le produit libre a bien été enregistré!'
             );
+        }
+
 
         return $this->render('ajouter_produit_libre/index.html.twig', [
             'controller_name' => 'AjouterProduitLibreController',

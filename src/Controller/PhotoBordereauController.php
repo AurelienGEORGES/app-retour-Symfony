@@ -57,7 +57,7 @@ class PhotoBordereauController extends AbstractController
 
             $this->addFlash(
                 'notice',
-                'Le formulaire a bien été enregistré!'
+                'Le bordereau a bien été enregistré!'
             );
         }
         return $this->render('photo_bordereau/index.html.twig', [

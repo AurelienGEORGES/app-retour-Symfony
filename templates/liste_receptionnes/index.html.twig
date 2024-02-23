@@ -4,46 +4,45 @@
 {% endblock %}
 
 {% block body %}
-	<h1 class="text-white my-5 mx-2 fs-1 fw-bold text-center">Liste des réceptionnés</h1>
+	<h1 class="text-white my-5 mx-2 fs-1 fw-normal text-center">Liste des réceptionnés</h1>
 	<form method="get" action="{{ path('app_liste_receptionnes') }}">
-		<div class='border rounded-3 border-success border-2 m-1'>
-			<h2 class="text-white my-5 fs-1 fw-bold text-center">Recherche réceptionnés</h2>
+		<div class='border rounded-3 border-warning border-2 m-1'>
 			<div class="m-3">
 				<label for="recherche-numero-receptionnes" class="form-label">
-					<span class='fs-1 fw-bold text-success'>N° RET ou RETSA</span>
+					<span class='fs-1 fw-normal text-warning'>N° RET ou RETSA</span>
 				</label>
-				<input type="text" class="form-control fs-1 fw-bold border-success border-2" id="recherche-numero-receptionnes" placeholder="entrez N°" name="recherche-numero-receptionnes">
+				<input type="text" class="form-control fs-1 fw-normal border-dark border-2" id="recherche-numero-receptionnes" placeholder="entrez N°" name="recherche-numero-receptionnes">
 			</div>
 			<div class="m-3">
 				<label for="recherche-id-receptionnes" class="form-label">
-					<span class='fs-1 fw-bold text-success'>ID produit</span>
+					<span class='fs-1 fw-normal text-warning'>ID produit</span>
 				</label>
-				<input type="text" class="form-control fs-1 fw-bold border-success border-2" id="recherche-id-receptionnes" placeholder="entrez un ID" name="recherche-id-receptionnes">
+				<input type="text" class="form-control fs-1 fw-normal border-dark border-2" id="recherche-id-receptionnes" placeholder="entrez un ID" name="recherche-id-receptionnes">
 			</div>
 			<div class='d-flex justify-content-center my-4'>
-				<button type="submit" class="btn btn-outline-success border-2 rounded-5">
-					<span class='fs-2 fw-bold p-2'>Recherche</span>
+				<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
+					<span class='fs-2 fw-normal p-2'>Recherche</span>
 				</button>
 			</div>
 		</div>
 	</form>
 	<h3 class="text-white my-5 fs-1 fw-bold text-center">Résultats recherche</h3>
-	<div class="d-flex justify-content-center">
+	<div class="d-flex justify-content-center mx-5">
 		<div>
 			{% for retour in retours %}
-				<div class="card m-1 border-success border-3">
-					<div class="card-body">
+				<div class="card my-3 border-primary border-3">
+					<div class="card-body p-0 ps-2">
 						{% if retourComplet[loop.index0] %}
-							<p class="card-title m-0">
+							<p class="card-text m-0">
 								<span class='fs-1 fw-bold text-success'>Complet</span>
 							</p>
 						{% else %}
-							<p class="card-title m-0">
+							<p class="card-text m-0">
 								<span class='fs-1 fw-bold text-danger'>Incomplet</span>
 							</p>
 						{% endif %}
-						<p class="card-title m-0">
-							<span class='fs-1 fw-bold text-success'>{{ retour.numretour }}</span>
+						<p class="card-text m-0">
+							<span class='fs-1 fw-bold'>{{ retour.numretour }}</span>
 						</p>
 						<p class="card-text m-0">
 							<span class='fs-1 fw-bold'>{{ retour.nomclient }}
@@ -52,9 +51,15 @@
 						<p class="card-text m-0">
 							<span class='fs-1 fw-bold'>{{ retour.transporteur }}</span>
 						</p>
-						<p class="card-text m-0">
-							<span class='fs-1 fw-bold text-success'>Produits réceptionnés</span>
-						</p>
+						{% if retourComplet[loop.index0] %}
+							<p class="card-text m-0">
+								<span class='fs-1 fw-bold text-success'>Réceptionnés</span>
+							</p>
+						{% else %}
+							<p class="card-text m-0">
+								<span class='fs-1 fw-bold text-danger'>Réceptionnés</span>
+							</p>
+						{% endif %}
 						{% for retourProduitReceptionne in retour.retourProduitReceptionnes %}
 							<p class="card-text m-0">
 								<span class='fs-1 fw-bold'>{{ retourProduitReceptionne.idproduit }}
@@ -62,9 +67,15 @@
 									{{ retourProduitReceptionne.quantite }}</span>
 							</p>
 						{% endfor %}
-						<p class="card-text m-0">
-							<span class='fs-1 fw-bold text-success'>Produits de l'attendu ou du sans attendu</span>
-						</p>
+						{% if retourComplet[loop.index0] %}
+							<p class="card-text m-0">
+								<span class='fs-1 fw-bold text-success'>Attendus</span>
+							</p>
+						{% else %}
+							<p class="card-text m-0">
+								<span class='fs-1 fw-bold text-danger'>Attendus</span>
+							</p>
+						{% endif %}
 						{% for retourProduit in retour.retourProduits %}
 							<p class="card-text m-0">
 								<span class='fs-1 fw-bold'>{{ retourProduit.idproduit }}

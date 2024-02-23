@@ -33,7 +33,7 @@ class CreationPaletteController extends AbstractController
                 $criteria['id_produit'] = $idProduitStock;
                 $stockProduits = $entityManager->getRepository(Stock::class)->findByCriteria($criteria);
             }
-            
+
             if ($couleurProduitStock) {
                 $criteria['code_couleur'] = $couleurProduitStock;
                 $stockProduits = $entityManager->getRepository(Stock::class)->findByCriteria($criteria);
@@ -117,15 +117,16 @@ class CreationPaletteController extends AbstractController
                 }
 
             $entityManager->flush();
+
+            $this->addFlash(
+                'notice',
+                'La palette a bien été envoyée!'
+            );
+
             $stockProduits = $entityManager->getRepository(Stock::class)->findAll();
         }
 
         $request->getSession()->set('produits_selectionnes', $produitsSelectionnes);
-
-        $this->addFlash(
-            'notice',
-            'La palette a bien été envoyée!'
-        );
 
         return $this->render('creation_palette/index.html.twig', [
             'controller_name' => 'CreationPaletteController',

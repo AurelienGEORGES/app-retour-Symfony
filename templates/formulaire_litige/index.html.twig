@@ -5,81 +5,250 @@
 
 {% block body %}
 	{% for message in app.flashes('notice') %}
-		<div class="flash-notice">
-			<p class="text-warning my-5 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
+		<div id="message">
+			<div class="flash-notice">
+				<p class="text-success my-3 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
+			</div>
+			<div class='d-flex justify-content-center'>
+				<button type="submit" class="btn btn-outline-success border-3 rounded-5" onclick="(removeMessage())">
+					<span class='fs-2 fw-normal p-3'>OK!</span>
+				</button>
+			</div>
 		</div>
 	{% endfor %}
-	<h1 class="text-white my-5 mx-2 fs-1 fw-bold text-center">Ajouter des produits à la reception
+	<h1 class="text-white my-5 mx-2 fs-1 fw-normal text-center">Reception
 		{{ numretour }}
 		avec litige</h1>
 	<form method="post" enctype="multipart/form-data" action="{{ path('app_formulaire_litige', {'id': id}) }}">
-		<div class="m-2">
-			<div class="input-group">
-				<label class="input-group-text" for="inputGroupFile01">photo 1</label>
-				<input type="file" accept="image/*" capture="camera" id="inputGroupFile01" class="form-control" name="photo1">
+		<div class="accordion mx-1 border border-4 border-dark rounded-3" id="accordionExample">
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+						Photo 1
+					</button>
+				</h2>
+				<div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<div class='d-flex justify-content-center flex-column my-3'>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="openCamera(1)">
+									<span class='fs-2 fw-normal'>Ouvrir caméra</span>
+								</button>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="closeCamera(1)">
+									<span class='fs-2 fw-normal'>Fermer caméra</span>
+								</button>
+							</div>
+							<div class="scan d-flex justify-content-center">
+								<video id="video1" width="640" height="480"></video>
+								<canvas id="canvas1" width="640" height="480" style="display: none;"></canvas>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="takePhoto(1)">
+									<span class='fs-2 fw-normal'>Prendre photo</span>
+								</button>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<img src="" alt="photo" id="photo-bordereau1" style="display: none;"/>
+							</div>
+							<div class="input-group">
+								<input type="file" accept="image/*" capture="camera" id="photoInput1" class="form-control m-0" name="photo1" required/>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="m-2">
-			<div class="input-group">
-				<label class="input-group-text" for="inputGroupFile02">photo 2</label>
-				<input type="file" accept="image/*" capture="camera" id="inputGroupFile02" class="form-control" name="photo2">
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+						Photo 2
+					</button>
+				</h2>
+				<div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<div class='d-flex justify-content-center flex-column my-3'>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="openCamera(2)">
+									<span class='fs-2 fw-normal'>Ouvrir caméra</span>
+								</button>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="closeCamera(2)">
+									<span class='fs-2 fw-normal'>Fermer caméra</span>
+								</button>
+							</div>
+							<div class="scan d-flex justify-content-center">
+								<video id="video2" width="640" height="480"></video>
+								<canvas id="canvas2" width="640" height="480" style="display: none;"></canvas>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="takePhoto(2)">
+									<span class='fs-2 fw-normal'>Prendre photo</span>
+								</button>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<img src="" alt="photo" id="photo-bordereau2" style="display: none;"/>
+							</div>
+							<div class="input-group">
+								<input type="file" accept="image/*" capture="camera" id="photoInput2" class="form-control m-0" name="photo2" required/>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="m-2">
-			<div class="input-group">
-				<label class="input-group-text" for="inputGroupFile03">photo 3</label>
-				<input type="file" accept="image/*" capture="camera" id="inputGroupFile03" class="form-control" name="photo3">
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+						Photo 3
+					</button>
+				</h2>
+				<div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<div class='d-flex justify-content-center flex-column my-3'>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="openCamera(3)">
+									<span class='fs-2 fw-normal'>Ouvrir caméra</span>
+								</button>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="closeCamera(3)">
+									<span class='fs-2 fw-normal'>Fermer caméra</span>
+								</button>
+							</div>
+							<div class="scan d-flex justify-content-center">
+								<video id="video3" width="640" height="480"></video>
+								<canvas id="canvas3" width="640" height="480" style="display: none;"></canvas>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="takePhoto(3)">
+									<span class='fs-2 fw-normal'>Prendre photo</span>
+								</button>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<img src="" alt="photo" id="photo-bordereau3" style="display: none;"/>
+							</div>
+							<div class="input-group">
+								<input type="file" accept="image/*" capture="camera" id="photoInput3" class="form-control m-0" name="photo3" required/>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="m-2">
-			<div class="input-group">
-				<label class="input-group-text" for="inputGroupFile04">photo 4</label>
-				<input type="file" accept="image/*" capture="camera" id="inputGroupFile04" class="form-control" name="photo4">
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+						Photo 4
+					</button>
+				</h2>
+				<div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<div class='d-flex justify-content-center flex-column my-3'>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="openCamera(4)">
+									<span class='fs-2 fw-normal'>Ouvrir caméra</span>
+								</button>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="closeCamera(4)">
+									<span class='fs-2 fw-normal'>Fermer caméra</span>
+								</button>
+							</div>
+							<div class="scan d-flex justify-content-center">
+								<video id="video4" width="640" height="480"></video>
+								<canvas id="canvas4" width="640" height="480" style="display: none;"></canvas>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="takePhoto(4)">
+									<span class='fs-2 fw-normal'>Prendre photo</span>
+								</button>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<img src="" alt="photo" id="photo-bordereau4" style="display: none;"/>
+							</div>
+							<div class="input-group">
+								<input type="file" accept="image/*" capture="camera" id="photoInput4" class="form-control m-0" name="photo4" required/>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="m-2">
-			<div class="input-group">
-				<label class="input-group-text" for="inputGroupFile05">photo 5</label>
-				<input type="file" accept="image/*" capture="camera" id="inputGroupFile05" class="form-control" name="photo5">
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+						Photo 5
+					</button>
+				</h2>
+				<div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<div class='d-flex justify-content-center flex-column my-3'>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="openCamera(5)">
+									<span class='fs-2 fw-normal'>Ouvrir caméra</span>
+								</button>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="closeCamera(5)">
+									<span class='fs-2 fw-normal'>Fermer caméra</span>
+								</button>
+							</div>
+							<div class="scan d-flex justify-content-center">
+								<video id="video5" width="640" height="480"></video>
+								<canvas id="canvas5" width="640" height="480" style="display: none;"></canvas>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="takePhoto(5)">
+									<span class='fs-2 fw-normal'>Prendre photo</span>
+								</button>
+							</div>
+							<div class="my-3 d-flex justify-content-center">
+								<img src="" alt="photo" id="photo-bordereau5" style="display: none;"/>
+							</div>
+							<div class="input-group">
+								<input type="file" accept="image/*" capture="camera" id="photoInput5" class="form-control m-0" name="photo5" required/>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="m-3">
 			<label for="transporteur-form-litige" class="form-label">
-				<span class='fs-1 fw-bold text-warning'>Transporteur</span>
+				<span class='fs-1 fw-normal text-warning'>Transporteur</span>
 			</label>
-			<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="transporteur-form-litige" name="transporteur-form-litige">
-				<option value="{{ transporteur }}" class='fs-1 fw-bold'>{{ transporteur }}</option>
-				<option value="shenker" class='fs-1 fw-bold'>shenker</option>
-				<option value="dpd" class='fs-1 fw-bold'>dpd</option>
-				<option value="mazet" class='fs-1 fw-bold'>mazet</option>
-				<option value="geodis" class='fs-1 fw-bold'>geodis</option>
-				<option value="gls" class='fs-1 fw-bold'>gls</option>
+			<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="transporteur-form-litige" name="transporteur-form-litige">
+				<option value="{{ transporteur }}" class='fs-1 fw-normal'>{{ transporteur }}</option>
+				<option value="shenker" class='fs-1 fw-normal'>shenker</option>
+				<option value="dpd" class='fs-1 fw-normal'>dpd</option>
+				<option value="mazet" class='fs-1 fw-normal'>mazet</option>
+				<option value="geodis" class='fs-1 fw-normal'>geodis</option>
+				<option value="gls" class='fs-1 fw-normal'>gls</option>
 			</select>
 		</div>
 		<div class="m-3">
 			<label for="etat-form-litige" class="form-label">
-				<span class='fs-1 fw-bold text-warning'>Etat du colis</span>
+				<span class='fs-1 fw-normal text-warning'>Etat du colis</span>
 			</label>
-			<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="etat-form-litige" name="etat-form-litige">
-				<option value="brisé" class='fs-1 fw-bold'>brisé</option>
-				<option value="cassé" class='fs-1 fw-bold'>cassé</option>
-				<option value="tordu" class='fs-1 fw-bold'>tordu</option>
-				<option value="déchiré" class='fs-1 fw-bold'>déchiré</option>
-				<option value="abimé" class='fs-1 fw-bold'>abimé</option>
+			<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="etat-form-litige" name="etat-form-litige">
+				<option value="brisé" class='fs-1 fw-normal'>brisé</option>
+				<option value="cassé" class='fs-1 fw-normal'>cassé</option>
+				<option value="tordu" class='fs-1 fw-normal'>tordu</option>
+				<option value="déchiré" class='fs-1 fw-normal'>déchiré</option>
+				<option value="abimé" class='fs-1 fw-normal'>abimé</option>
 			</select>
 		</div>
 		<div class="m-3">
 			<label for="commentaire-form-litige">
-				<span class='fs-1 fw-bold text-warning'>Commentaires</span>
+				<span class='fs-1 fw-normal text-warning'>Commentaires</span>
 			</label>
-			<textarea class="form-control fs-2 fw-bold mt-3 border-warning border-2 " id="commentaire-form-litige" style="height: 150px; width: 15rem;" name="commentaire-form-litige"></textarea>
+			<textarea class="form-control fs-3 fw-normal mt-3 border-dark border-2 " id="commentaire-form-litige" style="height: 150px; width: 15rem;" name="commentaire-form-litige"></textarea>
 		</div>
 		{% for retourProduit in retourProduits %}
 			<div class='border rounded-3 border-warning border-2 mx-1 my-4'>
 				<div class='d-flex justify-content-center flex-column'>
 					<div class='d-flex justify-content-center'>
 						<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga({{ retourProduit.id }})">
-							<span class='fs-2 fw-bold p-2'>Scan produit</span>
+							<span class='fs-2 fw-normal'>Scan produit</span>
 						</button>
 					</div>
 					<div class='d-flex justify-content-center'>
@@ -88,51 +257,51 @@
 				</div>
 				<div class="m-3">
 					<label for="id-form-litige_{{ retourProduit.id }}" class="form-label">
-						<span class='fs-1 fw-bold text-warning'>ID produit</span>
+						<span class='fs-1 fw-normal text-warning'>ID produit</span>
 					</label>
-					<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.idproduit }}" name="id-form-litige_{{ retourProduit.id }}" required>
+					<input type="number" class="form-control fs-1 fw-normal border-dark border-2" id="id-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.idproduit }}" name="id-form-litige_{{ retourProduit.id }}" required>
 				</div>
 				<div class="m-3">
 					<label for="code-couleur-form-litige_{{ retourProduit.id }}" class="form-label">
-						<span class='fs-1 fw-bold text-warning'>Code couleur</span>
+						<span class='fs-1 fw-normal text-warning'>Code couleur</span>
 					</label>
-					<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="code-couleur-form-litige_{{ retourProduit.id }}" name="code-couleur-form-litige_{{ retourProduit.id }}" required>
-						<option value="vert" class='fs-1 fw-bold'>vert</option>
-						<option value="jaune" class='fs-1 fw-bold'>jaune</option>
-						<option value="orange" class='fs-1 fw-bold'>orange</option>
-						<option value="rouge" class='fs-1 fw-bold'>rouge</option>
-						<option value="noir" class='fs-1 fw-bold'>noir</option>
+					<select class="form-select w-75 fs-1 fw-normal border-dak border-2" id="code-couleur-form-litige_{{ retourProduit.id }}" name="code-couleur-form-litige_{{ retourProduit.id }}" required>
+						<option value="vert" class='fs-1 fw-normal'>vert</option>
+						<option value="jaune" class='fs-1 fw-normal'>jaune</option>
+						<option value="orange" class='fs-1 fw-normal'>orange</option>
+						<option value="rouge" class='fs-1 fw-normal'>rouge</option>
+						<option value="noir" class='fs-1 fw-normal'>noir</option>
 					</select>
 				</div>
 				<div class="m-3">
 					<div class="form-group">
 						<label for="quantite-form-litige_{{ retourProduit.id }}">
-							<span class='fs-1 fw-bold text-warning'>Quantité</span>
+							<span class='fs-1 fw-normal text-warning'>Quantité</span>
 						</label>
-						<input type="number" min="1" class="form-control fs-1 fw-bold border-warning border-2" id="quantite-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.quantite }}" name="quantite-form-litige_{{ retourProduit.id }}" required/>
+						<input type="number" min="1" class="form-control fs-1 fw-normal border-dark border-2" id="quantite-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.quantite }}" name="quantite-form-litige_{{ retourProduit.id }}" required/>
 					</div>
 				</div>
-				<div class='ms-3 my-5 d-flex justify-content-center'>
+				<div class='my-5 d-flex justify-content-center'>
 					<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
-						<span class='fs-2 fw-bold p-2'>Supprimmer</span>
+						<span class='fs-2 fw-normal'>Supprimer</span>
 					</button>
 				</div>
 			</div>
 		{% endfor %}
 		<div id="ajoutProduit"></div>
-		<div class="d-flex justify-content-center my-4">
-			<button type="button" class="btn btn-outline-warning m-2 border-2 rounded-5" onclick="ajoutProduit()">
-				<span class='fs-2 fw-bold p-2'>Ajouter produit</span>
+		<div class="d-flex justify-content-center my-5">
+			<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="ajoutProduit()">
+				<span class='fs-2 fw-normal'>Ajouter produit</span>
 			</button>
 		</div>
-		<div class='ms-3 my-5 d-flex justify-content-center'>
+		<div class='my-5 d-flex justify-content-center'>
 			<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
-				<span class='fs-2 fw-bold p-2'>Enregistrer</span>
+				<span class='fs-2 fw-normal'>Enregistrer</span>
 			</button>
 		</div>
 	</form>
 	<script type="text/javascript">
-		let compteur = 1;
+		let compteur = 0;
 function ajoutProduit() {
 let container = document.createElement('div');
 container.className = 'border rounded-3 border-warning border-2 mx-1 my-4';
@@ -140,7 +309,7 @@ container.innerHTML = `
         <div class='d-flex justify-content-center flex-column m-3'>
 					<div class='d-flex justify-content-center'>
 						<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga_on_add_product(${compteur})">
-							<span class='fs-2 fw-bold p-2'>Scan produit</span>
+							<span class='fs-2 fw-normal'>Scan produit</span>
 						</button>
 					</div>
 					<div class='d-flex justify-content-center'>
@@ -149,33 +318,33 @@ container.innerHTML = `
 				</div>
         <div class="m-3">
         <label for="id-form-litige" class="form-label">
-					<span class='fs-1 fw-bold text-warning'>ID produit</span>
+					<span class='fs-1 fw-normal text-warning'>ID produit</span>
 				</label>
-				<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-litige_${compteur}" placeholder="remplir ou scanner" name="id-form-litige[]" required>
+				<input type="number" class="form-control fs-1 fw-normal border-dark border-2" id="id-form-litige_${compteur}" placeholder="id" name="id-form-litige[]" required>
 			</div>
 			<div class="m-3">
 				<label for="code-couleur-form-litige" class="form-label">
-					<span class='fs-1 fw-bold text-warning'>Code couleur</span>
+					<span class='fs-1 fw-normal text-warning'>Code couleur</span>
 				</label>
-				<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="code-couleur-form-litige" name="code-couleur-form-litige[]" required>
-					<option value="vert" class='fs-1 fw-bold'>vert</option>
-					<option value="jaune" class='fs-1 fw-bold'>jaune</option>
-					<option value="orange" class='fs-1 fw-bold'>orange</option>
-					<option value="rouge" class='fs-1 fw-bold'>rouge</option>
-					<option value="noir" class='fs-1 fw-bold'>noir</option>
+				<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="code-couleur-form-litige" name="code-couleur-form-litige[]" required>
+					<option value="vert" class='fs-1 fw-normal'>vert</option>
+					<option value="jaune" class='fs-1 fw-normal'>jaune</option>
+					<option value="orange" class='fs-1 fw-normal'>orange</option>
+					<option value="rouge" class='fs-1 fw-normal'>rouge</option>
+					<option value="noir" class='fs-1 fw-normal'>noir</option>
 				</select>
 			</div>
 			<div class="m-3">
 				<div class="form-group">
 					<label for="quantite-form-litige">
-						<span class='fs-1 fw-bold text-warning'>Quantité</span>
+						<span class='fs-1 fw-normal text-warning'>Quantité</span>
 					</label>
-					<input type="number" min="1" class="form-control fs-1 fw-bold border-warning border-2" id="quantite-form-litige" placeholder="1" name="quantite-form-litige[]" required/>
+					<input type="number" min="1" class="form-control fs-1 fw-normal border-dark border-2" id="quantite-form-litige" placeholder="1" name="quantite-form-litige[]" required/>
 				</div>
 			</div>
-        <div class='ms-3 my-5 d-flex justify-content-center'>
+        <div class='my-5 d-flex justify-content-center'>
             <button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
-                <span class='fs-2 fw-bold p-2'>Supprimer</span>
+                <span class='fs-2 fw-normal'>Supprimer</span>
             </button>
         </div>
     `;
@@ -183,7 +352,7 @@ container.innerHTML = `
 // Ajoutez le conteneur au formulaire
 let formulaire = document.getElementById('ajoutProduit');
 formulaire.appendChild(container);
-compteur++;
+compteur--;
 }
 
 function supprimerProduit(event) { // Récupérer l'élément parent du bouton sur lequel on a cliqué
@@ -244,6 +413,105 @@ document.querySelector('#id-form-litige_' + compteur).value = data.codeResult.co
 Quagga.stop();
 });
 }
+}
+
+function removeMessage() {
+var eltMessage = document.querySelector('#message')
+eltMessage.remove()
+}
+
+async function openCamera(nbVideo) {
+const video = document.getElementById('video' + nbVideo);
+
+try {
+const stream = await navigator.mediaDevices.getUserMedia({video: true});
+video.srcObject = stream;
+video.play();
+} catch (error) {
+console.error('Error accessing the camera: ', error);
+}
+}
+
+function closeCamera(nbClose) {
+const video = document.getElementById('video' + nbClose);
+const stream = video.srcObject;
+const tracks = stream.getTracks();
+
+tracks.forEach(track => {
+track.stop();
+});
+
+video.srcObject = null;
+}
+
+async function takePhoto(nbPhoto) {
+const video = document.getElementById('video' + nbPhoto);
+const canvas = document.getElementById('canvas' + nbPhoto);
+const context = canvas.getContext('2d');
+
+try {
+const stream = await navigator.mediaDevices.getUserMedia({video: true});
+video.srcObject = stream;
+
+video.onloadedmetadata = () => {
+video.play();
+};
+
+// document.body.appendChild(video);
+
+setTimeout(async () => {
+context.drawImage(video, 0, 0, canvas.width, canvas.height);
+const photo = canvas.toDataURL('image/png');
+
+// Insérer l'image capturée dans l'input file
+const photoInput = document.getElementById('photoInput' + nbPhoto);
+const blob = await dataURItoBlob(photo);
+const file = new File([blob], "photo_bordereau_" + Date.now() + ".png", {type: "image/png"});
+
+// Créer une nouvelle liste de fichiers contenant le fichier capturé
+const fileList = new DataTransfer();
+fileList.items.add(file);
+
+// Affecter la liste de fichiers à l'input file
+photoInput.files = fileList.files;
+if (fileList.files.length > 0) { // Obtenez l'URL du premier fichier dans la liste
+var imageUrl = URL.createObjectURL(fileList.files[0]);
+
+// Sélectionnez l'élément img avec l'ID "photo-bordereau"
+var voirPhoto = document.getElementById('photo-bordereau' + nbPhoto);
+
+// Définissez l'attribut src de l'image avec l'URL de l'image
+voirPhoto.src = imageUrl;
+}
+
+if (voirPhoto.src.trim() !== "") { // Affichez l'image en changeant le style
+voirPhoto.style.display = "block";
+}
+
+video.srcObject = stream;
+// document.body.appendChild(video);
+// video.parentNode.removeChild(video);
+
+// Vous pouvez ensuite envoyer la photo à un serveur ou la manipuler dans votre application.
+}, 100); // Vous pouvez ajuster ce délai selon vos besoins pour capturer la photo au bon moment.
+} catch (error) {
+console.error('Error accessing the camera: ', error);
+}
+}
+
+// Convertir les données de l'URL en objet Blob
+function dataURItoBlob(dataURI) {
+return new Promise((resolve) => {
+const byteString = atob(dataURI.split(',')[1]);
+const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+const ab = new ArrayBuffer(byteString.length);
+const ia = new Uint8Array(ab);
+for (let i = 0; i < byteString.length; i++) {
+ia[i] = byteString.charCodeAt(i);
+}
+const blob = new Blob([ab], {type: mimeString});
+resolve(blob);
+});
 }
 	</script>
 {% endblock %}

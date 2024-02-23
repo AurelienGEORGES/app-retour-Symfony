@@ -5,16 +5,20 @@ body {
 }
 
 .scan video {
-    height: 150px !important;
-    width: 200px !important; /* Définissez la hauteur de la vidéo selon vos besoins */
+    height: 210px !important;
+    width: 280px !important;
 }
 
-.scan video {
-    height: 150px !important;
-    width: 200px !important; /* Définissez la hauteur de la vidéo selon vos besoins */
+#photo-bordereau {
+    height: 210px !important;
+    width: 280px !important;
 }
 
 .drawingBuffer {
     display: none;
+}
+
+a {
+    text-decoration: none !important;  
 }
 

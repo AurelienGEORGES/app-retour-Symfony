@@ -5,17 +5,24 @@
 
 {% block body %}
 	{% for message in app.flashes('notice') %}
-		<div class="flash-notice">
-			<p class="text-warning my-5 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
+		<div id="message">
+			<div class="flash-notice">
+				<p class="text-success my-3 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
+			</div>
+			<div class='d-flex justify-content-center'>
+				<button type="submit" class="btn btn-outline-success border-3 rounded-5" onclick="(removeMessage())">
+					<span class='fs-2 fw-normal p-2'>OK!</span>
+				</button>
+			</div>
 		</div>
 	{% endfor %}
-	<h1 class="text-white my-5 fs-1 fw-bold text-center">Ajouter produit libre</h1>
+	<h1 class="text-white my-5 fs-1 fw-normal text-center">Ajouter produit libre</h1>
 	<form method="post" action="{{ path('app_ajouter_produit_libre') }}">
 		<div class='border-info border border-2 m-3 rounded-3'>
 			<div class='d-flex justify-content-center flex-column'>
 				<div class='d-flex justify-content-center'>
 					<button type="button" class="btn btn-outline-info mt-5 mb-2 border-2 rounded-5" onclick="load_quagga()">
-						<span class='fs-2 fw-bold p-2'>Scan produit</span>
+						<span class='fs-2 fw-normal'>Scan produit</span>
 					</button>
 				</div>
 				<div class='d-flex justify-content-center'>
@@ -24,45 +31,45 @@
 			</div>
 			<div class="m-3">
 				<label for="form-produit-libre-id" class="form-label">
-					<span class='fs-1 fw-bold text-info'>ID produit</span>
+					<span class='fs-1 fw-normal text-info'>ID produit</span>
 				</label>
-				<input type="number" class="form-control fs-1 fw-bold border-info border-3 rounded-3" id="form-produit-libre-id" placeholder="id" name="form-produit-libre-id" required>
+				<input type="number" class="form-control fs-1 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-id" placeholder="id" name="form-produit-libre-id" required>
 			</div>
 			<div class="m-3">
 				<label for="form-produit-libre-code-couleur" class="form-label">
-					<span class='fs-1 fw-bold text-info'>Code couleur</span>
+					<span class='fs-1 fw-normal text-info'>Code couleur</span>
 				</label>
-				<select class="form-select w-75 fs-1 fw-bold border-info border-3 rounded-3" id="form-produit-libre-code-couleur" name="form-produit-libre-code-couleur" required>
-					<option value="vert" class='fs-1 fw-bold'>vert</option>
-					<option value="jaune" class='fs-1 fw-bold'>jaune</option>
-					<option value="orange" class='fs-1 fw-bold'>orange</option>
-					<option value="rouge" class='fs-1 fw-bold'>rouge</option>
-					<option value="noir" class='fs-1 fw-bold'>noir</option>
+				<select class="form-select w-75 fs-1 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-code-couleur" name="form-produit-libre-code-couleur" required>
+					<option value="vert" class='fs-1 fw-normal'>vert</option>
+					<option value="jaune" class='fs-1 fw-normal'>jaune</option>
+					<option value="orange" class='fs-1 fw-normal'>orange</option>
+					<option value="rouge" class='fs-1 fw-normal'>rouge</option>
+					<option value="noir" class='fs-1 fw-normal'>noir</option>
 				</select>
 			</div>
 			<div class="m-3">
 				<div class="form-group">
 					<label for="form-produit-libre-quantite">
-						<span class='fs-1 fw-bold text-info'>Quantité :</span>
+						<span class='fs-1 fw-normal text-info'>Quantité :</span>
 					</label>
-					<input type="number" class="form-control fs-1 fw-bold border-info border-3 rounded-3" id="form-produit-libre-quantite" placeholder="chiffre" name="form-produit-libre-quantite" required/>
+					<input type="number" class="form-control fs-1 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-quantite" placeholder="qte" name="form-produit-libre-quantite" required/>
 				</div>
 			</div>
 			<div class="m-3">
 				<label for="form-produit-libre-transporteur" class="form-label">
-					<span class='fs-1 fw-bold text-info'>Transporteur</span>
+					<span class='fs-1 fw-normal text-info'>Transporteur</span>
 				</label>
-				<select class="form-select w-75 fs-1 fw-bold border-info border-3 rounded-3" id="form-produit-libre-transporteur" name="form-produit-libre-transporteur" required>
-					<option value="shenker" class='fs-4 fw-bold'>shenker</option>
-					<option value="dpd" class='fs-4 fw-bold'>dpd</option>
-					<option value="mazet" class='fs-4 fw-bold'>mazet</option>
-					<option value="geodis" class='fs-4 fw-bold'>geodis</option>
-					<option value="gls" class='fs-4 fw-bold'>gls</option>
+				<select class="form-select w-75 fs-1 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-transporteur" name="form-produit-libre-transporteur" required>
+					<option value="shenker" class='fs-4 fw-normal'>shenker</option>
+					<option value="dpd" class='fs-4 fw-normal'>dpd</option>
+					<option value="mazet" class='fs-4 fw-normal'>mazet</option>
+					<option value="geodis" class='fs-4 fw-normal'>geodis</option>
+					<option value="gls" class='fs-4 fw-normal'>gls</option>
 				</select>
 			</div>
-			<div class='m-5 d-flex justify-content-center'>
-				<button type="submit" class="btn btn-outline-info border-3 rounded-5">
-					<span class='fs-2 fw-bold p-2'>Mettre en stock</span>
+			<div class='my-5 d-flex justify-content-center'>
+				<button type="submit" class="btn btn-outline-info border-2 rounded-5">
+					<span class='fs-2 fw-normal'>Mettre en stock</span>
 				</button>
 			</div>
 		</div>
@@ -93,6 +100,10 @@ document.querySelector('#form-produit-libre-id').value = data.codeResult.code;
 Quagga.stop();
 });
 }
+}
+function removeMessage() {
+var eltMessage = document.querySelector('#message')
+eltMessage.remove()
 }
 	</script>
 {% endblock %}
