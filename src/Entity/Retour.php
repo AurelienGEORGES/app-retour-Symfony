@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\RetourRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\RetourProduit;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\RetourRepository;
+use App\Entity\RetourProduitReceptionnes;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: RetourRepository::class)]
 class Retour
@@ -243,7 +245,7 @@ class Retour
     {
         if (!$this->retourProduits->contains($retourProduit)) {
             $this->retourProduits->add($retourProduit);
-            $retourProduit->setIdRetour($this);
+            $retourProduit->setRetour($this);
         }
 
         return $this;
@@ -253,8 +255,8 @@ class Retour
     {
         if ($this->retourProduits->removeElement($retourProduit)) {
             // set the owning side to null (unless already changed)
-            if ($retourProduit->getIdRetour() === $this) {
-                $retourProduit->setIdRetour(null);
+            if ($retourProduit->getRetour() === $this) {
+                $retourProduit->setRetour(null);
             }
         }
 
@@ -301,5 +303,10 @@ class Retour
         $this->bordereau = $bordereau;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->num_retour;
     }
 }

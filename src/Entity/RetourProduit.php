@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\RetourProduitRepository;
+use App\Entity\Retour;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\RetourProduitRepository;
 
 #[ORM\Entity(repositoryClass: RetourProduitRepository::class)]
 class RetourProduit
@@ -53,15 +54,32 @@ class RetourProduit
         return $this;
     }
 
-    public function getIdRetour(): ?Retour
+    // public function getIdRetour(): ?Retour
+    // {
+    //     return $this->retour;
+    // }
+
+    // public function setIdRetour(?Retour $retour): static
+    // {
+    //     $this->retour = $retour;
+
+    //     return $this;
+    // }
+
+    public function getRetour(): ?Retour
     {
         return $this->retour;
     }
 
-    public function setIdRetour(?Retour $retour): static
+    public function setRetour(?Retour $retour): static
     {
         $this->retour = $retour;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->retour;
     }
 }

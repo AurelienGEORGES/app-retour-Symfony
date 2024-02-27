@@ -134,4 +134,9 @@ class Bordereau
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->num_bordereau;
+    }
+
 }
