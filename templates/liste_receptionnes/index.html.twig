@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+{% set csrfTokenListeReceptionnes = csrf_token('form-liste-receptionnes') %}
 	<h1 class="text-white my-5 mx-2 fs-1 fw-normal text-center">Liste des réceptionnés</h1>
 	<form method="get" action="{{ path('app_liste_receptionnes') }}">
 		<div class='border rounded-3 border-warning border-2 m-1'>
@@ -25,6 +26,7 @@
 				</button>
 			</div>
 		</div>
+        <input type="hidden" name="_token" value="{{ csrfTokenListeReceptionnes }}">
 	</form>
 	<h3 class="text-white my-5 fs-1 fw-bold text-center">Résultats recherche</h3>
 	<div class="d-flex justify-content-center mx-5">

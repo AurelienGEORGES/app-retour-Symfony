@@ -4,6 +4,8 @@
 {% endblock %}
 
 {% block body %}
+	{% set csrfTokenDateBordereau = csrf_token('form-date-bordereau') %}
+    {% set csrfTokenLierBordereau = csrf_token('form-lier-bordereau') %}
 	{% for message in app.flashes('notice') %}
 		<div id="message">
 			<div class="flash-notice">
@@ -31,6 +33,7 @@
 				</button>
 			</div>
 		</div>
+		<input type="hidden" name="_token" value="{{ csrfTokenDateBordereau }}">
 	</form>
 	<h2 class="text-white fs-1 mx-3 my-5 fw-normal text-center">Résultats recherche par date</h2>
 	{% for bordereau in bordereaux %}
@@ -148,6 +151,7 @@
 				<span class='fs-2 fw-normal'>Lier le bordereau</span>
 			</button>
 		</div>
+        <input type="hidden" name="_token" value="{{ csrfTokenLierBordereau }}">
 	</form>
 
 	<script type="text/javascript">

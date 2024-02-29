@@ -10,10 +10,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class FormulaireSansLitigeController extends AbstractController
 {
+    private $csrfTokenManager;
+
+    public function __construct(CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        $this->csrfTokenManager = $csrfTokenManager;
+    }
+
     #[IsGranted("ROLE_USER")]
     #[Route('/formulaire/sans/litige/{id}', name: 'app_formulaire_sans_litige')]
     public function index($id, EntityManagerInterface $entityManager, Request $request): Response
@@ -97,6 +105,8 @@ class FormulaireSansLitigeController extends AbstractController
                 'Le formulaire a bien été enregistré!'
             );
         }
+
+        $csrfTokenProduitSansLitige = $this->csrfTokenManager->getToken('form-sans-litige');
 
         return $this->render('formulaire_sans_litige/index.html.twig', [
             'controller_name' => 'FormulaireSansLitigeController',

@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+	{% set csrfTokenProduitLibre = csrf_token('form-produit-libre') %}
 	{% for message in app.flashes('notice') %}
 		<div id="message">
 			<div class="flash-notice">
@@ -73,6 +74,7 @@
 				</button>
 			</div>
 		</div>
+		<input type="hidden" name="_token" value="{{ csrfTokenProduitLibre }}">
 	</form>
 	<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.js"></script>
 	<script type="text/javascript">

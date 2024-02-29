@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ListeStockController!
+{% block title %}Liste du Stock
 {% endblock %}
 
 {% block body %}
+	{% set csrfTokenStock = csrf_token('form-stock') %}
 	<h1 class="text-white my-5 fs-1 fw-normal text-center">Liste du stock</h1>
 	<div class="border border-2 border-light rounded-3 mx-2 my-5">
 		<h2 class="text-white my-5 fs-1 fw-bold text-center">Import du stock</h2>
@@ -43,6 +44,7 @@
 					<span class='fs-2 fw-normal'>Rechercher</span>
 				</button>
 			</div>
+			<input type="hidden" name="_token" value="{{ csrfTokenStock }}">
 		</form>
 	</div>
 	<h4 class="text-white my-5 fs-1 fw-normal text-center mx-1">Résultat de la recherche</h4>

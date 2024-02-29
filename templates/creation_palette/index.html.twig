@@ -4,6 +4,8 @@
 {% endblock %}
 
 {% block body %}
+	{% set csrfTokenDepot = csrf_token('form-depot-token') %}
+	{% set csrfTokenProduitPalette = csrf_token('form-produit-palette') %}
 	{% for message in app.flashes('notice') %}
 		<div id="message">
 			<div class="flash-notice">
@@ -48,6 +50,7 @@
 					<span class='fs-2 fw-normal'>Créer palette</span>
 				</button>
 			</div>
+			<input type="hidden" name="_token" value="{{ csrfTokenDepot }}">
 		</form>
 		<div>
 			{% if produitsSelectionnes %}
@@ -98,6 +101,7 @@
 					<span class='fs-2 fw-normal'>Rechercher</span>
 				</button>
 			</div>
+            <input type="hidden" name="_token" value="{{ csrfTokenProduitPalette }}">
 		</form>
 	</div>
 	<h4 class="text-white my-5 fs-1 fw-normal text-center">Résultats recherche</h4>

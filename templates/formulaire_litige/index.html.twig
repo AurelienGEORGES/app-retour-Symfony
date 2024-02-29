@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+	{% set csrfTokenLitige = csrf_token('form-litige') %}
 	{% for message in app.flashes('notice') %}
 		<div id="message">
 			<div class="flash-notice">
@@ -299,6 +300,7 @@
 				<span class='fs-2 fw-normal'>Enregistrer</span>
 			</button>
 		</div>
+        <input type="hidden" name="_token" value="{{ csrfTokenLitige }}">
 	</form>
 	<script type="text/javascript">
 		let compteur = 0;

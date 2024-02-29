@@ -20,6 +20,7 @@
         "symfony/rate-limiter": "6.4.*",
         "symfony/runtime": "6.4.*",
         "symfony/security-bundle": "6.4.*",
+        "symfony/security-csrf": "6.4.*",
         "symfony/twig-bundle": "6.4.*",
         "symfony/ux-react": "^2.13",
         "symfony/validator": "6.4.*",

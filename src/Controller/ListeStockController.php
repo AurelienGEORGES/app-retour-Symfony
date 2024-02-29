@@ -10,10 +10,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ListeStockController extends AbstractController
 {
+    private $csrfTokenManager;
+
+    public function __construct(CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        $this->csrfTokenManager = $csrfTokenManager;
+    }
+
     #[IsGranted("ROLE_USER")]
     #[Route('/liste/stock', name: 'app_liste_stock')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
@@ -39,6 +47,8 @@ class ListeStockController extends AbstractController
                 
             }
         } 
+
+        $csrfTokenProduitStock = $this->csrfTokenManager->getToken('form-stock');
 
         return $this->render('liste_stock/index.html.twig', [
             'controller_name' => 'ListeStockController',
