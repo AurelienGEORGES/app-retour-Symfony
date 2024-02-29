@@ -27,28 +27,41 @@ class CreationPaletteController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
 
-        $stockProduits = $entityManager->getRepository(Stock::class)->findAll();
+        $request->getSession()->start();
 
-        if (!empty($request->query->get('recherche-creation-id-produit')) || !empty($request->query->get('recherche-creation-code-couleur'))) {
+        //$stockProduits = $entityManager->getRepository(Stock::class)->findAll();
 
-            $idProduitStock = $request->query->get('recherche-creation-id-produit');
-            $couleurProduitStock = $request->query->get('recherche-creation-code-couleur');
+        //if (!empty($request->query->get('recherche-creation-id-produit')) || !empty($request->query->get('recherche-creation-code-couleur'))) {
 
-            $criteria = [];
+        $idProduitStock = $request->query->get('recherche-creation-id-produit');
+        $couleurProduitStock = $request->query->get('recherche-creation-code-couleur');
+
+        //$criteria = [];
+        $criteria = $request->getSession()->get('criteria', []);
+        $stockProduits = $entityManager->getRepository(Stock::class)->findByCriteria($criteria);
+
+        // if (
+        //     $request->query->get('recherche-creation-id-produit') == ''
+        //     ||
+        //     $request->query->get('recherche-creation-code-couleur') == ''
+        // ) {
+        //     $criteria = [];
+        // }
+
             if ($idProduitStock) {
                 $criteria['id_produit'] = $idProduitStock;
                 $stockProduits = $entityManager->getRepository(Stock::class)->findByCriteria($criteria);
             }
 
-            if ($couleurProduitStock) {
-                $criteria['code_couleur'] = $couleurProduitStock;
-                $stockProduits = $entityManager->getRepository(Stock::class)->findByCriteria($criteria);
-            }
+        if ($couleurProduitStock) {
+            $criteria['code_couleur'] = $couleurProduitStock;
+            $stockProduits = $entityManager->getRepository(Stock::class)->findByCriteria($criteria);
         }
+        //}
 
-        $produitsSelectionnes = array();
+        //$produitsSelectionnes = array();
 
-        $request->getSession()->start();
+        //$request->getSession()->start();
         $produitsSelectionnes = $request->getSession()->get('produits_selectionnes', []);
 
         if (!empty($request->query->get('quantite-produit-palette'))) {
@@ -133,6 +146,7 @@ class CreationPaletteController extends AbstractController
         }
 
         $request->getSession()->set('produits_selectionnes', $produitsSelectionnes);
+        $request->getSession()->set('criteria', $criteria);
         $csrfTokenDepot = $this->csrfTokenManager->getToken('form-depot-token');
         $csrfTokenProduitPalette = $this->csrfTokenManager->getToken('form-produit-palette');
 
@@ -140,7 +154,7 @@ class CreationPaletteController extends AbstractController
             'controller_name' => 'CreationPaletteController',
             'produitsSelectionnes' => $produitsSelectionnes,
             'stockProduits' => $stockProduits,
-
+            'criteria' => $criteria
         ]);
     }
 }
