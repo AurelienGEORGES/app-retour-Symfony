@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pdf{% endblock %}
+
+{% block body %}
+
+    <h1 class="my-5 mx-2 fs-1 fw-normal text-center">Bordereau Negolux</h1>
+    <h2 class="my-5 mx-2 fs-1 fw-normal text-center">A destination de {{ depot }}</h2>
+<h3 class="my-5 mx-2 fs-1 fw-normal text-center">Liste des produits</h3>
+{% for produit in produits %}
+<h4 class="my-5 mx-2 fs-1 fw-normal text-center">id produit : {{ produit.idProduit }} * quantité {{ produit.quantite }}</h4>
+{% endfor %}
+{% endblock %}

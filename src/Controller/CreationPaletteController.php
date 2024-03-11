@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+
 use App\Entity\Stock;
 use App\Entity\Palette;
 use App\Entity\PaletteProduit;

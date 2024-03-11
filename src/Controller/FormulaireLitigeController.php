@@ -89,7 +89,9 @@ class FormulaireLitigeController extends AbstractController
             }
             $retourTraite->setNumretour($numRetourTraite);
             $retourTraite->setEtat($etat);
-            $retourTraite->setCommentaire($commentaire);
+            if (isset($commentaire)) {
+                $retourTraite->setCommentaire($commentaire);
+            }
             $currentDate = new \DateTime();
             $retourTraite->setDateTraitement($currentDate);
             if (isset($photoPath1)) {
@@ -152,8 +154,8 @@ class FormulaireLitigeController extends AbstractController
             foreach ($idStockProduits as $index => $idProduit) {
                 $stock = new Stock();
                 $stock->setIdProduit($idProduit);
-                $stock->setQuantite($quantitesStock[$index]); 
-                $stock->setCodeCouleur($codeCouleursStock[$index]); 
+                $stock->setQuantite($quantitesStock[$index]);
+                $stock->setCodeCouleur($codeCouleursStock[$index]);
                 $entityManager->persist($stock);
             }
 

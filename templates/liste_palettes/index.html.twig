@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste Palettes
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-white my-5 mx-2 fs-1 fw-normal text-center">Liste des palettes</h1>
+	<div class="d-flex justify-content-center mx-5">
+		<div>
+			{% for palette in palettes %}
+				<form method="post" class="card m-3 border-primary border-3" action="{{ path('app_pdf') }}">
+					<div class="card-body p-2">
+						<p class='fs-2 fw-bold text-center'>Palette N°{{ palette.id }}</p>
+						<input type="text" value="{{ palette.depot }}" class="pe-1 mb-1 form-control fs-3 fw-bold border-primary border-2" name="pdf-depot"/>
+						<input type="text" value="{{ palette.codeCouleur }}" class="pe-1 mb-1 form-control fs-3 fw-bold border-primary border-2" name="pdf-code-couleur"/>
+						<p class='fs-2 fw-bold text-center'>Produits * Quantité</p>
+						{% for produitPalette in palette.getPaletteProduits %}
+							<div class="d-flex justify-content flex-row">
+								<div class="me-2">
+									<input type="number" value="{{ produitPalette.idProduit }}" class="pe-1 mb-1 form-control fs-3 fw-bold border-primary border-2" name="pdf-id-produit[]"/>
+								</div>
+								<div>
+									<input type="number" value="{{ produitPalette.quantite }}" class="pe-1 mb-1 form-control fs-3 fw-bold border-primary border-2" name="pdf-quantite[]"/>
+								</div>
+							</div>
+						{% endfor %}
+						<div class='my-4 d-flex justify-content-center'>
+							<button type="submit" class="btn btn-outline-primary border-2 rounded-5">
+								<span class='fs-2 fw-normal'>Charger le pdf</span>
+							</button>
+						</div>
+					</div>
+				</form>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}

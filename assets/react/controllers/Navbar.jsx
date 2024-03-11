@@ -16,7 +16,8 @@ export default function () {
                     <a className="nav-link my-1" href="/produit"><span className="fw-normal fs-3">Ajouter produit libre</span></a>
                     <a className="nav-link my-1" href="/liste/receptionnes"><span className="fw-normal fs-3">Liste des réceptionnés</span></a>
                     <a className="nav-link my-1" href="/liste/stock"><span className="fw-normal fs-3">Liste stock</span></a>
-                    <a className="nav-link mt-1 mb-2" href="/creation/palette"><span className="fw-normal fs-3">Création palette</span></a>
+                    <a className="nav-link mt-1" href="/creation/palette"><span className="fw-normal fs-3">Création palette</span></a>
+                    <a className="nav-link mt-1 mb-2" href="/liste/palettes"><span className="fw-normal fs-3">Liste des palettes</span></a>
                 </div>
             </div>
         </div>
