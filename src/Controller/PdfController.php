@@ -47,7 +47,7 @@ class PdfController extends AbstractController
         $response = new Response();
         $response->setContent($dompdf->output());
         $response->headers->set('Content-Type', 'application/pdf');
-        $response->headers->set('Content-Disposition', 'attachment; filename=my_pdf.pdf');
+        $response->headers->set('Content-Disposition', 'attachment; filename=palette_negolux.pdf');
 
         return $response;
     }

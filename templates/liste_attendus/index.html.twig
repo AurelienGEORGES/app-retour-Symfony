@@ -34,7 +34,7 @@
 	{% for retour in retours %}
 		<div class="d-flex justify-content-center">
 			<div>
-				<div class="card m-1 border-primary border-3">
+				<div class="card my-3 border-primary border-3 min-vw-100">
 					<div class="card-body">
 						<p class="card-text m-0">
 							<span class='fs-1 fw-normal'>{{ retour.numretour }}</span>
@@ -62,7 +62,7 @@
 									{{ retourProduit.quantite }}</span>
 							</p>
 						{% endfor %}
-						<div class='d-flex flex-row'>
+						<div class='d-flex flex-row justify-content-center'>
 							<div>
 								<button type="button" class="btn btn-outline-primary m-2 border-2 rounded-5">
 									<a href="{{ path('app_formulaire_litige', {'id': retour.id}) }}">

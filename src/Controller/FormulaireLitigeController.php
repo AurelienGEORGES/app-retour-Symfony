@@ -29,6 +29,13 @@ class FormulaireLitigeController extends AbstractController
         $retour = $entityManager->getRepository(Retour::class)->find($id);
         $numretour = $retour->getNumRetour();
         $transporteur = $retour->getTransporteur();
+        $etatRetour = $retour->getEtat();
+        $commentaireRetour = $retour->getCommentaire();
+        $photoRetour1 = $retour->getPhoto1();
+        $photoRetour2 = $retour->getPhoto2();
+        $photoRetour3 = $retour->getPhoto3();
+        $photoRetour4 = $retour->getPhoto4();
+        $photoRetour5 = $retour->getPhoto5();
         $retourProduits = array_merge($retour->getRetourProduits()->toArray());
 
         if ($request->isMethod('POST')) {
@@ -173,6 +180,13 @@ class FormulaireLitigeController extends AbstractController
             'controller_name' => 'FormulaireLitigeController',
             'numretour' => $numretour,
             'transporteur' => $transporteur,
+            'photo1' => $photoRetour1,
+            'photo2' => $photoRetour2,
+            'photo3' => $photoRetour3,
+            'photo4' => $photoRetour4,
+            'photo5' => $photoRetour5,
+            'etat' => $etatRetour,
+            'commentaire' => $commentaireRetour,
             'retourProduits' => $retourProduits,
             'id' => $id
         ]);
