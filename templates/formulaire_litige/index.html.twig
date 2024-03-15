@@ -8,20 +8,20 @@
 	{% for message in app.flashes('notice') %}
 		<div id="message">
 			<div class="flash-notice">
-				<p class="text-success my-3 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
+				<p class="text-success my-3 fs-3 mx-2 fw-normal text-center">{{ message }}</p>
 			</div>
 			<div class='d-flex justify-content-center'>
 				<button type="submit" class="btn btn-outline-success border-3 rounded-5" onclick="(removeMessage())">
-					<span class='fs-2 fw-normal p-3'>OK!</span>
+					<span class='fs-3 fw-normal p-3'>OK!</span>
 				</button>
 			</div>
 		</div>
 	{% endfor %}
-	<h1 class="text-white my-5 mx-2 fs-1 fw-normal text-center">Reception
+	<h1 class="text-white my-5 mx-2 fs-3 fw-normal text-center">Reception
 		{{ numretour }}
 		avec litige</h1>
 	<form method="post" enctype="multipart/form-data" action="{{ path('app_formulaire_litige', {'id': id}) }}">
-		<div class="accordion mx-1 border border-4 border-dark rounded-3" id="accordionExample">
+		<div class="accordion mx-1 border border-4 border-dark rounded-3 input-desktop" id="accordionExample">
 			<div class="accordion-item">
 				<h2 class="accordion-header">
 					<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -32,16 +32,16 @@
 					<div class="accordion-body">
 						<div class='d-flex justify-content-center flex-column my-3'>
 							{% if photo1 %}
-								<p class='fs-2 fw-normal text-center'>la photo 1 est déjà prise</p>
+								<p class='fs-3 fw-normal text-center'>la photo 1 est déjà prise</p>
 							{% endif %}
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="openCamera(1)">
-									<span class='fs-2 fw-normal'>Ouvrir caméra</span>
+									<span class='fs-3 fw-normal'>Ouvrir caméra</span>
 								</button>
 							</div>
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="closeCamera(1)">
-									<span class='fs-2 fw-normal'>Fermer caméra</span>
+									<span class='fs-3 fw-normal'>Fermer caméra</span>
 								</button>
 							</div>
 							<div class="scan d-flex justify-content-center">
@@ -50,7 +50,7 @@
 							</div>
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="takePhoto(1)">
-									<span class='fs-2 fw-normal'>Prendre photo</span>
+									<span class='fs-3 fw-normal'>Prendre photo</span>
 								</button>
 							</div>
 							<div class="my-3 d-flex justify-content-center">
@@ -73,16 +73,16 @@
 					<div class="accordion-body">
 						<div class='d-flex justify-content-center flex-column my-3'>
 							{% if photo2 %}
-								<p class='fs-2 fw-normal text-center'>la photo 2 est déjà prise</p>
+								<p class='fs-3 fw-normal text-center'>la photo 2 est déjà prise</p>
 							{% endif %}
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="openCamera(2)">
-									<span class='fs-2 fw-normal'>Ouvrir caméra</span>
+									<span class='fs-3 fw-normal'>Ouvrir caméra</span>
 								</button>
 							</div>
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="closeCamera(2)">
-									<span class='fs-2 fw-normal'>Fermer caméra</span>
+									<span class='fs-3 fw-normal'>Fermer caméra</span>
 								</button>
 							</div>
 							<div class="scan d-flex justify-content-center">
@@ -91,7 +91,7 @@
 							</div>
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="takePhoto(2)">
-									<span class='fs-2 fw-normal'>Prendre photo</span>
+									<span class='fs-3 fw-normal'>Prendre photo</span>
 								</button>
 							</div>
 							<div class="my-3 d-flex justify-content-center">
@@ -114,16 +114,16 @@
 					<div class="accordion-body">
 						<div class='d-flex justify-content-center flex-column my-3'>
 							{% if photo3 %}
-								<p class='fs-2 fw-normal text-center'>la photo 3 est déjà prise</p>
+								<p class='fs-3 fw-normal text-center'>la photo 3 est déjà prise</p>
 							{% endif %}
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="openCamera(3)">
-									<span class='fs-2 fw-normal'>Ouvrir caméra</span>
+									<span class='fs-3 fw-normal'>Ouvrir caméra</span>
 								</button>
 							</div>
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="closeCamera(3)">
-									<span class='fs-2 fw-normal'>Fermer caméra</span>
+									<span class='fs-3 fw-normal'>Fermer caméra</span>
 								</button>
 							</div>
 							<div class="scan d-flex justify-content-center">
@@ -132,7 +132,7 @@
 							</div>
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="takePhoto(3)">
-									<span class='fs-2 fw-normal'>Prendre photo</span>
+									<span class='fs-3 fw-normal'>Prendre photo</span>
 								</button>
 							</div>
 							<div class="my-3 d-flex justify-content-center">
@@ -155,16 +155,16 @@
 					<div class="accordion-body">
 						<div class='d-flex justify-content-center flex-column my-3'>
 							{% if photo4 %}
-								<p class='fs-2 fw-normal text-center'>la photo 4 est déjà prise</p>
+								<p class='fs-3 fw-normal text-center'>la photo 4 est déjà prise</p>
 							{% endif %}
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="openCamera(4)">
-									<span class='fs-2 fw-normal'>Ouvrir caméra</span>
+									<span class='fs-3 fw-normal'>Ouvrir caméra</span>
 								</button>
 							</div>
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="closeCamera(4)">
-									<span class='fs-2 fw-normal'>Fermer caméra</span>
+									<span class='fs-3 fw-normal'>Fermer caméra</span>
 								</button>
 							</div>
 							<div class="scan d-flex justify-content-center">
@@ -173,7 +173,7 @@
 							</div>
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="takePhoto(4)">
-									<span class='fs-2 fw-normal'>Prendre photo</span>
+									<span class='fs-3 fw-normal'>Prendre photo</span>
 								</button>
 							</div>
 							<div class="my-3 d-flex justify-content-center">
@@ -196,16 +196,16 @@
 					<div class="accordion-body">
 						<div class='d-flex justify-content-center flex-column my-3'>
 							{% if photo5 %}
-								<p class='fs-2 fw-normal text-center'>la photo 5 est déjà prise</p>
+								<p class='fs-3 fw-normal text-center'>la photo 5 est déjà prise</p>
 							{% endif %}
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="openCamera(5)">
-									<span class='fs-2 fw-normal'>Ouvrir caméra</span>
+									<span class='fs-3 fw-normal'>Ouvrir caméra</span>
 								</button>
 							</div>
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="closeCamera(5)">
-									<span class='fs-2 fw-normal'>Fermer caméra</span>
+									<span class='fs-3 fw-normal'>Fermer caméra</span>
 								</button>
 							</div>
 							<div class="scan d-flex justify-content-center">
@@ -214,7 +214,7 @@
 							</div>
 							<div class="my-3 d-flex justify-content-center">
 								<button type="button" class="btn btn-outline-dark border-2 rounded-5" onclick="takePhoto(5)">
-									<span class='fs-2 fw-normal'>Prendre photo</span>
+									<span class='fs-3 fw-normal'>Prendre photo</span>
 								</button>
 							</div>
 							<div class="my-3 d-flex justify-content-center">
@@ -228,92 +228,111 @@
 				</div>
 			</div>
 		</div>
-		<div class="m-3">
-			<label for="transporteur-form-litige" class="form-label">
-				<span class='fs-1 fw-normal text-warning'>Transporteur</span>
-			</label>
-			<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="transporteur-form-litige" name="transporteur-form-litige">
-				<option value="{{ transporteur }}" class='fs-1 fw-normal'>{{ transporteur }}</option>
-				<option value="shenker" class='fs-1 fw-normal'>shenker</option>
-				<option value="dpd" class='fs-1 fw-normal'>dpd</option>
-				<option value="mazet" class='fs-1 fw-normal'>mazet</option>
-				<option value="geodis" class='fs-1 fw-normal'>geodis</option>
-				<option value="gls" class='fs-1 fw-normal'>gls</option>
-			</select>
-		</div>
-		<div class="m-3">
-			<label for="etat-form-litige" class="form-label">
-				<span class='fs-1 fw-normal text-warning'>Etat du colis</span>
-			</label>
-			<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="etat-form-litige" name="etat-form-litige">
-				<option value="{{ etat }}" class='fs-1 fw-normal'>{{ etat }}</option>
-                <option value="brisé" class='fs-1 fw-normal'>brisé</option>
-				<option value="cassé" class='fs-1 fw-normal'>cassé</option>
-				<option value="tordu" class='fs-1 fw-normal'>tordu</option>
-				<option value="déchiré" class='fs-1 fw-normal'>déchiré</option>
-				<option value="abimé" class='fs-1 fw-normal'>abimé</option>
-			</select>
-		</div>
-		<div class="m-3">
-			<label for="commentaire-form-litige">
-				<span class='fs-1 fw-normal text-warning'>Commentaires</span>
-			</label>
-			<textarea placeholder="{{ commentaire }}" class="form-control fs-3 fw-normal mt-3 border-dark border-2" id="commentaire-form-litige" style="height: 150px;" name="commentaire-form-litige"></textarea>
-		</div>
-		{% for retourProduit in retourProduits %}
-			<div class='border rounded-3 border-warning border-2 mx-1 my-4'>
-				<div class='d-flex justify-content-center flex-column'>
-					<div class='d-flex justify-content-center'>
-						<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga({{ retourProduit.id }})">
-							<span class='fs-2 fw-normal'>Scan produit</span>
-						</button>
-					</div>
-					<div class='d-flex justify-content-center'>
-						<div id='scan_{{ retourProduit.id }}' class='d-flex justify-content-center flex-column scan mt-3'></div>
-					</div>
-				</div>
-				<div class="m-3">
-					<label for="id-form-litige_{{ retourProduit.id }}" class="form-label">
-						<span class='fs-1 fw-normal text-warning'>ID produit</span>
+		<div class="d-flex justify-content-center">
+			<div class="d-flex flex-column justify-content-center">
+				<div class="m-1 d-flex justify-content-center flex-column">
+					<label for="transporteur-form-litige" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Transporteur</span>
 					</label>
-					<input type="number" class="form-control fs-1 fw-normal border-dark border-2" id="id-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.idproduit }}" name="id-form-litige_{{ retourProduit.id }}" required>
-				</div>
-				<div class="m-3">
-					<label for="code-couleur-form-litige_{{ retourProduit.id }}" class="form-label">
-						<span class='fs-1 fw-normal text-warning'>Code couleur</span>
-					</label>
-					<select class="form-select w-75 fs-1 fw-normal border-dak border-2" id="code-couleur-form-litige_{{ retourProduit.id }}" name="code-couleur-form-litige_{{ retourProduit.id }}" required>
-						<option value="vert" class='fs-1 fw-normal'>vert</option>
-						<option value="jaune" class='fs-1 fw-normal'>jaune</option>
-						<option value="orange" class='fs-1 fw-normal'>orange</option>
-						<option value="rouge" class='fs-1 fw-normal'>rouge</option>
-						<option value="noir" class='fs-1 fw-normal'>noir</option>
+					<select class="form-select w-75 fs-3 fw-normal border-dark border-2" id="transporteur-form-litige" name="transporteur-form-litige">
+						<option value="{{ transporteur }}" class='fs-3 fw-normal'>{{ transporteur }}</option>
+						<option value="shenker" class='fs-3 fw-normal'>shenker</option>
+						<option value="dpd" class='fs-3 fw-normal'>dpd</option>
+						<option value="mazet" class='fs-3 fw-normal'>mazet</option>
+						<option value="geodis" class='fs-3 fw-normal'>geodis</option>
+						<option value="gls" class='fs-3 fw-normal'>gls</option>
 					</select>
 				</div>
-				<div class="m-3">
-					<div class="form-group">
-						<label for="quantite-form-litige_{{ retourProduit.id }}">
-							<span class='fs-1 fw-normal text-warning'>Quantité</span>
-						</label>
-						<input type="number" min="1" class="form-control fs-1 fw-normal border-dark border-2" id="quantite-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.quantite }}" name="quantite-form-litige_{{ retourProduit.id }}" required/>
-					</div>
+				<div class="m-1 d-flex justify-content-center flex-column">
+					<label for="etat-form-litige" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Etat du colis</span>
+					</label>
+					<select class="form-select w-75 fs-3 fw-normal border-dark border-2" id="etat-form-litige" name="etat-form-litige">
+						<option value="{{ etat }}" class='fs-3 fw-normal'>{{ etat }}</option>
+						<option value="ouvert" class='fs-3 fw-normal'>ouvert</option>
+						<option value="manquant" class='fs-3 fw-normal'>manquant</option>
+						<option value="déchiré" class='fs-3 fw-normal'>déchiré</option>
+						<option value="troué" class='fs-3 fw-normal'>troué</option>
+						<option value="pas d'info" class='fs-3 fw-normal'>pas d'info</option>
+					</select>
 				</div>
-				<div class='my-5 d-flex justify-content-center'>
-					<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
-						<span class='fs-2 fw-normal'>Supprimer</span>
-					</button>
+                <div class="m-1 d-flex justify-content-center flex-column">
+					<label for="etat-produit-form-litige" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Etat du produit</span>
+					</label>
+					<select class="form-select w-75 fs-3 fw-normal border-dark border-2" id="etat-produit-form-litige" name="etat-produit-form-litige">
+						<option value="{{ etatProduit }}" class='fs-3 fw-normal'>{{ etatProduit }}</option>
+						<option value="pièce manquante" class='fs-3 fw-normal'>pièce manquante</option>
+						<option value="abimé" class='fs-3 fw-normal'>abimé</option>
+                        <option value="pas d'info" class='fs-3 fw-normal'>pas d'info</option>
+					</select>
+				</div>
+				<div class="m-1 d-flex justify-content-center flex-column">
+					<label for="commentaire-form-litige">
+						<span class='fs-3 fw-normal text-warning'>Commentaires</span>
+					</label>
+					<textarea placeholder="{{ commentaire }}" class="form-control fs-3 fw-normal mt-3 border-dark border-2" id="commentaire-form-litige" name="commentaire-form-litige" rows="5" cols="33"></textarea>
+				</div>
+			</div>
+		</div>
+		{% for retourProduit in retourProduits %}
+			<div class="d-flex justify-content-center">
+				<div class='border rounded-3 border-warning border-2 mx-1 my-4 custom-width-desktop'>
+					<div class='d-flex justify-content-center flex-column'>
+						<div class='d-flex justify-content-center'>
+							<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga({{ retourProduit.id }})">
+								<span class='fs-3 fw-normal'>Scan produit</span>
+							</button>
+						</div>
+						<div class='d-flex justify-content-center'>
+							<div id='scan_{{ retourProduit.id }}' class='d-flex justify-content-center flex-column scan mt-3'></div>
+						</div>
+					</div>
+					<div class="m-3 d-flex justify-content-center flex-column">
+						<label for="id-form-litige_{{ retourProduit.id }}" class="form-label">
+							<span class='fs-3 fw-normal text-warning'>ID produit</span>
+						</label>
+						<input type="number" class="form-control fs-3 fw-normal border-dark border-2 input-desktop" id="id-form-litige_{{ retourProduit.id }}" name="id-form-litige_{{ retourProduit.id }}" required value="{{ retourProduit.idproduit }}">
+					</div>
+                    <div class="m-3 d-flex justify-content-center flex-column">
+						<div class="form-group">
+							<label for="quantite-form-litige_{{ retourProduit.id }}">
+								<span class='fs-3 fw-normal text-warning'>Quantité</span>
+							</label>
+							<input type="number" min="1" class="form-control fs-3 fw-normal border-dark border-2" id="quantite-form-litige_{{ retourProduit.id }}" value="{{ retourProduit.quantite }}" name="quantite-form-litige_{{ retourProduit.id }}" required/>
+						</div>
+					</div>
+                    {% for i in 1..retourProduit.quantite %}
+					<div class="m-3 d-flex justify-content-center flex-column">
+						<label for="code-couleur-form-litige_{{ i }}" class="form-label">
+							<span class='fs-3 fw-normal text-warning'>Couleur produit {{ i }}</span>
+						</label>
+						<select class="form-select w-75 fs-3 fw-normal border-dak border-2" id="code-couleur-form-litige_{{ i }}" name="code-couleur-form-litige_{{ i }}" required>
+							<option value="vert" class='fs-3 fw-normal'>vert</option>
+							<option value="jaune" class='fs-3 fw-normal'>jaune</option>
+							<option value="orange" class='fs-3 fw-normal'>orange</option>
+							<option value="rouge" class='fs-3 fw-normal'>rouge</option>
+							<option value="noir" class='fs-3 fw-normal'>noir</option>
+						</select>
+					</div>
+                    {% endfor %}
+					<div class='my-5 d-flex justify-content-center'>
+						<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
+							<span class='fs-3 fw-normal'>Supprimer</span>
+						</button>
+					</div>
 				</div>
 			</div>
 		{% endfor %}
 		<div id="ajoutProduit"></div>
 		<div class="d-flex justify-content-center my-5">
 			<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="ajoutProduit()">
-				<span class='fs-2 fw-normal'>Ajouter produit</span>
+				<span class='fs-3 fw-normal'>Ajouter produit</span>
 			</button>
 		</div>
 		<div class='my-5 d-flex justify-content-center'>
 			<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
-				<span class='fs-2 fw-normal'>Enregistrer</span>
+				<span class='fs-3 fw-normal'>Enregistrer</span>
 			</button>
 		</div>
 		<input type="hidden" name="_token" value="{{ csrfTokenLitige }}">
@@ -322,12 +341,13 @@
 		let compteur = 0;
 function ajoutProduit() {
 let container = document.createElement('div');
-container.className = 'border rounded-3 border-warning border-2 mx-1 my-4';
+container.className = 'd-flex justify-content-center';
 container.innerHTML = `
+<div class="border rounded-3 border-warning border-2 mx-1 my-4 custom-width-desktop">
         <div class='d-flex justify-content-center flex-column m-3'>
 					<div class='d-flex justify-content-center'>
 						<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga_on_add_product(${compteur})">
-							<span class='fs-2 fw-normal'>Scan produit</span>
+							<span class='fs-3 fw-normal'>Scan produit</span>
 						</button>
 					</div>
 					<div class='d-flex justify-content-center'>
@@ -336,35 +356,36 @@ container.innerHTML = `
 				</div>
         <div class="m-3">
         <label for="id-form-litige" class="form-label">
-					<span class='fs-1 fw-normal text-warning'>ID produit</span>
+					<span class='fs-3 fw-normal text-warning'>ID produit</span>
 				</label>
-				<input type="number" class="form-control fs-1 fw-normal border-dark border-2" id="id-form-litige_${compteur}" placeholder="id" name="id-form-litige[]" required>
+				<input type="number" class="form-control fs-3 fw-normal border-dark border-2" id="id-form-litige_${compteur}" placeholder="id" name="id-form-litige[]" required>
 			</div>
 			<div class="m-3">
 				<label for="code-couleur-form-litige" class="form-label">
-					<span class='fs-1 fw-normal text-warning'>Code couleur</span>
+					<span class='fs-3 fw-normal text-warning'>Code couleur</span>
 				</label>
-				<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="code-couleur-form-litige" name="code-couleur-form-litige[]" required>
-					<option value="vert" class='fs-1 fw-normal'>vert</option>
-					<option value="jaune" class='fs-1 fw-normal'>jaune</option>
-					<option value="orange" class='fs-1 fw-normal'>orange</option>
-					<option value="rouge" class='fs-1 fw-normal'>rouge</option>
-					<option value="noir" class='fs-1 fw-normal'>noir</option>
+				<select class="form-select w-75 fs-3 fw-normal border-dark border-2" id="code-couleur-form-litige" name="code-couleur-form-litige[]" required>
+					<option value="vert" class='fs-3 fw-normal'>vert</option>
+					<option value="jaune" class='fs-3 fw-normal'>jaune</option>
+					<option value="orange" class='fs-3 fw-normal'>orange</option>
+					<option value="rouge" class='fs-3 fw-normal'>rouge</option>
+					<option value="noir" class='fs-3 fw-normal'>noir</option>
 				</select>
 			</div>
 			<div class="m-3">
 				<div class="form-group">
 					<label for="quantite-form-litige">
-						<span class='fs-1 fw-normal text-warning'>Quantité</span>
+						<span class='fs-3 fw-normal text-warning'>Quantité</span>
 					</label>
-					<input type="number" min="1" class="form-control fs-1 fw-normal border-dark border-2" id="quantite-form-litige" placeholder="1" name="quantite-form-litige[]" required/>
+					<input type="number" min="1" class="form-control fs-3 fw-normal border-dark border-2" id="quantite-form-litige" placeholder="1" name="quantite-form-litige[]" required/>
 				</div>
 			</div>
         <div class='my-5 d-flex justify-content-center'>
             <button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
-                <span class='fs-2 fw-normal'>Supprimer</span>
+                <span class='fs-3 fw-normal'>Supprimer</span>
             </button>
         </div>
+    </div>    
     `;
 
 // Ajoutez le conteneur au formulaire
@@ -531,5 +552,6 @@ const blob = new Blob([ab], {type: mimeString});
 resolve(blob);
 });
 }
+
 	</script>
 {% endblock %}

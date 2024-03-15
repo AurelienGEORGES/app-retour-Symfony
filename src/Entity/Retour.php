@@ -66,6 +66,9 @@ class Retour
     #[ORM\ManyToOne(inversedBy: 'retours')]
     private ?Bordereau $bordereau = null;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $etat_produit = null;
+
     public function __construct()
     {
         $this->retourProduits = new ArrayCollection();
@@ -308,5 +311,17 @@ class Retour
     public function __toString()
     {
         return $this->num_retour;
+    }
+
+    public function getEtatProduit(): ?string
+    {
+        return $this->etat_produit;
+    }
+
+    public function setEtatProduit(string $etat_produit): static
+    {
+        $this->etat_produit = $etat_produit;
+
+        return $this;
     }
 }

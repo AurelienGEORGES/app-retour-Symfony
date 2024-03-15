@@ -4,83 +4,85 @@
 {% endblock %}
 
 {% block body %}
-{% set csrfTokenListeReceptionnes = csrf_token('form-liste-receptionnes') %}
-	<h1 class="text-white my-5 mx-2 fs-1 fw-normal text-center">Liste des réceptionnés</h1>
-	<form method="get" action="{{ path('app_liste_receptionnes') }}">
-		<div class='border rounded-3 border-warning border-2 m-1'>
-			<div class="m-3">
-				<label for="recherche-numero-receptionnes" class="form-label">
-					<span class='fs-1 fw-normal text-warning'>N° RET ou RETSA</span>
-				</label>
-				<input type="text" class="form-control fs-1 fw-normal border-dark border-2" id="recherche-numero-receptionnes" placeholder="entrez N°" name="recherche-numero-receptionnes">
+	{% set csrfTokenListeReceptionnes = csrf_token('form-liste-receptionnes') %}
+	<h1 class="text-white my-5 mx-2 fs-3 fw-normal text-center">Liste des réceptionnés</h1>
+	<div class="d-flex justify-content-center">
+		<form method="get" action="{{ path('app_liste_receptionnes') }}" class="input-desktop">
+			<div class='border rounded-3 border-warning border-2 m-1'>
+				<div class="m-3">
+					<label for="recherche-numero-receptionnes" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>N° RET ou RETSA</span>
+					</label>
+					<input type="text" class="form-control fs-3 fw-normal border-dark border-2" id="recherche-numero-receptionnes" placeholder="entrez N°" name="recherche-numero-receptionnes">
+				</div>
+				<div class="m-3">
+					<label for="recherche-id-receptionnes" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>ID produit</span>
+					</label>
+					<input type="text" class="form-control fs-3 fw-normal border-dark border-2" id="recherche-id-receptionnes" placeholder="entrez un ID" name="recherche-id-receptionnes">
+				</div>
+				<div class='d-flex justify-content-center my-4'>
+					<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
+						<span class='fs-3 fw-normal p-2'>Recherche</span>
+					</button>
+				</div>
 			</div>
-			<div class="m-3">
-				<label for="recherche-id-receptionnes" class="form-label">
-					<span class='fs-1 fw-normal text-warning'>ID produit</span>
-				</label>
-				<input type="text" class="form-control fs-1 fw-normal border-dark border-2" id="recherche-id-receptionnes" placeholder="entrez un ID" name="recherche-id-receptionnes">
-			</div>
-			<div class='d-flex justify-content-center my-4'>
-				<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
-					<span class='fs-2 fw-normal p-2'>Recherche</span>
-				</button>
-			</div>
-		</div>
-        <input type="hidden" name="_token" value="{{ csrfTokenListeReceptionnes }}">
-	</form>
-	<h3 class="text-white my-5 fs-1 fw-bold text-center">Résultats recherche</h3>
+			<input type="hidden" name="_token" value="{{ csrfTokenListeReceptionnes }}">
+		</form>
+	</div>
+	<h3 class="text-white my-5 fs-3 fw-normal text-center">Résultats recherche</h3>
 	<div class="d-flex justify-content-center mx-5">
 		<div>
 			{% for retour in retours %}
-				<div class="card my-4 border-primary border-3 min-vw-100">
+				<div class="card my-4 border-primary border-3 custom-width-desktop">
 					<div class="card-body p-0 ps-2">
 						{% if retourComplet[loop.index0] %}
 							<p class="card-text m-0">
-								<span class='fs-1 fw-bold text-success'>Complet</span>
+								<span class='fs-3 fw-bold text-success'>Complet</span>
 							</p>
 						{% else %}
 							<p class="card-text m-0">
-								<span class='fs-1 fw-bold text-danger'>Incomplet</span>
+								<span class='fs-3 fw-bold text-danger'>Incomplet</span>
 							</p>
 						{% endif %}
 						<p class="card-text m-0">
-							<span class='fs-1 fw-bold'>{{ retour.numretour }}</span>
+							<span class='fs-3 fw-bold'>{{ retour.numretour }}</span>
 						</p>
 						<p class="card-text m-0">
-							<span class='fs-1 fw-bold'>{{ retour.nomclient }}
+							<span class='fs-3 fw-bold'>{{ retour.nomclient }}
 								{{ retour.prenomclient }}</span>
 						</p>
 						<p class="card-text m-0">
-							<span class='fs-1 fw-bold'>{{ retour.transporteur }}</span>
+							<span class='fs-3 fw-bold'>{{ retour.transporteur }}</span>
 						</p>
 						{% if retourComplet[loop.index0] %}
 							<p class="card-text m-0">
-								<span class='fs-1 fw-bold text-success'>Réceptionnés</span>
+								<span class='fs-3 fw-bold text-success'>Réceptionnés</span>
 							</p>
 						{% else %}
 							<p class="card-text m-0">
-								<span class='fs-1 fw-bold text-danger'>Réceptionnés</span>
+								<span class='fs-3 fw-bold text-danger'>Réceptionnés</span>
 							</p>
 						{% endif %}
 						{% for retourProduitReceptionne in retour.retourProduitReceptionnes %}
 							<p class="card-text m-0">
-								<span class='fs-1 fw-bold'>{{ retourProduitReceptionne.idproduit }}
+								<span class='fs-3 fw-bold'>{{ retourProduitReceptionne.idproduit }}
 									*
 									{{ retourProduitReceptionne.quantite }}</span>
 							</p>
 						{% endfor %}
 						{% if retourComplet[loop.index0] %}
 							<p class="card-text m-0">
-								<span class='fs-1 fw-bold text-success'>Attendus</span>
+								<span class='fs-3 fw-bold text-success'>Attendus</span>
 							</p>
 						{% else %}
 							<p class="card-text m-0">
-								<span class='fs-1 fw-bold text-danger'>Attendus</span>
+								<span class='fs-3 fw-bold text-danger'>Attendus</span>
 							</p>
 						{% endif %}
 						{% for retourProduit in retour.retourProduits %}
 							<p class="card-text m-0">
-								<span class='fs-1 fw-bold'>{{ retourProduit.idproduit }}
+								<span class='fs-3 fw-bold'>{{ retourProduit.idproduit }}
 									*
 									{{ retourProduit.quantite }}</span>
 							</p>

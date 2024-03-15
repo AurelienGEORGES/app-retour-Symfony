@@ -64,6 +64,7 @@ class FormulaireSansLitigeController extends AbstractController
                     $retourProduit->setCodeCouleur($codeCouleur);
                     $retourProduit->setQuantite($quantite);
                     $retourProduit->setRetour($retourObj);
+                    $retourProduit->setDateReception($currentDate);
                     $entityManager->persist($retourProduit);
                     $stock = new Stock();
                     $stock->setIdProduit($idProduitReceptionnes);
@@ -94,7 +95,8 @@ class FormulaireSansLitigeController extends AbstractController
                 $stock = new Stock();
                 $stock->setIdProduit($idProduit);
                 $stock->setQuantite($quantitesStock[$index]); 
-                $stock->setCodeCouleur($codeCouleursStock[$index]); 
+                $stock->setCodeCouleur($codeCouleursStock[$index]);
+                $stock->setDateReception($currentDate); 
                 $entityManager->persist($stock);
             }
 

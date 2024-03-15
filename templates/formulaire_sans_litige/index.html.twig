@@ -8,11 +8,11 @@
 	{% for message in app.flashes('notice') %}
 		<div id="message">
 			<div class="flash-notice">
-				<p class="text-success my-3 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
+				<p class="text-success my-3 fs-3 mx-2 fw-normal text-center">{{ message }}</p>
 			</div>
 			<div class='d-flex justify-content-center'>
 				<button type="submit" class="btn btn-outline-success border-3 rounded-5" onclick="(removeMessage())">
-					<span class='fs-2 fw-bold p-2'>OK!</span>
+					<span class='fs-3 fw-normal p-3'>OK!</span>
 				</button>
 			</div>
 		</div>
@@ -21,61 +21,65 @@
 		{{ numretour }}
 		sans litige</h1>
 	<form method="post" action="{{ path('app_formulaire_sans_litige', {'id': id}) }}">
-		<div class="m-3">
-			<label for="transporteur-form-sans-litige" class="form-label">
-				<span class='fs-1 fw-normal text-warning'>Transporteur</span>
-			</label>
-			<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="transporteur-form-sans-litige" name="transporteur-form-sans-litige">
-				<option value="{{ transporteur }}" class='fs-1 fw-normal'>{{ transporteur }}</option>
-				<option value="shenker" class='fs-1 fw-normal'>shenker</option>
-				<option value="dpd" class='fs-1 fw-normal'>dpd</option>
-				<option value="mazet" class='fs-1 fw-normal'>mazet</option>
-				<option value="geodis" class='fs-1 fw-normal'>geodis</option>
-				<option value="gls" class='fs-1 fw-normal'>gls</option>
-			</select>
+		<div class="d-flex justify-content-center">
+			<div class="m-3">
+				<label for="transporteur-form-sans-litige" class="form-label">
+					<span class='fs-3 fw-normal text-warning'>Transporteur</span>
+				</label>
+				<select class="form-select w-100 fs-3 fw-normal border-dark border-2" id="transporteur-form-sans-litige" name="transporteur-form-sans-litige">
+					<option value="{{ transporteur }}" class='fs-3 fw-normal'>{{ transporteur }}</option>
+					<option value="shenker" class='fs-3 fw-normal'>shenker</option>
+					<option value="dpd" class='fs-3 fw-normal'>dpd</option>
+					<option value="mazet" class='fs-3 fw-normal'>mazet</option>
+					<option value="geodis" class='fs-3 fw-normal'>geodis</option>
+					<option value="gls" class='fs-3 fw-normal'>gls</option>
+				</select>
+			</div>
 		</div>
 		{% for retourProduit in retourProduits %}
-			<div class='border rounded-3 border-warning border-2 mx-1 my-4'>
-				<div class='d-flex justify-content-center flex-column'>
-					<div class='d-flex justify-content-center'>
-						<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga({{ retourProduit.id }})">
-							<span class='fs-2 fw-normal'>Scan produit</span>
+			<div class="d-flex justify-content-center">
+				<div class='border rounded-3 border-warning border-2 mx-1 my-4'>
+					<div class='d-flex justify-content-center flex-column'>
+						<div class='d-flex justify-content-center'>
+							<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga({{ retourProduit.id }})">
+								<span class='fs-3 fw-normal'>Scan produit</span>
+							</button>
+						</div>
+						<div class='d-flex justify-content-center'>
+							<div id='scan_{{ retourProduit.id }}' class='d-flex justify-content-center flex-column scan mt-3'></div>
+						</div>
+					</div>
+					<div class="m-3">
+						<label for="id-form-sans-litige_{{ retourProduit.id }}" class="form-label">
+							<span class='fs-1 fw-normal text-warning'>ID produit</span>
+						</label>
+						<input type="number" class="form-control fs-1 fw-normal border-dark border-2" id="id-form-sans-litige_{{ retourProduit.id }}" value="{{ retourProduit.idproduit }}" name="id-form-sans-litige_{{ retourProduit.id }}">
+					</div>
+					<div class="m-3">
+						<label for="code-couleur-form-sans-litige_{{ retourProduit.id }}" class="form-label">
+							<span class='fs-1 fw-normal text-warning'>Code couleur</span>
+						</label>
+						<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="code-couleur-form-sans-litige_{{ retourProduit.id }}" name="code-couleur-form-sans-litige_{{ retourProduit.id }}">
+							<option value="vert" class='fs-1 fw-normal'>vert</option>
+							<option value="jaune" class='fs-1 fw-normal'>jaune</option>
+							<option value="orange" class='fs-1 fw-normal'>orange</option>
+							<option value="rouge" class='fs-1 fw-normal'>rouge</option>
+							<option value="noir" class='fs-1 fw-normal'>noir</option>
+						</select>
+					</div>
+					<div class="m-3">
+						<div class="form-group">
+							<label for="quantite-form-sans-litige_{{ retourProduit.id }}">
+								<span class='fs-1 fw-normal text-warning'>Quantité</span>
+							</label>
+							<input type="number" min="1" class="form-control fs-1 fw-normal border-dark border-2" id="quantite-form-sans-litige_{{ retourProduit.id }}" value="{{ retourProduit.quantite }}" name="quantite-form-sans-litige_{{ retourProduit.id }}"/>
+						</div>
+					</div>
+					<div class='ms-3 my-5 d-flex justify-content-center'>
+						<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
+							<span class='fs-2 fw-normal'>Supprimer</span>
 						</button>
 					</div>
-					<div class='d-flex justify-content-center'>
-						<div id='scan_{{ retourProduit.id }}' class='d-flex justify-content-center flex-column scan mt-3'></div>
-					</div>
-				</div>
-				<div class="m-3">
-					<label for="id-form-sans-litige_{{ retourProduit.id }}" class="form-label">
-						<span class='fs-1 fw-normal text-warning'>ID produit</span>
-					</label>
-					<input type="number" class="form-control fs-1 fw-normal border-dark border-2" id="id-form-sans-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.idproduit }}" name="id-form-sans-litige_{{ retourProduit.id }}">
-				</div>
-				<div class="m-3">
-					<label for="code-couleur-form-sans-litige_{{ retourProduit.id }}" class="form-label">
-						<span class='fs-1 fw-normal text-warning'>Code couleur</span>
-					</label>
-					<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="code-couleur-form-sans-litige_{{ retourProduit.id }}" name="code-couleur-form-sans-litige_{{ retourProduit.id }}">
-						<option value="vert" class='fs-1 fw-normal'>vert</option>
-						<option value="jaune" class='fs-1 fw-normal'>jaune</option>
-						<option value="orange" class='fs-1 fw-normal'>orange</option>
-						<option value="rouge" class='fs-1 fw-normal'>rouge</option>
-						<option value="noir" class='fs-1 fw-normal'>noir</option>
-					</select>
-				</div>
-				<div class="m-3">
-					<div class="form-group">
-						<label for="quantite-form-sans-litige_{{ retourProduit.id }}">
-							<span class='fs-1 fw-normal text-warning'>Quantité</span>
-						</label>
-						<input type="number" min="1" class="form-control fs-1 fw-normal border-dark border-2" id="quantite-form-sans-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.quantite }}" name="quantite-form-sans-litige_{{ retourProduit.id }}"/>
-					</div>
-				</div>
-				<div class='ms-3 my-5 d-flex justify-content-center'>
-					<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
-						<span class='fs-2 fw-normal'>Supprimer</span>
-					</button>
 				</div>
 			</div>
 		{% endfor %}
@@ -90,7 +94,7 @@
 				<span class='fs-2 fw-normal'>Enregistrer</span>
 			</button>
 		</div>
-        <input type="hidden" name="_token" value="{{ csrfTokenSansLitige }}">
+		<input type="hidden" name="_token" value="{{ csrfTokenSansLitige }}">
 	</form>
 	<script type="text/javascript">
 		let compteurSans = 0;

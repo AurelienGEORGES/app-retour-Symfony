@@ -17,13 +17,13 @@
 			</div>
 		</div>
 	{% endfor %}
-	<h1 class="text-white my-5 fs-1 fw-normal text-center">Ajouter produit libre</h1>
-	<form method="post" action="{{ path('app_ajouter_produit_libre') }}">
-		<div class='border-info border border-2 m-3 rounded-3'>
+	<h1 class="text-white my-5 fs-3 fw-normal text-center">Ajouter produit libre</h1>
+	<form method="post" action="{{ path('app_ajouter_produit_libre') }}" class="d-flex justify-content-center">
+		<div class='border-info border border-2 m-3 rounded-3 input-desktop'>
 			<div class='d-flex justify-content-center flex-column'>
 				<div class='d-flex justify-content-center'>
 					<button type="button" class="btn btn-outline-info mt-5 mb-2 border-2 rounded-5" onclick="load_quagga()">
-						<span class='fs-2 fw-normal'>Scan produit</span>
+						<span class='fs-3 fw-normal'>Scan produit</span>
 					</button>
 				</div>
 				<div class='d-flex justify-content-center'>
@@ -32,45 +32,45 @@
 			</div>
 			<div class="m-3">
 				<label for="form-produit-libre-id" class="form-label">
-					<span class='fs-1 fw-normal text-info'>ID produit</span>
+					<span class='fs-3 fw-normal text-info'>ID produit</span>
 				</label>
-				<input type="number" class="form-control fs-1 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-id" placeholder="id" name="form-produit-libre-id" required>
+				<input type="number" class="form-control fs-3 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-id" placeholder="id" name="form-produit-libre-id" required>
 			</div>
 			<div class="m-3">
 				<label for="form-produit-libre-code-couleur" class="form-label">
-					<span class='fs-1 fw-normal text-info'>Code couleur</span>
+					<span class='fs-3 fw-normal text-info'>Code couleur</span>
 				</label>
-				<select class="form-select w-75 fs-1 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-code-couleur" name="form-produit-libre-code-couleur" required>
-					<option value="vert" class='fs-1 fw-normal'>vert</option>
-					<option value="jaune" class='fs-1 fw-normal'>jaune</option>
-					<option value="orange" class='fs-1 fw-normal'>orange</option>
-					<option value="rouge" class='fs-1 fw-normal'>rouge</option>
-					<option value="noir" class='fs-1 fw-normal'>noir</option>
+				<select class="form-select w-75 fs-3 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-code-couleur" name="form-produit-libre-code-couleur" required>
+					<option value="vert" class='fs-3 fw-normal'>vert</option>
+					<option value="jaune" class='fs-3 fw-normal'>jaune</option>
+					<option value="orange" class='fs-3 fw-normal'>orange</option>
+					<option value="rouge" class='fs-3 fw-normal'>rouge</option>
+					<option value="noir" class='fs-3 fw-normal'>noir</option>
 				</select>
 			</div>
 			<div class="m-3">
 				<div class="form-group">
 					<label for="form-produit-libre-quantite">
-						<span class='fs-1 fw-normal text-info'>Quantité :</span>
+						<span class='fs-3 fw-normal text-info'>Quantité :</span>
 					</label>
-					<input type="number" class="form-control fs-1 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-quantite" placeholder="qte" name="form-produit-libre-quantite" required/>
+					<input type="number" class="form-control fs-3 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-quantite" placeholder="qte" name="form-produit-libre-quantite" required/>
 				</div>
 			</div>
 			<div class="m-3">
 				<label for="form-produit-libre-transporteur" class="form-label">
-					<span class='fs-1 fw-normal text-info'>Transporteur</span>
+					<span class='fs-3 fw-normal text-info'>Transporteur</span>
 				</label>
-				<select class="form-select w-75 fs-1 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-transporteur" name="form-produit-libre-transporteur" required>
-					<option value="shenker" class='fs-4 fw-normal'>shenker</option>
-					<option value="dpd" class='fs-4 fw-normal'>dpd</option>
-					<option value="mazet" class='fs-4 fw-normal'>mazet</option>
-					<option value="geodis" class='fs-4 fw-normal'>geodis</option>
-					<option value="gls" class='fs-4 fw-normal'>gls</option>
+				<select class="form-select w-75 fs-3 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-transporteur" name="form-produit-libre-transporteur" required>
+					<option value="shenker" class='fs-3 fw-normal'>shenker</option>
+					<option value="dpd" class='fs-3 fw-normal'>dpd</option>
+					<option value="mazet" class='fs-3 fw-normal'>mazet</option>
+					<option value="geodis" class='fs-3 fw-normal'>geodis</option>
+					<option value="gls" class='fs-3 fw-normal'>gls</option>
 				</select>
 			</div>
 			<div class='my-5 d-flex justify-content-center'>
 				<button type="submit" class="btn btn-outline-info border-2 rounded-5">
-					<span class='fs-2 fw-normal'>Mettre en stock</span>
+					<span class='fs-3 fw-normal'>Mettre en stock</span>
 				</button>
 			</div>
 		</div>

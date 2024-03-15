@@ -1,7 +1,7 @@
 $background-color: #2d3032;
 
 body {
-  background-color: $background-color !important;
+    background-color: $background-color !important;
 }
 
 .scan video {
@@ -19,6 +19,27 @@ body {
 }
 
 a {
-    text-decoration: none !important;  
+    text-decoration: none !important;
 }
 
+@media (min-width: 600px) {
+    .input-desktop {
+        max-width: 500px;
+    }
+}
+
+.custom-width-desktop {
+    width: 90vw;
+}
+
+@media (min-width: 600px) {
+    .custom-width-desktop {
+        width: 50vw;
+    }
+}
+
+@media (min-width: 600px) {
+    .creation-palette-width {
+        width: 500px;
+    }
+}

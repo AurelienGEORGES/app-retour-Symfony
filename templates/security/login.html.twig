@@ -13,43 +13,51 @@
 			<div class="my-3">
 				<div class="d-flex flex-column">
 					<div class="d-flex justify-content-center">
-						<span class='fs-1 fw-normal text-warning'>tu es connecté
-							{{ app.user.userIdentifier }}</span>
+						<span class='fs-3 fw-normal text-warning text-center'>tu es connecté
+							{{ app.user.name }}</span>
 					</div>
 					<div class="d-flex justify-content-center">
-						<a href="{{ path('app_logout') }}" class="btn btn-outline-warning border-2 rounded-5 my-3">Se déconnecter</a>
+						<a href="{{ path('app_logout') }}" class="btn btn-outline-warning border-2 rounded-5 my-3" role="button"><span class='fs-3 fw-normal p-2'>Se déconnecter</span></a>
 					</div>
 				</div>
 			</div>
 		</div>
 	{% endif %}
-	<h1 class="text-white my-5 fs-1 fw-normal text-center">Connexion</h1>
-
-	<label for="username" class="form-label">
-		<span class='fs-1 fw-normal text-warning'>Pseudo</span>
-	</label>
-	<input type="text" placeholder="pseudo" value="{{ last_username }}" name="_username" id="username" class="form-control fs-1 fw-normal border-warning border-2" autocomplete="off" required autofocus>
-	<label for="password" class="form-label">
-		<span class='fs-1 fw-normal text-warning'>Mot de passe</span>
-	</label>
-	<input type="password" placeholder="mot de passe" name="_password" id="password" class="form-control fs-1 fw-normal border-warning border-2" autocomplete="off" required>
-
+	<h1 class="text-white my-3 fs-3 fw-normal text-center">Connexion</h1>
+	<div class="d-flex flex-column">
+		<div class="d-flex justify-content-center my-2">
+			<label for="username" class="form-label">
+				<span class='fs-3 fw-normal text-warning'>Pseudo</span>
+			</label>
+		</div>
+		<div class="d-flex justify-content-center my-2">
+			<input type="text" placeholder="pseudo" value="{{ last_username }}" name="_username" id="username" class="form-control fs-3 fw-normal border-warning border-2 input-desktop" autocomplete="off" required>
+		</div>
+		<div class="d-flex justify-content-center my-2">
+			<label for="password" class="form-label">
+				<span class='fs-3 fw-normal text-warning'>Mot de passe</span>
+			</label>
+		</div>
+		<div class="d-flex justify-content-center my-2">
+			<input type="password" placeholder="mot de passe" name="_password" id="password" class="form-control fs-3 fw-normal border-warning border-2 input-desktop" autocomplete="off" required>
+		</div>
+	</div>
 	<input
 	type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
 	{#
-										            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-										            See https://symfony.com/doc/current/security/remember_me.html
-										
-										            <div class="checkbox mb-3">
-										                <label>
-										                    <input type="checkbox" name="_remember_me"> Remember me
-										                </label>
-										            </div>
-										        #}
+													            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+													            See https://symfony.com/doc/current/security/remember_me.html
+													
+													            <div class="checkbox mb-3">
+													                <label>
+													                    <input type="checkbox" name="_remember_me"> Remember me
+													                </label>
+													            </div>
+													        #}
 	<div class="d-flex justify-content-center">
-		<button class="btn btn-outline-warning border-2 rounded-5 mt-4" type="submit">
-			<span class='fs-2 fw-normal p-2'>
+		<button class="btn btn-outline-warning border-2 rounded-5 my-4" type="submit">
+			<span class='fs-3 fw-normal p-2'>
 				connecter</span>
 		</button>
 	</div>

@@ -19,44 +19,44 @@
 		</div>
 	{% endfor %}
 	<h1 class="text-white my-5 mx-2 fs-1 fw-normal text-center">Création d'une palette</h1>
-	<div class='border rounded-3 border-warning border-2 m-3'>
-		<form method="get" action="{{ path('app_creation_palette') }}">
-			<h2 class="text-warning my-5 fs-1 fw-normal text-center">Palette en cours</h2>
-			<div class="m-3">
-				<label for="choix-couleur-palette" class="form-label">
-					<span class='fs-1 fw-normal text-warning' id="choix-palette">Couleur palette</span>
-				</label>
-				<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="choix-couleur-palette" name="choix-couleur-palette" required>
-					<option value="" class='fs-1 fw-normal'>choisir</option>
-					<option value="vert" class='fs-1 fw-normal'>vert</option>
-					<option value="jaune" class='fs-1 fw-normal'>jaune</option>
-					<option value="orange" class='fs-1 fw-normal'>orange</option>
-					<option value="rouge" class='fs-1 fw-normal'>rouge</option>
-					<option value="noir" class='fs-1 fw-normal'>noir</option>
-				</select>
-			</div>
-			<div class="m-3">
-				<label for="choix-depot-palette" class="form-label">
-					<span class='fs-1 fw-normal text-warning'>Depot</span>
-				</label>
-				<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="choix-depot-palette" name="choix-depot-palette" required>
-					<option value="" class='fs-1 fw-normal'>choisir</option>
-					<option value="aberial" class='fs-1 fw-normal'>Abérial</option>
-					<option value="phylea" class='fs-1 fw-normal'>Phyléa</option>
-				</select>
-			</div>
-			<div class='my-5 d-flex justify-content-center'>
-				<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
-					<span class='fs-2 fw-normal'>Créer palette</span>
-				</button>
-			</div>
-			<input type="hidden" name="_token" value="{{ csrfTokenDepot }}">
-		</form>
-		<div>
+	<div class="d-flex justify-content-center">
+		<div class='border rounded-3 border-warning border-2 m-3 input-desktop creation-palette-width'>
+			<form method="get" action="{{ path('app_creation_palette') }}">
+				<h2 class="text-warning my-5 fs-1 fw-normal text-center">Palette en cours</h2>
+				<div class="m-3">
+					<label for="choix-couleur-palette" class="form-label">
+						<span class='fs-1 fw-normal text-warning' id="choix-palette">Couleur palette</span>
+					</label>
+					<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="choix-couleur-palette" name="choix-couleur-palette" required>
+						<option value="" class='fs-1 fw-normal'>choisir</option>
+						<option value="vert" class='fs-1 fw-normal'>vert</option>
+						<option value="jaune" class='fs-1 fw-normal'>jaune</option>
+						<option value="orange" class='fs-1 fw-normal'>orange</option>
+						<option value="rouge" class='fs-1 fw-normal'>rouge</option>
+						<option value="noir" class='fs-1 fw-normal'>noir</option>
+					</select>
+				</div>
+				<div class="m-3">
+					<label for="choix-depot-palette" class="form-label">
+						<span class='fs-1 fw-normal text-warning'>Depot</span>
+					</label>
+					<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="choix-depot-palette" name="choix-depot-palette" required>
+						<option value="" class='fs-1 fw-normal'>choisir</option>
+						<option value="aberial" class='fs-1 fw-normal'>Abérial</option>
+						<option value="phylea" class='fs-1 fw-normal'>Phyléa</option>
+					</select>
+				</div>
+				<div class='my-5 d-flex justify-content-center'>
+					<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
+						<span class='fs-2 fw-normal'>Créer palette</span>
+					</button>
+				</div>
+				<input type="hidden" name="_token" value="{{ csrfTokenDepot }}">
+			</form>
 			{% if produitsSelectionnes %}
 				{% for key, produit in produitsSelectionnes %}
-					<form class='border rounded-3 border-light border-2 m-3' method="get" action="{{ path('app_creation_palette') }}">
-						<p class="text-white fs-2 text-center mt-2">
+					<form class='border rounded-3 border-warning border-2 m-3' method="get" action="{{ path('app_creation_palette') }}">
+						<p class="text-warning fs-2 text-center mt-2">
 							{{ produit.idprod }}
 							*
 							{{ produit.qte }}
@@ -65,7 +65,7 @@
 							<input type="hidden" value="{{ produit.qte }}" name="produit-qte"/>
 							<input type="hidden" value="{{ produit.prod }}" name="produit-prod"/>
 							<input type="hidden" value="{{ produit.idprod }}" name="produit-id-prod"/>
-							<button type="submit" class="btn btn-outline-light border-2 rounded-5">
+							<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
 								<span class='fs-2 fw-normal'>supprimer</span>
 							</button>
 						</div>
@@ -74,39 +74,41 @@
 			{% endif %}
 		</div>
 	</div>
-	<div class='border rounded-3 border-light border-2 m-3'>
-		<h3 class="text-white my-5 fs-1 fw-normal text-center">Rechercher des produits</h3>
-		<form method="get" action="{{ path('app_creation_palette') }}">
-			<div class="m-3">
-				<label for="recherche-creation-code-couleur" class="form-label">
-					<span class='fs-1 fw-normal text-light'>Code couleur</span>
-				</label>
-				<select class="form-select w-75 fs-1 fw-normal border-light border-2" id="recherche-creation-code-couleur" name="recherche-creation-code-couleur">
-					{% if criteria is empty %}
-                    <option value="initial" class='fs-1 fw-normal'>choisir</option>
-                    {% else %}
-                    <option value="{{ criteria.code_couleur }}" class='fs-1 fw-normal'>{{ criteria.code_couleur }}</option>
-                    {% endif %}
-                    <option value="vert" class='fs-1 fw-normal'>vert</option>
-					<option value="jaune" class='fs-1 fw-normal'>jaune</option>
-					<option value="orange" class='fs-1 fw-normal'>orange</option>
-					<option value="rouge" class='fs-1 fw-normal'>rouge</option>
-					<option value="noir" class='fs-1 fw-normal'>noir</option>
-				</select>
-			</div>
-			<div class="m-3">
-				<label for="recherche-creation-id-produit" class="form-label">
-					<span class='fs-1 fw-normal text-light'>ID produit</span>
-				</label>
-				<input type="text" class="form-control fs-1 fw-normal border-light border-2" id="recherche-creation-id-produit" name="recherche-creation-id-produit" placeholder="id">
-			</div>
-			<div class='my-5 d-flex justify-content-center'>
-				<button type="submit" class="btn btn-outline-light border-3 rounded-5">
-					<span class='fs-2 fw-normal'>Rechercher</span>
-				</button>
-			</div>
-			<input type="hidden" name="_token" value="{{ csrfTokenProduitPalette }}">
-		</form>
+	<div class="d-flex justify-content-center">
+		<div class='border rounded-3 border-light border-2 m-3 input-desktop'>
+			<h3 class="text-white my-5 fs-1 fw-normal text-center">Rechercher des produits</h3>
+			<form method="get" action="{{ path('app_creation_palette') }}">
+				<div class="m-3">
+					<label for="recherche-creation-code-couleur" class="form-label">
+						<span class='fs-1 fw-normal text-light'>Code couleur</span>
+					</label>
+					<select class="form-select w-75 fs-1 fw-normal border-light border-2" id="recherche-creation-code-couleur" name="recherche-creation-code-couleur">
+						{% if criteria is empty %}
+							<option value="initial" class='fs-1 fw-normal'>choisir</option>
+						{% else %}
+							<option value="{{ criteria.code_couleur }}" class='fs-1 fw-normal'>{{ criteria.code_couleur }}</option>
+						{% endif %}
+						<option value="vert" class='fs-1 fw-normal'>vert</option>
+						<option value="jaune" class='fs-1 fw-normal'>jaune</option>
+						<option value="orange" class='fs-1 fw-normal'>orange</option>
+						<option value="rouge" class='fs-1 fw-normal'>rouge</option>
+						<option value="noir" class='fs-1 fw-normal'>noir</option>
+					</select>
+				</div>
+				<div class="m-3">
+					<label for="recherche-creation-id-produit" class="form-label">
+						<span class='fs-1 fw-normal text-light'>ID produit</span>
+					</label>
+					<input type="text" class="form-control fs-1 fw-normal border-light border-2" id="recherche-creation-id-produit" name="recherche-creation-id-produit" placeholder="id">
+				</div>
+				<div class='my-5 d-flex justify-content-center'>
+					<button type="submit" class="btn btn-outline-light border-3 rounded-5">
+						<span class='fs-2 fw-normal'>Rechercher</span>
+					</button>
+				</div>
+				<input type="hidden" name="_token" value="{{ csrfTokenProduitPalette }}">
+			</form>
+		</div>
 	</div>
 	<h4 class="text-white my-5 fs-1 fw-normal text-center">Résultats recherche</h4>
 	<div class="d-flex justify-content-center mb-5">

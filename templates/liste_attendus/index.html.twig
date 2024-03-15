@@ -5,36 +5,46 @@
 
 {% block body %}
 	<h1 class="text-white my-5 fs-1 fw-normal text-center mx-2">recherche attendus ou sans attendus</h1>
-	<div class="border border-2 border-warning mx-1 rounded-4">
-		{{ form_start(form) }}
-		<div class='m-2'>
-			{{ form_label(form.numRetour, 'N° RET, RETSA, NT', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
-			{{ form_widget(form.numRetour) }}
+	<div class="d-flex justify-content-center">
+		<div class="border border-2 border-warning mx-1 rounded-4 d-flex flex-column input-desktop">
+			{{ form_start(form) }}
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_label(form.numRetour, 'N° RET, RETSA, NT', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_widget(form.numRetour) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_label(form.prenomClient, 'Prénom client', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_widget(form.prenomClient) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_label(form.nomClient, 'Nom client', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_widget(form.nomClient) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_label(form.transporteur, 'Transporteur', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_widget(form.transporteur) }}
+			</div>
+			<div class='d-flex justify-content-center'>
+				<button type="submit" class="btn btn-outline-warning my-3 border-2 rounded-5">
+					<span class='fs-2 fw-normal'>Recherche</span>
+				</button>
+			</div>
+			{{ form_end(form) }}
 		</div>
-		<div class='m-2'>
-			{{ form_label(form.prenomClient, 'Prénom client', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
-			{{ form_widget(form.prenomClient) }}
-		</div>
-		<div class='m-2'>
-			{{ form_label(form.nomClient, 'Nom client', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
-			{{ form_widget(form.nomClient) }}
-		</div>
-		<div class='m-2'>
-			{{ form_label(form.transporteur, 'Transporteur', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
-			{{ form_widget(form.transporteur) }}
-		</div>
-		<div class='d-flex justify-content-center'>
-			<button type="submit" class="btn btn-outline-warning my-3 border-2 rounded-5">
-				<span class='fs-2 fw-normal'>Recherche</span>
-			</button>
-		</div>
-		{{ form_end(form) }}
 	</div>
 	<h2 class="text-white my-5 fs-1 fw-normal text-center mx-2">résultats attendus / sans attendus</h2>
 	{% for retour in retours %}
 		<div class="d-flex justify-content-center">
 			<div>
-				<div class="card my-3 border-primary border-3 min-vw-100">
+				<div class="card my-3 border-primary border-3 custom-width-desktop">
 					<div class="card-body">
 						<p class="card-text m-0">
 							<span class='fs-1 fw-normal'>{{ retour.numretour }}</span>

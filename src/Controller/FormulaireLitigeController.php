@@ -30,6 +30,7 @@ class FormulaireLitigeController extends AbstractController
         $numretour = $retour->getNumRetour();
         $transporteur = $retour->getTransporteur();
         $etatRetour = $retour->getEtat();
+        $etatProduitRetour = $retour->getEtatProduit();
         $commentaireRetour = $retour->getCommentaire();
         $photoRetour1 = $retour->getPhoto1();
         $photoRetour2 = $retour->getPhoto2();
@@ -80,6 +81,7 @@ class FormulaireLitigeController extends AbstractController
 
             $transporteur = $request->request->get('transporteur-form-litige');
             $etat = $request->request->get('etat-form-litige');
+            $etatProduit = $request->request->get('etat-produit-form-litige');
             $commentaire = $request->request->get('commentaire-form-litige');
 
             $retourTraite = $entityManager->getRepository(Retour::class)->find($id);
@@ -96,6 +98,7 @@ class FormulaireLitigeController extends AbstractController
             }
             $retourTraite->setNumretour($numRetourTraite);
             $retourTraite->setEtat($etat);
+            $retourTraite->setEtatProduit($etatProduit);
             if (isset($commentaire)) {
                 $retourTraite->setCommentaire($commentaire);
             }
@@ -132,11 +135,13 @@ class FormulaireLitigeController extends AbstractController
                     $retourProduit->setCodeCouleur($codeCouleur);
                     $retourProduit->setQuantite($quantite);
                     $retourProduit->setRetour($retourObj);
+                    $retourProduit->setDateReception($currentDate);
                     $entityManager->persist($retourProduit);
                     $stock = new Stock();
                     $stock->setIdProduit($idProduitReceptionnes);
                     $stock->setQuantite($quantite);
                     $stock->setCodeCouleur($codeCouleur);
+                    $stock->setDateReception($currentDate);
                     $entityManager->persist($stock);
                 }
             }
@@ -186,6 +191,7 @@ class FormulaireLitigeController extends AbstractController
             'photo4' => $photoRetour4,
             'photo5' => $photoRetour5,
             'etat' => $etatRetour,
+            'etatProduit' => $etatProduitRetour,
             'commentaire' => $commentaireRetour,
             'retourProduits' => $retourProduits,
             'id' => $id

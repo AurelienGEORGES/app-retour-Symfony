@@ -9,11 +9,11 @@
 	{% for message in app.flashes('notice') %}
 		<div id="message">
 			<div class="flash-notice">
-				<p class="text-success my-3 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
+				<p class="text-success my-3 fs-3 mx-2 fw-normal text-center">{{ message }}</p>
 			</div>
 			<div class='d-flex justify-content-center'>
 				<button type="submit" class="btn btn-outline-success border-3 rounded-5" onclick="(removeMessage())">
-					<span class='fs-2 fw-normal p-3'>OK!</span>
+					<span class='fs-3 fw-normal p-3'>OK!</span>
 				</button>
 			</div>
 		</div>
@@ -86,34 +86,38 @@
 		</div>
 	{% endfor %}
 	<p class="text-white my-5 fs-1 fw-normal text-center">Recherche pour lier un/des attendus ou sans attendus</p>
-	<div class="border border-2 border-warning mx-1 rounded-4">
-		{{ form_start(form) }}
-		<div class='m-2'>
-			{{ form_label(form.numRetour, 'N° RET, RETSA, NT', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
-			{{ form_widget(form.numRetour) }}
+	<div class="d-flex justify-content-center">
+		<div class="border border-2 border-warning mx-1 rounded-4 input-desktop">
+			{{ form_start(form) }}
+			<div class='m-2'>
+				{{ form_label(form.numRetour, 'N° RET, RETSA, NT', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
+				{{ form_widget(form.numRetour) }}
+			</div>
+			<div class='m-2'>
+				{{ form_label(form.prenomClient, 'Prénom client', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
+				{{ form_widget(form.prenomClient) }}
+			</div>
+			<div class='m-2'>
+				{{ form_label(form.nomClient, 'Nom client', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
+				{{ form_widget(form.nomClient) }}
+			</div>
+			<div class='m-2'>
+				{{ form_label(form.transporteur, 'Transporteur', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
+				{{ form_widget(form.transporteur) }}
+			</div>
+			<div class='d-flex justify-content-center'>
+				<button type="submit" class="btn btn-outline-warning my-3 border-2 rounded-5">
+					<span class='fs-2 fw-normal'>Recherche</span>
+				</button>
+			</div>
+			{{ form_end(form) }}
 		</div>
-		<div class='m-2'>
-			{{ form_label(form.prenomClient, 'Prénom client', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
-			{{ form_widget(form.prenomClient) }}
-		</div>
-		<div class='m-2'>
-			{{ form_label(form.nomClient, 'Nom client', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
-			{{ form_widget(form.nomClient) }}
-		</div>
-		<div class='m-2'>
-			{{ form_label(form.transporteur, 'Transporteur', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
-			{{ form_widget(form.transporteur) }}
-		</div>
-		<div class='d-flex justify-content-center'>
-			<button type="submit" class="btn btn-outline-warning my-3 border-2 rounded-5">
-				<span class='fs-2 fw-normal'>Recherche</span>
-			</button>
-		</div>
-		{{ form_end(form) }}</div>
+	</div>
 	<h4 class="text-white fs-1 my-5 fw-normal text-center">liste attendus/sans attendus</h4>
 	{% for retour in retours %}
-		<div class="d-flex justify-content-center my-3">
-			<div class="w-100">
+    <div class="d-flex justify-content-center">
+		<div class="my-3">
+			<div class="custom-width-desktop">
 				<div class="card m-1 border-primary border-3">
 					<div class="card-body">
 						<div class="container p-0 m-0">
@@ -146,6 +150,7 @@
 				</div>
 			</div>
 		</div>
+    </div>
 	{% endfor %}
 	<form method="get" action="{{ path('app_liste_bordereaux') }}" id="lienForm">
 		<div class='my-5 d-flex justify-content-center'>

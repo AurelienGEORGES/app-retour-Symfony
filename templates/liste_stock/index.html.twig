@@ -18,34 +18,36 @@
 			</div>
 		</div>
 	</div>
-	<div class='border rounded-3 border-warning border-2 mx-2 my-5'>
-		<form method="get" action="{{ path('app_liste_stock') }}">
-			<div class="m-3">
-				<label for="recherche-stock-code-couleur" class="form-label">
-					<span class='fs-1 fw-normal text-warning'>Code couleur</span>
-				</label>
-				<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="recherche-stock-code-couleur" name="recherche-stock-code-couleur">
-					<option value="" class='fs-1 fw-normal'>choisir</option>
-					<option value="vert" class='fs-1 fw-normal'>vert</option>
-					<option value="jaune" class='fs-1 fw-normal'>jaune</option>
-					<option value="orange" class='fs-1 fw-normal'>orange</option>
-					<option value="rouge" class='fs-1 fw-normal'>rouge</option>
-					<option value="noir" class='fs-1 fw-normal'>noir</option>
-				</select>
-			</div>
-			<div class="m-3">
-				<label for="recherche-stock-id-produit" class="form-label">
-					<span class='fs-1 fw-normal text-warning'>ID produit</span>
-				</label>
-				<input type="text" class="form-control fs-1 fw-normal border-dark border-2" id="recherche-stock-id-produit" placeholder="ID" name="recherche-stock-id-produit">
-			</div>
-			<div class='d-flex justify-content-center mb-4'>
-				<button type="submit" class="btn btn-outline-warning my-2 border-2 rounded-5">
-					<span class='fs-2 fw-normal'>Rechercher</span>
-				</button>
-			</div>
-			<input type="hidden" name="_token" value="{{ csrfTokenStock }}">
-		</form>
+	<div class="d-flex justify-content-center">
+		<div class='border rounded-3 border-warning border-2 mx-2 my-5 input-desktop'>
+			<form method="get" action="{{ path('app_liste_stock') }}">
+				<div class="m-3">
+					<label for="recherche-stock-code-couleur" class="form-label">
+						<span class='fs-1 fw-normal text-warning'>Code couleur</span>
+					</label>
+					<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="recherche-stock-code-couleur" name="recherche-stock-code-couleur">
+						<option value="" class='fs-1 fw-normal'>choisir</option>
+						<option value="vert" class='fs-1 fw-normal'>vert</option>
+						<option value="jaune" class='fs-1 fw-normal'>jaune</option>
+						<option value="orange" class='fs-1 fw-normal'>orange</option>
+						<option value="rouge" class='fs-1 fw-normal'>rouge</option>
+						<option value="noir" class='fs-1 fw-normal'>noir</option>
+					</select>
+				</div>
+				<div class="m-3">
+					<label for="recherche-stock-id-produit" class="form-label">
+						<span class='fs-1 fw-normal text-warning'>ID produit</span>
+					</label>
+					<input type="text" class="form-control fs-1 fw-normal border-dark border-2" id="recherche-stock-id-produit" placeholder="ID" name="recherche-stock-id-produit">
+				</div>
+				<div class='d-flex justify-content-center mb-4'>
+					<button type="submit" class="btn btn-outline-warning my-2 border-2 rounded-5">
+						<span class='fs-2 fw-normal'>Rechercher</span>
+					</button>
+				</div>
+				<input type="hidden" name="_token" value="{{ csrfTokenStock }}">
+			</form>
+		</div>
 	</div>
 	<h4 class="text-white my-5 fs-1 fw-normal text-center mx-1">Résultat de la recherche</h4>
 	<div class="d-flex justify-content-center mb-5">
@@ -53,43 +55,52 @@
 			<div class="d-flex flex-column">
 				{% for stockProduit in stockProduits %}
 					{% if stockProduit.codecouleur == 'vert' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: green; color: black;">
+						<div style="background-color: green; border-radius: 10px;" class="my-3">
+							<p class='fs-3 fw-normal p-1 text-center' style="color: black;">
 								{{ stockProduit.idproduit }}
 								*
-								{{ stockProduit.quantite }}</p>
+								{{ stockProduit.quantite }}</p> 
+                                <p class='fs-3 fw-normal p-1 text-center' style="background-color: green; color: black;">
+                                le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}</p>
 						</div>
 					{% endif %}
 					{% if stockProduit.codecouleur == 'orange' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: orange; color: black;">
+						<div style="background-color: orange; border-radius: 10px;" class="my-3">
+							<p class='fs-3 fw-normal p-1 text-center' style="color: black;">
 								{{ stockProduit.idproduit }}
 								*
-								{{ stockProduit.quantite }}</p>
+								{{ stockProduit.quantite }}
+                                </p>
+                                <p class='fs-3 fw-normal p-1 text-center' style="background-color: orange; color: black;">
+                                le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}
+                                </p>
 						</div>
 					{% endif %}
 					{% if stockProduit.codecouleur == 'jaune' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: yellow; color: black;">
+						<div style="background-color: yellow; border-radius: 10px;" class="my-3">
+							<p class='fs-3 fw-normal p-1 text-center' style="color: black;">
 								{{ stockProduit.idproduit }}
 								*
-								{{ stockProduit.quantite }}</p>
+								{{ stockProduit.quantite }}</p> 
+                                <p class='fs-3 fw-normal p-1 text-center' style="background-color: yellow; color: black;">le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}</p>
 						</div>
 					{% endif %}
 					{% if stockProduit.codecouleur == 'rouge' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: red; color: black;">
+						<div style="background-color: red; border-radius: 10px;" class="my-3">
+							<p class='fs-3 fw-normal p-1 text-center' style="color: black;">
 								{{ stockProduit.idproduit }}
 								*
-								{{ stockProduit.quantite }}</p>
+								{{ stockProduit.quantite }}</p> 
+                                <p class='fs-3 fw-normal p-1 text-center' style="background-color: red; color: black;">le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}</p>
 						</div>
 					{% endif %}
 					{% if stockProduit.codecouleur == 'noir' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: black; color: white;">
+						<div style="background-color: black; border-radius: 10px;" class="my-3">
+							<p class='fs-3 fw-normal p-1 text-center' style="color: white;">
 								{{ stockProduit.idproduit }}
 								*
-								{{ stockProduit.quantite }}</p>
+								{{ stockProduit.quantite }}</p> 
+                                <p class='fs-3 fw-normal p-1 text-center' style="color: white;">le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}</p>
 						</div>
 					{% endif %}
 				{% endfor %}
