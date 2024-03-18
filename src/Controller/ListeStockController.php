@@ -3,9 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Stock;
-use App\Entity\ProduitLibre;
+use App\Entity\PaletteProduit;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\RetourProduitReceptionnes;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,7 +26,10 @@ class ListeStockController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
 
-        $stockProduits = $entityManager->getRepository(Stock::class)->findAll();
+        $produitsPalettes = $entityManager->getRepository(PaletteProduit::class)->findAll();
+        foreach ($produitsPalettes as $produitPalette) {
+            $palette = $produitPalette->getPalette();
+        }
         
         if (!empty($request)) {
 
@@ -52,7 +54,8 @@ class ListeStockController extends AbstractController
 
         return $this->render('liste_stock/index.html.twig', [
             'controller_name' => 'ListeStockController',
-            'stockProduits' => $stockProduits
+            'produitsPalettes' => $produitsPalettes,
+            'palette' => $palette
         ]);
     }
 }

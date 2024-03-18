@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Stock;
 use App\Entity\Retour;
+use App\Entity\Palette;
+use App\Entity\PaletteProduit;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\RetourProduitReceptionnes;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +28,7 @@ class FormulaireLitigeController extends AbstractController
     #[Route('/formulaire/litige/{id}', name: 'app_formulaire_litige')]
     public function index($id, EntityManagerInterface $entityManager, Request $request): Response
     {
+        $palettes = $entityManager->getRepository(Palette::class)->findAll();
         $retour = $entityManager->getRepository(Retour::class)->find($id);
         $numretour = $retour->getNumRetour();
         $transporteur = $retour->getTransporteur();
@@ -122,56 +125,87 @@ class FormulaireLitigeController extends AbstractController
             $entityManager->persist($retourTraite);
 
             foreach ($retourProduits as $retourProduit) {
-                if (
-                    !empty($request->request->get('id-form-litige_' . $retourProduit->getId()))
-                    && !empty($request->request->get('id-form-litige_' . $retourProduit->getId()))
-                    && !empty($request->request->get('quantite-form-litige_' . $retourProduit->getId()))
-                ) {
-                    $idProduitReceptionnes = $request->request->get('id-form-litige_' . $retourProduit->getId());
-                    $codeCouleur = $request->request->get('code-couleur-form-litige_' . $retourProduit->getId());
-                    $quantite = $request->request->get('quantite-form-litige_' . $retourProduit->getId());
-                    $retourProduit = new RetourProduitReceptionnes();
-                    $retourProduit->setIdproduit($idProduitReceptionnes);
-                    $retourProduit->setCodeCouleur($codeCouleur);
-                    $retourProduit->setQuantite($quantite);
-                    $retourProduit->setRetour($retourObj);
-                    $retourProduit->setDateReception($currentDate);
-                    $entityManager->persist($retourProduit);
-                    $stock = new Stock();
-                    $stock->setIdProduit($idProduitReceptionnes);
-                    $stock->setQuantite($quantite);
-                    $stock->setCodeCouleur($codeCouleur);
-                    $stock->setDateReception($currentDate);
-                    $entityManager->persist($stock);
+
+                $idProduitReceptionne = $request->request->get('id-form-litige_' . $retourProduit->getId());
+
+                for ($p = $retourProduit->getQuantite(); $p >= 1; $p--) {
+
+                    if (
+                        // $request->request->get('code-couleur-form-litige_' . $p) !== 'pas-de-produit'
+                        $paletteId = $request->request->get('form-litige-palette_' . $idProduitReceptionne . '_' . $p) !== 'pas-de-produit'
+                    ) {
+                        // $codeCouleur = $request->request->get('code-couleur-form-litige_' . $p);
+                        $paletteProduit = new PaletteProduit();
+                        $paletteId = $request->request->get('form-litige-palette_' . $idProduitReceptionne . '_' . $p);
+                        $palette = $entityManager->getRepository(Palette::class)->find($paletteId);
+                        $codeCouleur = $palette->getCodeCouleur();
+                        $paletteProduit->setPalette($palette);
+                        $paletteProduit->setIdProduit($idProduitReceptionne);
+                        $paletteProduit->setQuantite(1);
+                        $paletteProduit->setCodeCouleur($codeCouleur);
+                        $paletteProduit->setDateReception($currentDate);
+                        $entityManager->persist($paletteProduit);
+                        $retourProduit = new RetourProduitReceptionnes();
+                        $retourProduit->setIdProduit($idProduitReceptionne);
+                        $retourProduit->setCodeCouleur($codeCouleur);
+                        $retourProduit->setQuantite(1);
+                        $retourProduit->setRetour($retourObj);
+                        $retourProduit->setDateReception($currentDate);
+                        $entityManager->persist($retourProduit);
+                        $stock = new Stock();
+                        $stock->setIdProduit($idProduitReceptionne);
+                        $stock->setCodeCouleur($codeCouleur);
+                        $stock->setQuantite(1);
+                        $stock->setDateReception($currentDate);
+                        $entityManager->persist($stock);
+                        $entityManager->flush();
+                    }
                 }
             }
 
             $idProduits = $request->request->all('id-form-litige', []);
-            $codeCouleurs = $request->request->all('code-couleur-form-litige', []);
+            // $codeCouleurs = $request->request->all('code-couleur-form-litige', []);
             $quantites = $request->request->all('quantite-form-litige', []);
+            $idPaletteProduitReceptionne = $request->request->all('form-litige-palette', []);
 
             foreach ($idProduits as $index => $idProduit) {
+                $paletteProduitReceptionne = new PaletteProduit();
+                $palette = $entityManager->getRepository(Palette::class)->find($idPaletteProduitReceptionne[$index]);
+                $codeCouleur = $palette->getCodeCouleur();
+                $paletteProduitReceptionne->setPalette($palette);
+                $paletteProduitReceptionne->setIdProduit($idProduit);
+                $paletteProduitReceptionne->setQuantite($quantites[$index]);
+                $paletteProduitReceptionne->setDateReception($currentDate);
+                $paletteProduitReceptionne->setCodeCouleur($codeCouleur);
+                $entityManager->persist($paletteProduitReceptionne);
                 $produit = new RetourProduitReceptionnes();
                 $produit->setIdproduit($idProduit);
-                $produit->setCodeCouleur($codeCouleurs[$index]);
+                $produit->setCodeCouleur($codeCouleur);
                 $produit->setQuantite($quantites[$index]);
                 $produit->setRetour($retourObj);
+                $produit->setDateReception($currentDate);
                 $entityManager->persist($produit);
+                $entityManager->flush();
             }
 
             $idStockProduits = $request->request->all('id-form-litige', []);
-            $codeCouleursStock = $request->request->all('code-couleur-form-litige', []);
+            // $codeCouleursStock = $request->request->all('code-couleur-form-litige', []);
             $quantitesStock = $request->request->all('quantite-form-litige', []);
+            $idPaletteProduitStock = $request->request->all('form-litige-palette', []);
 
             foreach ($idStockProduits as $index => $idProduit) {
+                $palette = $entityManager->getRepository(Palette::class)->find($idPaletteProduitStock[$index]);
+                $codeCouleurStock = $palette->getCodeCouleur();
                 $stock = new Stock();
                 $stock->setIdProduit($idProduit);
                 $stock->setQuantite($quantitesStock[$index]);
-                $stock->setCodeCouleur($codeCouleursStock[$index]);
+                $stock->setCodeCouleur($codeCouleurStock);
+                $stock->setDateReception($currentDate);
                 $entityManager->persist($stock);
+                $entityManager->flush();
             }
 
-            $entityManager->flush();
+
 
             $this->addFlash(
                 'notice',
@@ -194,7 +228,8 @@ class FormulaireLitigeController extends AbstractController
             'etatProduit' => $etatProduitRetour,
             'commentaire' => $commentaireRetour,
             'retourProduits' => $retourProduits,
-            'id' => $id
+            'id' => $id,
+            'palettes' => $palettes
         ]);
     }
 }

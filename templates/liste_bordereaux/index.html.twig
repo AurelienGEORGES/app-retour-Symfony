@@ -18,76 +18,80 @@
 			</div>
 		</div>
 	{% endfor %}
-	<h1 class="text-white mx-3 my-5 fs-1 fw-normal text-center">Liste des bordereaux</h1>
+	<h1 class="text-white mx-3 my-5 fs-3 fw-normal text-center">Liste des bordereaux</h1>
 	<form method="get" action="{{ path('app_liste_bordereaux') }}">
-		<div class='border rounded-3 border-warning border-2 m-3'>
-			<div class="form-group m-3">
-				<label for="date_reception" class='mb-3'>
-					<span class='fs-2 fw-normal text-warning'>Date :</span>
-				</label>
-				<input type="date" name="date_reception" class="form-control fs-2 fw-bold border-dark border-2" id="date_reception"/>
-			</div>
-			<div class='ms-3 my-4'>
-				<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
-					<span class='fs-2 fw-normal'>Recherche</span>
-				</button>
+		<div class="d-flex justify-content-center">
+			<div class='border rounded-3 border-warning border-2 m-3 custom-width-desktop'>
+				<div class="form-group m-3">
+					<label for="date_reception" class='mb-3'>
+						<span class='fs-3 fw-normal text-warning'>Date :</span>
+					</label>
+					<input type="date" name="date_reception" class="form-control fs-3 fw-bold border-dark border-2" id="date_reception"/>
+				</div>
+				<div class='ms-3 my-4'>
+					<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
+						<span class='fs-3 fw-normal'>Recherche</span>
+					</button>
+				</div>
 			</div>
 		</div>
 		<input type="hidden" name="_token" value="{{ csrfTokenDateBordereau }}">
 	</form>
-	<h2 class="text-white fs-1 mx-3 my-5 fw-normal text-center">Résultats recherche par date</h2>
+	<h2 class="text-white fs-3 mx-3 my-5 fw-normal text-center">Résultats recherche par date</h2>
 	{% for bordereau in bordereaux %}
-		<div class='border-primary border border-2 mx-1 rounded-3 my-3'>
-			<div class="d-flex flex-row m-1">
-				<div>
-					<input class="form-check-input border-primary border-3 p-3 m-0" type="checkbox" id="CheckboxBordereau_{{ bordereau.id }}" onchange='isCheckedBordereau({{ bordereau.id }})' data-id="{{ bordereau.id }}">
+		<div class="d-flex justify-content-center">
+			<div class='border-primary border border-2 mx-1 rounded-3 my-3 custom-width-desktop'>
+				<div class="d-flex flex-row m-1">
+					<div>
+						<input class="form-check-input border-primary border-3 p-3 m-0" type="checkbox" id="CheckboxBordereau_{{ bordereau.id }}" onchange='isCheckedBordereau({{ bordereau.id }})' data-id="{{ bordereau.id }}">
+					</div>
+					<div>
+						<label class="form-check-label ms-1" for="CheckboxBordereau_{{ bordereau.id }}">
+							<span class='fs-3 fw-normal text-white'>choisir</span>
+						</label>
+					</div>
 				</div>
-				<div>
-					<label class="form-check-label ms-1" for="CheckboxBordereau_{{ bordereau.id }}">
-						<span class='fs-2 fw-normal text-white'>choisir</span>
-					</label>
-				</div>
-			</div>
-			<p class='fs-3 fw-normal text-white ms-1'>{{ bordereau.numbordereau }}</p>
-			{% if bordereau.photo1 %}
-				<div class="d-flex justify-content-center">
-					<img width='300px' height='300px' class="mt-2 img-fluid" src="{{ asset(bordereau.photo1) }}"/>
-				</div>
-				<!-- Bouton pour ouvrir la modal -->
-				<div class="d-flex justify-content-center">
-					<button type="button" class="btn btn-outline-primary mx-2 my-4 border-2 rounded-5" data-bs-toggle="modal" data-bs-target="#imageModal_{{ bordereau.id }}">
-						<span class='fs-2 fw-normal'>Ouvrir l'image</span>
-					</button>
-				</div>
-				<!-- Modal -->
-				<div class="modal fade" id="imageModal_{{ bordereau.id }}" tabindex="-1" aria-labelledby="imageModalLabel_{{ bordereau.id }}" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered modal-xl">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="imageModalLabel">Image</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-							</div>
-							<div class="modal-body">
-								<img class="img-fluid" src="{{ asset(bordereau.photo1) }}" alt="Image">
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+				<p class='fs-3 fw-normal text-white ms-1'>{{ bordereau.numbordereau }}</p>
+				{% if bordereau.photo1 %}
+					<div class="d-flex justify-content-center">
+						<img width='300px' height='300px' class="mt-2 img-fluid" src="{{ asset(bordereau.photo1) }}"/>
+					</div>
+					<!-- Bouton pour ouvrir la modal -->
+					<div class="d-flex justify-content-center">
+						<button type="button" class="btn btn-outline-primary mx-2 my-4 border-2 rounded-5" data-bs-toggle="modal" data-bs-target="#imageModal_{{ bordereau.id }}">
+							<span class='fs-3 fw-normal'>Ouvrir l'image</span>
+						</button>
+					</div>
+					<!-- Modal -->
+					<div class="modal fade" id="imageModal_{{ bordereau.id }}" tabindex="-1" aria-labelledby="imageModalLabel_{{ bordereau.id }}" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered modal-xl">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="imageModalLabel">Image</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<img class="img-fluid" src="{{ asset(bordereau.photo1) }}" alt="Image">
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			{% endif %}
-			{% if bordereau.photo2 %}
-				<div>
-					<img width='300px' height='300px' class="mt-2 img-fluid" src="{{ asset(bordereau.photo2) }}"/>
-				</div>
-			{% endif %}
-			<p class='fs-3 fw-normal text-white ms-2'>{{ bordereau.commentaire }}</p>
+				{% endif %}
+				{% if bordereau.photo2 %}
+					<div>
+						<img width='300px' height='300px' class="mt-2 img-fluid" src="{{ asset(bordereau.photo2) }}"/>
+					</div>
+				{% endif %}
+				<p class='fs-3 fw-normal text-white ms-2'>{{ bordereau.commentaire }}</p>
+			</div>
 		</div>
 	{% endfor %}
-	<p class="text-white my-5 fs-1 fw-normal text-center">Recherche pour lier un/des attendus ou sans attendus</p>
+	<p class="text-white my-5 fs-3 fw-normal text-center">Recherche pour lier un/des attendus ou sans attendus</p>
 	<div class="d-flex justify-content-center">
-		<div class="border border-2 border-warning mx-1 rounded-4 input-desktop">
+		<div class="border border-2 border-warning mx-1 rounded-4 custom-width-desktop">
 			{{ form_start(form) }}
 			<div class='m-2'>
 				{{ form_label(form.numRetour, 'N° RET, RETSA, NT', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
@@ -107,55 +111,55 @@
 			</div>
 			<div class='d-flex justify-content-center'>
 				<button type="submit" class="btn btn-outline-warning my-3 border-2 rounded-5">
-					<span class='fs-2 fw-normal'>Recherche</span>
+					<span class='fs-3 fw-normal'>Recherche</span>
 				</button>
 			</div>
 			{{ form_end(form) }}
 		</div>
 	</div>
-	<h4 class="text-white fs-1 my-5 fw-normal text-center">liste attendus/sans attendus</h4>
+	<h4 class="text-white fs-3 my-5 fw-normal text-center">liste attendus/sans attendus</h4>
 	{% for retour in retours %}
-    <div class="d-flex justify-content-center">
-		<div class="my-3">
-			<div class="custom-width-desktop">
-				<div class="card m-1 border-primary border-3">
-					<div class="card-body">
-						<div class="container p-0 m-0">
-							<div class="form-check p-0 m-0 d-flex flex-column">
-								<div>
-									<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ retour.id }}" onchange='isCheckedListe({{ retour.id }})'>
-								</div>
-								<div>
-									<label class="form-check-label m-0" for="CheckboxListe_{{ retour.id }}">
-										<span class='fs-1 fw-normal'>{{ retour.numretour }}</span>
-									</label>
+		<div class="d-flex justify-content-center">
+			<div class="my-3">
+				<div class="custom-width-desktop">
+					<div class="card m-1 border-primary border-3">
+						<div class="card-body">
+							<div class="container p-0 m-0">
+								<div class="form-check p-0 m-0 d-flex flex-column">
+									<div>
+										<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ retour.id }}" onchange='isCheckedListe({{ retour.id }})'>
+									</div>
+									<div>
+										<label class="form-check-label m-0" for="CheckboxListe_{{ retour.id }}">
+											<span class='fs-3 fw-normal'>{{ retour.numretour }}</span>
+										</label>
+									</div>
 								</div>
 							</div>
-						</div>
-						<p class="card-text m-0">
-							<span class='fs-1 fw-normal'>{{ retour.prenomclient}}
-								{{ retour.nomclient}}</span>
-						</p>
-						<p class="card-text m-0">
-							<span class='fs-1 fw-normal'>{{ retour.Transporteur }}</span>
-						</p>
-						{% for retourProduit in retour.retourProduits %}
 							<p class="card-text m-0">
-								<span class='fs-1 fw-normal'>{{ retourProduit.idproduit }}
-									*
-									{{ retourProduit.quantite }}</span>
+								<span class='fs-3 fw-normal'>{{ retour.prenomclient}}
+									{{ retour.nomclient}}</span>
 							</p>
-						{% endfor %}
+							<p class="card-text m-0">
+								<span class='fs-3 fw-normal'>{{ retour.Transporteur }}</span>
+							</p>
+							{% for retourProduit in retour.retourProduits %}
+								<p class="card-text m-0">
+									<span class='fs-3 fw-normal'>{{ retourProduit.idproduit }}
+										*
+										{{ retourProduit.quantite }}</span>
+								</p>
+							{% endfor %}
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-    </div>
 	{% endfor %}
 	<form method="get" action="{{ path('app_liste_bordereaux') }}" id="lienForm">
 		<div class='my-5 d-flex justify-content-center'>
 			<button type="submit" class="btn btn-outline-warning my-3 border-2 rounded-5">
-				<span class='fs-2 fw-normal'>Lier le bordereau</span>
+				<span class='fs-3 fw-normal'>Lier le bordereau</span>
 			</button>
 		</div>
 		<input type="hidden" name="_token" value="{{ csrfTokenLierBordereau }}">

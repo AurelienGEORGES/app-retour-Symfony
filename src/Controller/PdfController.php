@@ -20,6 +20,7 @@ class PdfController extends AbstractController
 
         // Extract relevant data for PDF generation
         $depot = $formData['pdf-depot'];
+        $numeroPalette = $formData['numero-palette'];
         $codeCouleur = $formData['pdf-code-couleur'];
         $produits = []; // Array to store product data
 
@@ -36,6 +37,7 @@ class PdfController extends AbstractController
             'depot' => $depot,
             'codeCouleur' => $codeCouleur,
             'produits' => $produits,
+            'numero' => $numeroPalette
         ]);
         
         // Generate the PDF

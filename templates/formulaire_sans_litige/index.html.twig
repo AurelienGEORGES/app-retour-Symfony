@@ -17,7 +17,7 @@
 			</div>
 		</div>
 	{% endfor %}
-	<h1 class="text-white my-5 fs-1 mx-2 fw-normal text-center">Reception
+	<h1 class="text-white my-5 fs-3 mx-2 fw-normal text-center">Reception
 		{{ numretour }}
 		sans litige</h1>
 	<form method="post" action="{{ path('app_formulaire_sans_litige', {'id': id}) }}">
@@ -33,12 +33,13 @@
 					<option value="mazet" class='fs-3 fw-normal'>mazet</option>
 					<option value="geodis" class='fs-3 fw-normal'>geodis</option>
 					<option value="gls" class='fs-3 fw-normal'>gls</option>
+					<option value="vir" class='fs-3 fw-normal'>vir</option>
 				</select>
 			</div>
 		</div>
 		{% for retourProduit in retourProduits %}
 			<div class="d-flex justify-content-center">
-				<div class='border rounded-3 border-warning border-2 mx-1 my-4'>
+				<div class='border rounded-3 border-warning border-2 mx-1 my-4 custom-width-desktop'>
 					<div class='d-flex justify-content-center flex-column'>
 						<div class='d-flex justify-content-center'>
 							<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga({{ retourProduit.id }})">
@@ -51,33 +52,41 @@
 					</div>
 					<div class="m-3">
 						<label for="id-form-sans-litige_{{ retourProduit.id }}" class="form-label">
-							<span class='fs-1 fw-normal text-warning'>ID produit</span>
+							<span class='fs-3 fw-normal text-warning'>ID produit</span>
 						</label>
-						<input type="number" class="form-control fs-1 fw-normal border-dark border-2" id="id-form-sans-litige_{{ retourProduit.id }}" value="{{ retourProduit.idproduit }}" name="id-form-sans-litige_{{ retourProduit.id }}">
+						<input type="number" class="form-control fs-3 fw-normal border-dark border-2" id="id-form-sans-litige_{{ retourProduit.id }}" value="{{ retourProduit.idproduit }}" name="id-form-sans-litige_{{ retourProduit.id }}">
 					</div>
-					<div class="m-3">
-						<label for="code-couleur-form-sans-litige_{{ retourProduit.id }}" class="form-label">
-							<span class='fs-1 fw-normal text-warning'>Code couleur</span>
-						</label>
-						<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="code-couleur-form-sans-litige_{{ retourProduit.id }}" name="code-couleur-form-sans-litige_{{ retourProduit.id }}">
-							<option value="vert" class='fs-1 fw-normal'>vert</option>
-							<option value="jaune" class='fs-1 fw-normal'>jaune</option>
-							<option value="orange" class='fs-1 fw-normal'>orange</option>
-							<option value="rouge" class='fs-1 fw-normal'>rouge</option>
-							<option value="noir" class='fs-1 fw-normal'>noir</option>
-						</select>
-					</div>
-					<div class="m-3">
-						<div class="form-group">
-							<label for="quantite-form-sans-litige_{{ retourProduit.id }}">
-								<span class='fs-1 fw-normal text-warning'>Quantité</span>
+					{% for i in 1..retourProduit.quantite %}
+						{# <div class="m-3 d-flex justify-content-center flex-column">
+							<label for="code-couleur-form-sans-litige_{{ i }}" class="form-label">
+								<span class='fs-3 fw-normal text-warning'>Couleur produit
+									{{ i }}</span>
 							</label>
-							<input type="number" min="1" class="form-control fs-1 fw-normal border-dark border-2" id="quantite-form-sans-litige_{{ retourProduit.id }}" value="{{ retourProduit.quantite }}" name="quantite-form-sans-litige_{{ retourProduit.id }}"/>
+							<select class="form-select w-75 fs-3 fw-normal border-dark border-2" id="code-couleur-form-sans-litige_{{ i }}" name="code-couleur-form-sans-litige_{{ i }}" required>
+								<option value="vert" class='fs-3 fw-normal'>vert</option>
+								<option value="jaune" class='fs-3 fw-normal'>jaune</option>
+								<option value="orange" class='fs-3 fw-normal'>orange</option>
+								<option value="rouge" class='fs-3 fw-normal'>rouge</option>
+								<option value="noir" class='fs-3 fw-normal'>noir</option>
+								<option value="pas-de-produit" class='fs-3 fw-normal'>pas de produit</option>
+							</select>
+						</div> #}
+						<div class="m-3">
+							<label for="form-sans-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" class="form-label">
+								<span class='fs-3 fw-normal text-warning'>Palette produit {{ i }}</span>
+							</label>
+							<select class="form-select w-100 fs-3 fw-normal border-dark border-3 rounded-3" id="form-sans-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" name="form-sans-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" required>
+								{% for palette in palettes %}
+									<option value="{{ palette.id }}" class='fs-3 fw-normal'>N°{{ palette.id }}
+										{{ palette.codeCouleur }}</option>
+								{% endfor %}
+                                <option value="pas-de-produit" class='fs-3 fw-normal'>pas de produit</option>
+							</select>
 						</div>
-					</div>
+					{% endfor %}
 					<div class='ms-3 my-5 d-flex justify-content-center'>
 						<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
-							<span class='fs-2 fw-normal'>Supprimer</span>
+							<span class='fs-3 fw-normal'>Supprimer</span>
 						</button>
 					</div>
 				</div>
@@ -86,12 +95,12 @@
 		<div id="ajoutProduit"></div>
 		<div class="d-flex justify-content-center my-5">
 			<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="ajoutProduit()">
-				<span class='fs-2 fw-normal'>Ajouter produit</span>
+				<span class='fs-3 fw-normal'>Ajouter produit</span>
 			</button>
 		</div>
 		<div class='my-5 d-flex justify-content-center'>
 			<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
-				<span class='fs-2 fw-normal'>Enregistrer</span>
+				<span class='fs-3 fw-normal'>Enregistrer</span>
 			</button>
 		</div>
 		<input type="hidden" name="_token" value="{{ csrfTokenSansLitige }}">
@@ -100,12 +109,13 @@
 		let compteurSans = 0;
 function ajoutProduit() {
 let container = document.createElement('div');
-container.className = 'border rounded-3 border-warning border-2 m-1 mx-1 my-4';
+container.className = 'd-flex justify-content-center';
 container.innerHTML = `
+<div class="border rounded-3 border-warning border-2 mx-1 my-4 custom-width-desktop">
         <div class='d-flex justify-content-center flex-column m-3'>
 					<div class='d-flex justify-content-center'>
 						<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga_on_add_product_sans(${compteurSans})">
-							<span class='fs-2 fw-normal'>Scan produit</span>
+							<span class='fs-3 fw-normal'>Scan produit</span>
 						</button>
 					</div>
 					<div class='d-flex justify-content-center'>
@@ -113,34 +123,34 @@ container.innerHTML = `
 					</div>
 				</div>
         <div class="m-3">
-        <label for="id-form-sans-litige" class="form-label">
-					<span class='fs-1 fw-normal text-warning'>ID produit</span>
+        <label for="id-form-sans-litige_${compteurSans}" class="form-label">
+					<span class='fs-3 fw-normal text-warning'>ID produit</span>
 				</label>
-				<input type="number" class="form-control fs-1 fw-normal border-dark border-2" id="id-form-sans-litige_${compteurSans}" placeholder="id" name="id-form-sans-litige[]">
+				<input type="number" class="form-control fs-3 fw-normal border-dark border-2" id="id-form-sans-litige_${compteurSans}" placeholder="id" name="id-form-sans-litige[]" required>
 			</div>
 			<div class="m-3">
-				<label for="code-couleur-form-sans-litige" class="form-label">
-					<span class='fs-1 fw-normal text-warning'>Code couleur</span>
-				</label>
-				<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="code-couleur-form-sans-litige" name="code-couleur-form-sans-litige[]">
-					<option value="vert" class='fs-1 fw-normal'>vert</option>
-					<option value="jaune" class='fs-1 fw-normal'>jaune</option>
-					<option value="orange" class='fs-1 fw-normal'>orange</option>
-					<option value="rouge" class='fs-1 fw-normal'>rouge</option>
-					<option value="noir" class='fs-1 fw-normal'>noir</option>
-				</select>
-			</div>
+							<label for="form-sans-litige-palette_${compteurSans}" class="form-label">
+								<span class='fs-3 fw-normal text-warning'>Palette produit</span>
+							</label>
+							<select class="form-select w-100 fs-3 fw-normal border-dark border-3 rounded-3" id="form-sans-litige-palette_${compteurSans}" name="form-sans-litige-palette[]" required>				
+									{% for palette in palettes %}
+									<option value="{{ palette.id }}" class='fs-3 fw-normal'>N°{{ palette.id }}
+										{{ palette.codeCouleur }}</option>
+								{% endfor %}		
+                                <option value="pas-de-produit" class='fs-3 fw-normal'>pas de produit</option>
+							</select>
+						</div>
 			<div class="m-3">
 				<div class="form-group">
 					<label for="quantite-form-sans-litige">
-						<span class='fs-1 fw-normal text-warning'>Quantité</span>
+						<span class='fs-3 fw-normal text-warning'>Quantité</span>
 					</label>
-					<input type="number" min="1" class="form-control fs-1 fw-normal border-dark border-2" id="quantite-form-sans-litige" placeholder="1" name="quantite-form-sans-litige[]"/>
+					<input type="number" min="1" class="form-control fs-3 fw-normal border-dark border-2" id="quantite-form-sans-litige" name="quantite-form-sans-litige[]" required value="1"/>
 				</div>
 			</div>
         <div class='ms-3 my-5 d-flex justify-content-center'>
             <button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
-                <span class='fs-2 fw-normal'>Supprimer</span>
+                <span class='fs-3 fw-normal'>Supprimer</span>
             </button>
         </div>
     `;

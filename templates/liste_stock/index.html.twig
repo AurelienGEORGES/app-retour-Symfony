@@ -52,57 +52,73 @@
 	<h4 class="text-white my-5 fs-1 fw-normal text-center mx-1">Résultat de la recherche</h4>
 	<div class="d-flex justify-content-center mb-5">
 		<div>
-			<div class="d-flex flex-column">
-				{% for stockProduit in stockProduits %}
-					{% if stockProduit.codecouleur == 'vert' %}
-						<div style="background-color: green; border-radius: 10px;" class="my-3">
-							<p class='fs-3 fw-normal p-1 text-center' style="color: black;">
-								{{ stockProduit.idproduit }}
-								*
-								{{ stockProduit.quantite }}</p> 
-                                <p class='fs-3 fw-normal p-1 text-center' style="background-color: green; color: black;">
-                                le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}</p>
+			<div
+				class="d-flex flex-column">
+				{# {% for stockProduit in stockProduits %}
+									{% if stockProduit.codecouleur == 'vert' %}
+										<div style="background-color: green; border-radius: 10px;" class="my-3">
+											<p class='fs-3 fw-normal p-1 text-center' style="color: black;">
+												{{ stockProduit.idproduit }}
+												*
+												{{ stockProduit.quantite }}</p> 
+				                                <p class='fs-3 fw-normal p-1 text-center' style="background-color: green; color: black;">
+				                                le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}</p>
+										</div>
+									{% endif %}
+									{% if stockProduit.codecouleur == 'orange' %}
+										<div style="background-color: orange; border-radius: 10px;" class="my-3">
+											<p class='fs-3 fw-normal p-1 text-center' style="color: black;">
+												{{ stockProduit.idproduit }}
+												*
+												{{ stockProduit.quantite }}
+				                                </p>
+				                                <p class='fs-3 fw-normal p-1 text-center' style="background-color: orange; color: black;">
+				                                le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}
+				                                </p>
+										</div>
+									{% endif %}
+									{% if stockProduit.codecouleur == 'jaune' %}
+										<div style="background-color: yellow; border-radius: 10px;" class="my-3">
+											<p class='fs-3 fw-normal p-1 text-center' style="color: black;">
+												{{ stockProduit.idproduit }}
+												*
+												{{ stockProduit.quantite }}</p> 
+				                                <p class='fs-3 fw-normal p-1 text-center' style="background-color: yellow; color: black;">le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}</p>
+										</div>
+									{% endif %}
+									{% if stockProduit.codecouleur == 'rouge' %}
+										<div style="background-color: red; border-radius: 10px;" class="my-3">
+											<p class='fs-3 fw-normal p-1 text-center' style="color: black;">
+												{{ stockProduit.idproduit }}
+												*
+												{{ stockProduit.quantite }}</p> 
+				                                <p class='fs-3 fw-normal p-1 text-center' style="background-color: red; color: black;">le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}</p>
+										</div>
+									{% endif %}
+									{% if stockProduit.codecouleur == 'noir' %}
+										<div style="background-color: black; border-radius: 10px;" class="my-3">
+											<p class='fs-3 fw-normal p-1 text-center' style="color: white;">
+												{{ stockProduit.idproduit }}
+												*
+												{{ stockProduit.quantite }}</p> 
+				                                <p class='fs-3 fw-normal p-1 text-center' style="color: white;">le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}</p>
+										</div>
+									{% endif %}
+								{% endfor %} #}
+				{% for produitPalette in produitsPalettes %}
+					<div class="card my-4 border-primary border-3 custom-width-desktop">
+						<div class="card-body p-0 ps-2">
+							<p class="card-text m-0">
+								<span class='fs-3 fw-bold'>{{ produitPalette.idProduit }} * {{ produitPalette.quantite }}</span>
+							</p>
+							<p class="card-text m-0">
+								<span class='fs-3 fw-bold'>{{ produitPalette.dateReception|date('d/m/Y H:i:s') }}</span>
+							</p>
+                            <p class="card-text m-0">
+								<span class='fs-3 fw-bold'>palette N°{{ produitPalette.getpalette.codeCouleur }}</span>
+							</p>
 						</div>
-					{% endif %}
-					{% if stockProduit.codecouleur == 'orange' %}
-						<div style="background-color: orange; border-radius: 10px;" class="my-3">
-							<p class='fs-3 fw-normal p-1 text-center' style="color: black;">
-								{{ stockProduit.idproduit }}
-								*
-								{{ stockProduit.quantite }}
-                                </p>
-                                <p class='fs-3 fw-normal p-1 text-center' style="background-color: orange; color: black;">
-                                le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}
-                                </p>
-						</div>
-					{% endif %}
-					{% if stockProduit.codecouleur == 'jaune' %}
-						<div style="background-color: yellow; border-radius: 10px;" class="my-3">
-							<p class='fs-3 fw-normal p-1 text-center' style="color: black;">
-								{{ stockProduit.idproduit }}
-								*
-								{{ stockProduit.quantite }}</p> 
-                                <p class='fs-3 fw-normal p-1 text-center' style="background-color: yellow; color: black;">le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}</p>
-						</div>
-					{% endif %}
-					{% if stockProduit.codecouleur == 'rouge' %}
-						<div style="background-color: red; border-radius: 10px;" class="my-3">
-							<p class='fs-3 fw-normal p-1 text-center' style="color: black;">
-								{{ stockProduit.idproduit }}
-								*
-								{{ stockProduit.quantite }}</p> 
-                                <p class='fs-3 fw-normal p-1 text-center' style="background-color: red; color: black;">le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}</p>
-						</div>
-					{% endif %}
-					{% if stockProduit.codecouleur == 'noir' %}
-						<div style="background-color: black; border-radius: 10px;" class="my-3">
-							<p class='fs-3 fw-normal p-1 text-center' style="color: white;">
-								{{ stockProduit.idproduit }}
-								*
-								{{ stockProduit.quantite }}</p> 
-                                <p class='fs-3 fw-normal p-1 text-center' style="color: white;">le {{ stockProduit.dateReception|date('d/m/Y H:i:s') }}</p>
-						</div>
-					{% endif %}
+					</div>
 				{% endfor %}
 			</div>
 		</div>

@@ -234,20 +234,21 @@
 					<label for="transporteur-form-litige" class="form-label">
 						<span class='fs-3 fw-normal text-warning'>Transporteur</span>
 					</label>
-					<select class="form-select w-75 fs-3 fw-normal border-dark border-2" id="transporteur-form-litige" name="transporteur-form-litige">
+					<select class="form-select fs-3 fw-normal border-dark border-2" id="transporteur-form-litige" name="transporteur-form-litige">
 						<option value="{{ transporteur }}" class='fs-3 fw-normal'>{{ transporteur }}</option>
 						<option value="shenker" class='fs-3 fw-normal'>shenker</option>
 						<option value="dpd" class='fs-3 fw-normal'>dpd</option>
 						<option value="mazet" class='fs-3 fw-normal'>mazet</option>
 						<option value="geodis" class='fs-3 fw-normal'>geodis</option>
 						<option value="gls" class='fs-3 fw-normal'>gls</option>
+                        <option value="vir" class='fs-3 fw-normal'>vir</option>
 					</select>
 				</div>
 				<div class="m-1 d-flex justify-content-center flex-column">
 					<label for="etat-form-litige" class="form-label">
 						<span class='fs-3 fw-normal text-warning'>Etat du colis</span>
 					</label>
-					<select class="form-select w-75 fs-3 fw-normal border-dark border-2" id="etat-form-litige" name="etat-form-litige">
+					<select class="form-select fs-3 fw-normal border-dark border-2" id="etat-form-litige" name="etat-form-litige">
 						<option value="{{ etat }}" class='fs-3 fw-normal'>{{ etat }}</option>
 						<option value="ouvert" class='fs-3 fw-normal'>ouvert</option>
 						<option value="manquant" class='fs-3 fw-normal'>manquant</option>
@@ -256,22 +257,22 @@
 						<option value="pas d'info" class='fs-3 fw-normal'>pas d'info</option>
 					</select>
 				</div>
-                <div class="m-1 d-flex justify-content-center flex-column">
+				<div class="m-1 d-flex justify-content-center flex-column">
 					<label for="etat-produit-form-litige" class="form-label">
 						<span class='fs-3 fw-normal text-warning'>Etat du produit</span>
 					</label>
-					<select class="form-select w-75 fs-3 fw-normal border-dark border-2" id="etat-produit-form-litige" name="etat-produit-form-litige">
+					<select class="form-select fs-3 fw-normal border-dark border-2" id="etat-produit-form-litige" name="etat-produit-form-litige">
 						<option value="{{ etatProduit }}" class='fs-3 fw-normal'>{{ etatProduit }}</option>
 						<option value="pièce manquante" class='fs-3 fw-normal'>pièce manquante</option>
 						<option value="abimé" class='fs-3 fw-normal'>abimé</option>
-                        <option value="pas d'info" class='fs-3 fw-normal'>pas d'info</option>
+						<option value="pas d'info" class='fs-3 fw-normal'>pas d'info</option>
 					</select>
 				</div>
 				<div class="m-1 d-flex justify-content-center flex-column">
 					<label for="commentaire-form-litige">
 						<span class='fs-3 fw-normal text-warning'>Commentaires</span>
 					</label>
-					<textarea placeholder="{{ commentaire }}" class="form-control fs-3 fw-normal mt-3 border-dark border-2" id="commentaire-form-litige" name="commentaire-form-litige" rows="5" cols="33"></textarea>
+					<textarea class="form-control fs-3 fw-normal mt-3 border-dark border-2" id="commentaire-form-litige" name="commentaire-form-litige" rows="5" cols="33">{{ commentaire }}</textarea>
 				</div>
 			</div>
 		</div>
@@ -294,28 +295,34 @@
 						</label>
 						<input type="number" class="form-control fs-3 fw-normal border-dark border-2 input-desktop" id="id-form-litige_{{ retourProduit.id }}" name="id-form-litige_{{ retourProduit.id }}" required value="{{ retourProduit.idproduit }}">
 					</div>
-                    <div class="m-3 d-flex justify-content-center flex-column">
-						<div class="form-group">
-							<label for="quantite-form-litige_{{ retourProduit.id }}">
-								<span class='fs-3 fw-normal text-warning'>Quantité</span>
+					{% for i in 1..retourProduit.quantite %}
+						{# <div class="m-3 d-flex justify-content-center flex-column">
+							<label for="code-couleur-form-litige_{{ i }}" class="form-label">
+								<span class='fs-3 fw-normal text-warning'>Couleur produit
+									{{ i }}</span>
 							</label>
-							<input type="number" min="1" class="form-control fs-3 fw-normal border-dark border-2" id="quantite-form-litige_{{ retourProduit.id }}" value="{{ retourProduit.quantite }}" name="quantite-form-litige_{{ retourProduit.id }}" required/>
+							<select class="form-select w-75 fs-3 fw-normal border-dak border-2" id="code-couleur-form-litige_{{ i }}" name="code-couleur-form-litige_{{ i }}" required>
+								<option value="vert" class='fs-3 fw-normal'>vert</option>
+								<option value="jaune" class='fs-3 fw-normal'>jaune</option>
+								<option value="orange" class='fs-3 fw-normal'>orange</option>
+								<option value="rouge" class='fs-3 fw-normal'>rouge</option>
+								<option value="noir" class='fs-3 fw-normal'>noir</option>
+								<option value="pas-de-produit" class='fs-3 fw-normal'>pas de produit</option>
+							</select>
+						</div> #}
+                        <div class="m-3">
+							<label for="form-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" class="form-label">
+								<span class='fs-3 fw-normal text-warning'>Palette produit {{ i }}</span>
+							</label>
+							<select class="form-select w-100 fs-3 fw-normal border-dark border-3 rounded-3" id="form-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" name="form-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" required>
+								{% for palette in palettes %}
+									<option value="{{ palette.id }}" class='fs-3 fw-normal'>N°{{ palette.id }}
+										{{ palette.codeCouleur }}</option>
+								{% endfor %}
+                                <option value="pas-de-produit" class='fs-3 fw-normal'>pas de produit</option>
+							</select>
 						</div>
-					</div>
-                    {% for i in 1..retourProduit.quantite %}
-					<div class="m-3 d-flex justify-content-center flex-column">
-						<label for="code-couleur-form-litige_{{ i }}" class="form-label">
-							<span class='fs-3 fw-normal text-warning'>Couleur produit {{ i }}</span>
-						</label>
-						<select class="form-select w-75 fs-3 fw-normal border-dak border-2" id="code-couleur-form-litige_{{ i }}" name="code-couleur-form-litige_{{ i }}" required>
-							<option value="vert" class='fs-3 fw-normal'>vert</option>
-							<option value="jaune" class='fs-3 fw-normal'>jaune</option>
-							<option value="orange" class='fs-3 fw-normal'>orange</option>
-							<option value="rouge" class='fs-3 fw-normal'>rouge</option>
-							<option value="noir" class='fs-3 fw-normal'>noir</option>
-						</select>
-					</div>
-                    {% endfor %}
+					{% endfor %}
 					<div class='my-5 d-flex justify-content-center'>
 						<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
 							<span class='fs-3 fw-normal'>Supprimer</span>
@@ -355,29 +362,29 @@ container.innerHTML = `
 					</div>
 				</div>
         <div class="m-3">
-        <label for="id-form-litige" class="form-label">
+        <label for="id-form-litige_${compteur}" class="form-label">
 					<span class='fs-3 fw-normal text-warning'>ID produit</span>
 				</label>
 				<input type="number" class="form-control fs-3 fw-normal border-dark border-2" id="id-form-litige_${compteur}" placeholder="id" name="id-form-litige[]" required>
 			</div>
 			<div class="m-3">
-				<label for="code-couleur-form-litige" class="form-label">
-					<span class='fs-3 fw-normal text-warning'>Code couleur</span>
-				</label>
-				<select class="form-select w-75 fs-3 fw-normal border-dark border-2" id="code-couleur-form-litige" name="code-couleur-form-litige[]" required>
-					<option value="vert" class='fs-3 fw-normal'>vert</option>
-					<option value="jaune" class='fs-3 fw-normal'>jaune</option>
-					<option value="orange" class='fs-3 fw-normal'>orange</option>
-					<option value="rouge" class='fs-3 fw-normal'>rouge</option>
-					<option value="noir" class='fs-3 fw-normal'>noir</option>
-				</select>
-			</div>
+							<label for="form-litige-palette_${compteur}" class="form-label">
+								<span class='fs-3 fw-normal text-warning'>Palette produit</span>
+							</label>
+							<select class="form-select w-100 fs-3 fw-normal border-dark border-3 rounded-3" id="form-litige-palette_${compteur}" name="form-litige-palette[]" required>				
+									{% for palette in palettes %}
+									<option value="{{ palette.id }}" class='fs-3 fw-normal'>N°{{ palette.id }}
+										{{ palette.codeCouleur }}</option>
+								{% endfor %}		
+                                <option value="pas-de-produit" class='fs-3 fw-normal'>pas de produit</option>
+							</select>
+						</div>
 			<div class="m-3">
 				<div class="form-group">
 					<label for="quantite-form-litige">
 						<span class='fs-3 fw-normal text-warning'>Quantité</span>
 					</label>
-					<input type="number" min="1" class="form-control fs-3 fw-normal border-dark border-2" id="quantite-form-litige" placeholder="1" name="quantite-form-litige[]" required/>
+					<input type="number" min="1" class="form-control fs-3 fw-normal border-dark border-2" id="quantite-form-litige" placeholder="1" name="quantite-form-litige[]" required value="1"/>
 				</div>
 			</div>
         <div class='my-5 d-flex justify-content-center'>
@@ -552,6 +559,5 @@ const blob = new Blob([ab], {type: mimeString});
 resolve(blob);
 });
 }
-
 	</script>
 {% endblock %}

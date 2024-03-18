@@ -8,11 +8,11 @@
 	{% for message in app.flashes('notice') %}
 		<div id="message">
 			<div class="flash-notice">
-				<p class="text-success my-3 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
+				<p class="text-success my-3 fs-3 mx-2 fw-normal text-center">{{ message }}</p>
 			</div>
 			<div class='d-flex justify-content-center'>
 				<button type="submit" class="btn btn-outline-success border-3 rounded-5" onclick="(removeMessage())">
-					<span class='fs-2 fw-normal p-2'>OK!</span>
+					<span class='fs-3 fw-normal p-2'>OK!</span>
 				</button>
 			</div>
 		</div>
@@ -36,7 +36,7 @@
 				</label>
 				<input type="number" class="form-control fs-3 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-id" placeholder="id" name="form-produit-libre-id" required>
 			</div>
-			<div class="m-3">
+			{# <div class="m-3">
 				<label for="form-produit-libre-code-couleur" class="form-label">
 					<span class='fs-3 fw-normal text-info'>Code couleur</span>
 				</label>
@@ -47,26 +47,38 @@
 					<option value="rouge" class='fs-3 fw-normal'>rouge</option>
 					<option value="noir" class='fs-3 fw-normal'>noir</option>
 				</select>
-			</div>
+			</div> #}
 			<div class="m-3">
 				<div class="form-group">
 					<label for="form-produit-libre-quantite">
 						<span class='fs-3 fw-normal text-info'>Quantité :</span>
 					</label>
-					<input type="number" class="form-control fs-3 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-quantite" placeholder="qte" name="form-produit-libre-quantite" required/>
+					<input type="number" min="1" class="form-control fs-3 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-quantite" value="1" name="form-produit-libre-quantite" required/>
 				</div>
 			</div>
 			<div class="m-3">
 				<label for="form-produit-libre-transporteur" class="form-label">
 					<span class='fs-3 fw-normal text-info'>Transporteur</span>
 				</label>
-				<select class="form-select w-75 fs-3 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-transporteur" name="form-produit-libre-transporteur" required>
+				<select class="form-select fs-3 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-transporteur" name="form-produit-libre-transporteur" required>
 					<option value="shenker" class='fs-3 fw-normal'>shenker</option>
 					<option value="dpd" class='fs-3 fw-normal'>dpd</option>
 					<option value="mazet" class='fs-3 fw-normal'>mazet</option>
 					<option value="geodis" class='fs-3 fw-normal'>geodis</option>
 					<option value="gls" class='fs-3 fw-normal'>gls</option>
+                    <option value="vir" class='fs-3 fw-normal'>vir</option>
+                    <option value="indetermine" class='fs-3 fw-normal'>indeterminé</option>
 				</select>
+			</div>
+            <div class="m-3">
+				<label for="form-produit-libre-palette" class="form-label">
+					<span class='fs-3 fw-normal text-info'>Palette</span>
+				</label>
+				<select class="form-select w-100 fs-3 fw-normal border-dark border-3 rounded-3" id="form-produit-libre-palette" name="form-produit-libre-palette" required>
+					{% for palette in palettes %}
+                        <option value="{{ palette.id }}" class='fs-3 fw-normal'>N°{{ palette.id }} {{ palette.codeCouleur }}</option>
+                    {% endfor %}
+                </select>
 			</div>
 			<div class='my-5 d-flex justify-content-center'>
 				<button type="submit" class="btn btn-outline-info border-2 rounded-5">

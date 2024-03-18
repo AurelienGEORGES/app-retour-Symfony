@@ -4,14 +4,15 @@
 {% endblock %}
 
 {% block body %}
-	<h1 class="my-5 mx-2 fs-1 fw-normal text-center">Bordereau Negolux</h1>
-	<h2 class="my-5 mx-2 fs-1 fw-normal text-center">A destination de
-		{{ depot }}</h2>
-	<h3 class="my-5 mx-2 fs-1 fw-normal text-center">Liste des produits</h3>
+	<h1>Bordereau Negolux</h1>
+	<h2>Destination : {{ depot }}</h2>
+    <h2>couleur : {{ codeCouleur }}</h2> 
+    <h2>N° palette : {{ numero }}</h2>
+	<h2>Liste des produits : </h2>
 	{% for produit in produits %}
-		<h4 class="my-5 mx-2 fs-1 fw-normal text-center">id produit :
+		<h3>- id produit :
 			{{ produit.idProduit }}
 			* quantité
-			{{ produit.quantite }}</h4>
+			{{ produit.quantite }}</h3>
 	{% endfor %}
 {% endblock %}
