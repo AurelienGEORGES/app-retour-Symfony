@@ -92,16 +92,22 @@ class FormulaireLitigeController extends AbstractController
             $numRetourTraite = $retourTraite->getNumRetour();
             if (substr($numRetourTraite, -3) === '-01') {
                 $numRetourTraite = substr_replace($numRetourTraite, '-02', -3);
+                $retourTraite->setEtat02($etat);
+                $retourTraite->setEtatProduit02($etatProduit);
             } else if (substr($numRetourTraite, -3) === '-02') {
                 $numRetourTraite = substr_replace($numRetourTraite, '-03', -3);
+                $retourTraite->setEtat03($etat);
+                $retourTraite->setEtatProduit03($etatProduit);
             } else if (substr($numRetourTraite, -3) === '-03') {
                 $numRetourTraite = substr_replace($numRetourTraite, '-04', -3);
             } else {
                 $numRetourTraite .= '-01';
+                $retourTraite->setEtat($etat);
+                $retourTraite->setEtatProduit($etatProduit);
             }
             $retourTraite->setNumretour($numRetourTraite);
-            $retourTraite->setEtat($etat);
-            $retourTraite->setEtatProduit($etatProduit);
+            // $retourTraite->setEtat($etat);
+            // $retourTraite->setEtatProduit($etatProduit);
             if (isset($commentaire)) {
                 $retourTraite->setCommentaire($commentaire);
             }
@@ -123,6 +129,7 @@ class FormulaireLitigeController extends AbstractController
                 $retourTraite->setPhoto5($photoPath5);
             }
             $entityManager->persist($retourTraite);
+            $entityManager->flush();
 
             foreach ($retourProduits as $retourProduit) {
 

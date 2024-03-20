@@ -4,37 +4,108 @@
 {% endblock %}
 
 {% block body %}
-	<h1 class="text-white my-5 mx-2 fs-1 fw-normal text-center">Liste des palettes</h1>
-	<div class="d-flex justify-content-center mx-5">
-		<div>
-			{% for palette in palettes %}
-				<form method="post" class="card m-3 border-primary border-3" action="{{ path('app_pdf') }}">
-					<div class="card-body p-2 custom-width-desktop m-2">
-						<div class="d-flex flex-row">
-							<p class='fs-2 fw-bold text-center'>Palette N° </p>
-							<input type="number" value="{{ palette.id }}" class="pe-1 mb-1 form-control fs-3 fw-bold border-primary border-2" style="width: 100px;" name="numero-palette"/>
-						</div>
-						<input type="text" value="{{ palette.depot }}" class="pe-1 mb-1 form-control fs-3 fw-bold border-primary border-2" name="pdf-depot"/>
-						<input type="text" value="{{ palette.codeCouleur }}" class="pe-1 mb-1 form-control fs-3 fw-bold border-primary border-2" name="pdf-code-couleur"/>
-						<p class='fs-2 fw-bold text-center'>Produits * Quantité</p>
-						{% for produitPalette in palette.getPaletteProduits %}
-							<div class="d-flex justify-content flex-row">
-								<div class="me-2">
-									<input type="number" value="{{ produitPalette.idProduit }}" class="pe-1 mb-1 form-control fs-3 fw-bold border-primary border-2" name="pdf-id-produit[]"/>
-								</div>
-								<div>
-									<input type="number" value="{{ produitPalette.quantite }}" class="pe-1 mb-1 form-control fs-3 fw-bold border-primary border-2" name="pdf-quantite[]"/>
-								</div>
-							</div>
-						{% endfor %}
-						<div class='my-4 d-flex justify-content-center'>
-							<button type="submit" class="btn btn-outline-primary border-2 rounded-5">
-								<span class='fs-2 fw-normal'>Charger le pdf</span>
-							</button>
-						</div>
-					</div>
-				</form>
-			{% endfor %}
+	{% for message in app.flashes('notice') %}
+		<div id="message">
+			<div class="flash-notice">
+				<p class="text-success my-3 fs-3 mx-2 fw-normal text-center">{{ message }}</p>
+			</div>
+			<div class='d-flex justify-content-center'>
+				<button type="submit" class="btn btn-outline-success border-3 rounded-5" onclick="(removeMessage())">
+					<span class='fs-3 fw-normal p-2'>OK!</span>
+				</button>
+			</div>
+		</div>
+	{% endfor %}
+	<h1 class="text-white my-5 mx-2 fs-3 fw-normal text-center">Liste des palettes</h1>
+	<div class="d-flex justify-content-center">
+		<div class='border rounded-3 border-warning border-2 mx-2 input-desktop'>
+			<form method="get" action="{{ path('app_liste_palettes') }}">
+				<div class="form-group m-3">
+					<label for="recherche-palette" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>N° :</span>
+					</label>
+					<input type="text" class="form-control fs-3 fw-normal border-dark border-2" id="recherche-palette" placeholder="palette" name="recherche-palette">
+				</div>
+				<div class="form-group m-3">
+					<label for="recherche-statut" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Statut :</span>
+					</label>
+					<select class="form-select fs-3 fw-normal border-dark border-3 rounded-3" id="recherche-statut" name="recherche-statut">
+						<option value="" class='fs-3 fw-normal'>choisir</option>
+						<option value="en-cours" class='fs-3 fw-normal'>en cours</option>
+						<option value="termine" class='fs-3 fw-normal'>terminée</option>
+						<option value="transmise" class='fs-3 fw-normal'>transmise</option>
+					</select>
+				</div>
+				<div class='d-flex justify-content-center mb-4'>
+					<button type="submit" class="btn btn-outline-warning my-2 border-2 rounded-5">
+						<span class='fs-3 fw-normal'>Rechercher</span>
+					</button>
+				</div>
+			</form>
 		</div>
 	</div>
+	{% for palette in palettes %}
+		<form method="post" class="card my-5 mx-1 border-primary border-3" action="{{ path('app_pdf') }}">
+			<div class="card-body p-2 custom-width-desktop">
+				<p class='fs-3 fw-normal my-3'>Palette N°
+					{{ palette.id }}
+					{{ palette.codeCouleur }}</p>
+
+				{% if palette.dateTransmise is not null %}
+					<p class='fs-3 fw-normal my-3'>transmise le :
+						{{ palette.dateTransmise|date('d/m/Y H:i:s') }}</p>
+				{% elseif palette.dateTermine is not null %}
+					<p class='fs-3 fw-normal my-3'>terminée le :
+						{{ palette.dateTermine|date('d/m/Y H:i:s') }}</p>
+				{% else %}
+					<p class='fs-3 fw-normal my-3'>toujours en cours</p>
+				{% endif %}
+				<input type="hidden" value="{{ palette.id }}" name="numero-palette-pdf"/>
+				<div class="form-group">
+					<label for="fixer-statut" class="form-label">
+						<span class='fs-3 fw-normal'>Statut :</span>
+					</label>
+					<select class="form-select fs-3 fw-normal border-primary border-2 rounded-3" id="fixer-statut" name="fixer-statut">
+						<option value="{{ palette.statut }}" class='fs-3 fw-normal'>{{ palette.statut }}</option>
+						<option value="en cours" class='fs-3 fw-normal'>en cours</option>
+						<option value="terminée" class='fs-3 fw-normal'>terminée</option>
+						<option value="transmise" class='fs-3 fw-normal'>transmise</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="fixer-depot" class="form-label my-3">
+						<span class='fs-3 fw-normal'>Dépot :</span>
+					</label>
+					<select class="form-select fs-3 fw-normal border-primary border-2 rounded-3" id="fixer-depot" name="fixer-depot">
+						<option value="{{ palette.depot }}" class='fs-3 fw-normal'>{{ palette.depot }}</option>
+						<option value="sans dépot" class='fs-3 fw-normal'>sans dépot</option>
+						<option value="phyléa" class='fs-3 fw-normal'>phyléa</option>
+						<option value="abérial" class='fs-3 fw-normal'>abérial</option>
+					</select>
+				</div>
+				<input type="hidden" value="{{ palette.codeCouleur }}" name="pdf-code-couleur"/>
+				<p class='fs-3 fw-normal my-2'>Produits * Quantité :</p>
+				{% for produitPalette in palette.getPaletteProduits %}
+					<input type="hidden" value="{{ produitPalette.idProduit }}" name="pdf-id-produit[]"/>
+					<input type="hidden" value="{{ produitPalette.quantite }}" name="pdf-quantite[]"/>
+					<p class='fs-3 fw-normal my-2'>-
+						{{ produitPalette.idProduit }}
+						*
+						{{ produitPalette.quantite }}</p>
+				{% endfor %}
+				<div class='my-4 d-flex justify-content-center'>
+					<button type="submit" class="btn btn-outline-primary border-2 rounded-5">
+						<span class='fs-3 fw-normal'>Valider</span>
+					</button>
+				</div>
+			</div>
+		</form>
+	{% endfor %}
+    <script type="text/javascript">
+function removeMessage() {
+var eltMessage = document.querySelector('#message')
+eltMessage.remove()
+}
+</script>
 {% endblock %}

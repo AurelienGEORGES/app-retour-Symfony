@@ -134,8 +134,6 @@ class FormulaireSansLitigeController extends AbstractController
                 $entityManager->flush();
             }
 
-
-
             $this->addFlash(
                 'notice',
                 'Le formulaire a bien été enregistré!'

@@ -21,28 +21,52 @@ class PaletteProduitRepository extends ServiceEntityRepository
         parent::__construct($registry, PaletteProduit::class);
     }
 
-//    /**
-//     * @return PaletteProduit[] Returns an array of PaletteProduit objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return PaletteProduit[] Returns an array of PaletteProduit objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('p.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?PaletteProduit
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?PaletteProduit
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
+
+    public function findByCriteria(array $criteria = [])
+    {
+        $qb = $this->createQueryBuilder('r');
+
+        // Ajoutez les conditions de recherche en fonction des critères fournis
+        foreach ($criteria as $field => $value) {
+            $qb->andWhere("r.$field = :$field")->setParameter($field, $value);
+            //$qb->andWhere("r.$field LIKE :$field")->setParameter($field, "%$value%");
+        }
+
+        // Vous pouvez ajouter d'autres conditions, tri, etc. si nécessaire
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByDate($date)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.date_reception > :date')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
 }

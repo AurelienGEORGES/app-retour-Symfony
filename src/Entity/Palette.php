@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PaletteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PaletteRepository::class)]
@@ -23,6 +24,15 @@ class Palette
 
     #[ORM\OneToMany(mappedBy: 'palette', targetEntity: PaletteProduit::class)]
     private Collection $paletteProduits;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_termine = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_transmise = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $statut = null;
 
     public function __construct()
     {
@@ -91,5 +101,41 @@ class Palette
     public function __toString()
     {
         return $this->id;
+    }
+
+    public function getDateTermine(): ?\DateTimeInterface
+    {
+        return $this->date_termine;
+    }
+
+    public function setDateTermine(?\DateTimeInterface $date_termine): static
+    {
+        $this->date_termine = $date_termine;
+
+        return $this;
+    }
+
+    public function getDateTransmise(): ?\DateTimeInterface
+    {
+        return $this->date_transmise;
+    }
+
+    public function setDateTransmise(?\DateTimeInterface $date_transmise): static
+    {
+        $this->date_transmise = $date_transmise;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?string $statut): static
+    {
+        $this->statut = $statut;
+
+        return $this;
     }
 }

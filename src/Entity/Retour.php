@@ -69,6 +69,18 @@ class Retour
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $etat_produit = null;
 
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $etat_02 = null;
+
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $etat_produit_02 = null;
+
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $etat_03 = null;
+
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $etat_produit_03 = null;
+
     public function __construct()
     {
         $this->retourProduits = new ArrayCollection();
@@ -321,6 +333,54 @@ class Retour
     public function setEtatProduit(string $etat_produit): static
     {
         $this->etat_produit = $etat_produit;
+
+        return $this;
+    }
+
+    public function getEtat02(): ?string
+    {
+        return $this->etat_02;
+    }
+
+    public function setEtat02(?string $etat_02): static
+    {
+        $this->etat_02 = $etat_02;
+
+        return $this;
+    }
+
+    public function getEtatProduit02(): ?string
+    {
+        return $this->etat_produit_02;
+    }
+
+    public function setEtatProduit02(?string $etat_produit_02): static
+    {
+        $this->etat_produit_02 = $etat_produit_02;
+
+        return $this;
+    }
+
+    public function getEtat03(): ?string
+    {
+        return $this->etat_03;
+    }
+
+    public function setEtat03(?string $etat_03): static
+    {
+        $this->etat_03 = $etat_03;
+
+        return $this;
+    }
+
+    public function getEtatProduit03(): ?string
+    {
+        return $this->etat_produit_03;
+    }
+
+    public function setEtatProduit03(?string $etat_produit_03): static
+    {
+        $this->etat_produit_03 = $etat_produit_03;
 
         return $this;
     }

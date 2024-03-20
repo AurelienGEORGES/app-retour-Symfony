@@ -56,6 +56,7 @@ class ListeReceptionnesController extends AbstractController
         }
 
         $retourComplet = [];
+        $retourSurplus = [];
         $retourProduitsReceptionnes = [];
         $retourProduits = [];
 
@@ -83,14 +84,15 @@ class ListeReceptionnesController extends AbstractController
                 $quantite = $produit->getQuantite();
                 $produitsAcomparer[$idProduit] = $quantite;
             }
+
             ksort($produitsAcomparer);
             ksort($receptionnesAcomparer);
 
             if ($receptionnesAcomparer === $produitsAcomparer) {
-                $retourComplet[] = true;
+                $retourComplet[] = true; 
             } else {
                 $retourComplet[] = false;
-            }
+            }   
         }
 
         $csrfTokenListeReceptionnes = $this->csrfTokenManager->getToken('form-liste-receptionnes');
@@ -100,7 +102,8 @@ class ListeReceptionnesController extends AbstractController
             'retours' => $retours,
             'retourProduitsReceptionnes' => $retourProduitsReceptionnes,
             '$retourProduits' => $retourProduits,
-            'retourComplet' => $retourComplet
+            'retourComplet' => $retourComplet,
+            'retourSurplus' => $retourSurplus
         ]);
     }
 }

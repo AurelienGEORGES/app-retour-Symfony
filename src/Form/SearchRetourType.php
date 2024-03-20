@@ -36,6 +36,7 @@ class SearchRetourType extends AbstractType
                     'mazet' => 'mazet',
                     'geodis' => 'geodis',
                     'gls' => 'gls',
+                    'vir' => 'vir'
                 ],
                 'attr' => ['class' => 'form-select fs-3 fw-normal border-dark border-2 input-desktop'],
                 'required' => false,

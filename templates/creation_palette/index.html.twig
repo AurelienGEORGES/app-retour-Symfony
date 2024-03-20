@@ -4,16 +4,16 @@
 {% endblock %}
 
 {% block body %}
-	{% set csrfTokenDepot = csrf_token('form-depot-token') %}
+	{% set csrfTokenPaletteCouleur = csrf_token('form-palette-couleur-token') %}
 	{% set csrfTokenProduitPalette = csrf_token('form-produit-palette') %}
 	{% for message in app.flashes('notice') %}
 		<div id="message">
 			<div class="flash-notice">
-				<p class="text-success my-3 fs-1 mx-2 fw-bold text-center">{{ message }}</p>
+				<p class="text-success my-3 fs-3 mx-2 fw-bold text-center">{{ message }}</p>
 			</div>
 			<div class='d-flex justify-content-center'>
 				<button type="submit" class="btn btn-outline-success border-3 rounded-5" onclick="(removeMessage())">
-					<span class='fs-2 fw-bold p-2'>OK!</span>
+					<span class='fs-3 fw-bold p-2'>OK!</span>
 				</button>
 			</div>
 		</div>
@@ -22,21 +22,22 @@
 	<div class="d-flex justify-content-center">
 		<div class='border rounded-3 border-warning border-2 m-3 input-desktop creation-palette-width'>
 			<form method="get" action="{{ path('app_creation_palette') }}">
-				<h2 class="text-warning my-5 fs-1 fw-normal text-center">Palette en cours</h2>
+				{# <h2 class="text-warning my-5 fs-1 fw-normal text-center">Palette en cours</h2> #}
 				<div class="m-3">
 					<label for="choix-couleur-palette" class="form-label">
 						<span class='fs-1 fw-normal text-warning' id="choix-palette">Couleur palette</span>
 					</label>
-					<select class="form-select w-75 fs-1 fw-normal border-dark border-2" id="choix-couleur-palette" name="choix-couleur-palette" required>
+					<select class="form-select fs-1 fw-normal border-dark border-2" id="choix-couleur-palette" name="choix-couleur-palette" required>
 						<option value="" class='fs-1 fw-normal'>choisir</option>
 						<option value="vert" class='fs-1 fw-normal'>vert</option>
 						<option value="jaune" class='fs-1 fw-normal'>jaune</option>
 						<option value="orange" class='fs-1 fw-normal'>orange</option>
 						<option value="rouge" class='fs-1 fw-normal'>rouge</option>
 						<option value="noir" class='fs-1 fw-normal'>noir</option>
+						<option value="SAV" class='fs-1 fw-normal'>SAV</option>
 					</select>
 				</div>
-				<div class="m-3">
+				{# <div class="m-3">
 					<label for="choix-depot-palette" class="form-label">
 						<span class='fs-1 fw-normal text-warning'>Depot</span>
 					</label>
@@ -45,230 +46,232 @@
 						<option value="aberial" class='fs-1 fw-normal'>Abérial</option>
 						<option value="phylea" class='fs-1 fw-normal'>Phyléa</option>
 					</select>
-				</div>
+				</div> #}
 				<div class='my-5 d-flex justify-content-center'>
 					<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
 						<span class='fs-2 fw-normal'>Créer palette</span>
 					</button>
 				</div>
-				<input type="hidden" name="_token" value="{{ csrfTokenDepot }}">
+				<input type="hidden" name="_token" value="{{ csrfTokenPaletteCouleur }}">
 			</form>
-			{% if produitsSelectionnes %}
-				{% for key, produit in produitsSelectionnes %}
-					<form class='border rounded-3 border-warning border-2 m-3' method="get" action="{{ path('app_creation_palette') }}">
-						<p class="text-warning fs-2 text-center mt-2">
-							{{ produit.idprod }}
-							*
-							{{ produit.qte }}
-						</p>
-						<div class='my-2 d-flex justify-content-center'>
-							<input type="hidden" value="{{ produit.qte }}" name="produit-qte"/>
-							<input type="hidden" value="{{ produit.prod }}" name="produit-prod"/>
-							<input type="hidden" value="{{ produit.idprod }}" name="produit-id-prod"/>
-							<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
-								<span class='fs-2 fw-normal'>supprimer</span>
-							</button>
-						</div>
-					</form>
-				{% endfor %}
-			{% endif %}
 		</div>
 	</div>
-	<div class="d-flex justify-content-center">
-		<div class='border rounded-3 border-light border-2 m-3 input-desktop'>
-			<h3 class="text-white my-5 fs-1 fw-normal text-center">Rechercher des produits</h3>
-			<form method="get" action="{{ path('app_creation_palette') }}">
-				<div class="m-3">
-					<label for="recherche-creation-code-couleur" class="form-label">
-						<span class='fs-1 fw-normal text-light'>Code couleur</span>
-					</label>
-					<select class="form-select w-75 fs-1 fw-normal border-light border-2" id="recherche-creation-code-couleur" name="recherche-creation-code-couleur">
-						{% if criteria is empty %}
-							<option value="initial" class='fs-1 fw-normal'>choisir</option>
-						{% else %}
-							<option value="{{ criteria.code_couleur }}" class='fs-1 fw-normal'>{{ criteria.code_couleur }}</option>
+	{# {% if produitsSelectionnes %}
+					{% for key, produit in produitsSelectionnes %}
+						<form class='border rounded-3 border-warning border-2 m-3' method="get" action="{{ path('app_creation_palette') }}">
+							<p class="text-warning fs-2 text-center mt-2">
+								{{ produit.idprod }}
+								*
+								{{ produit.qte }}
+							</p>
+							<div class='my-2 d-flex justify-content-center'>
+								<input type="hidden" value="{{ produit.qte }}" name="produit-qte"/>
+								<input type="hidden" value="{{ produit.prod }}" name="produit-prod"/>
+								<input type="hidden" value="{{ produit.idprod }}" name="produit-id-prod"/>
+								<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
+									<span class='fs-2 fw-normal'>supprimer</span>
+								</button>
+							</div>
+						</form>
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+		<div class="d-flex justify-content-center">
+			<div class='border rounded-3 border-light border-2 m-3 input-desktop'>
+				<h3 class="text-white my-5 fs-1 fw-normal text-center">Rechercher des produits</h3>
+				<form method="get" action="{{ path('app_creation_palette') }}">
+					<div class="m-3">
+						<label for="recherche-creation-code-couleur" class="form-label">
+							<span class='fs-1 fw-normal text-light'>Code couleur</span>
+						</label>
+						<select class="form-select w-75 fs-1 fw-normal border-light border-2" id="recherche-creation-code-couleur" name="recherche-creation-code-couleur">
+							{% if criteria is empty %}
+								<option value="initial" class='fs-1 fw-normal'>choisir</option>
+							{% else %}
+								<option value="{{ criteria.code_couleur }}" class='fs-1 fw-normal'>{{ criteria.code_couleur }}</option>
+							{% endif %}
+							<option value="vert" class='fs-1 fw-normal'>vert</option>
+							<option value="jaune" class='fs-1 fw-normal'>jaune</option>
+							<option value="orange" class='fs-1 fw-normal'>orange</option>
+							<option value="rouge" class='fs-1 fw-normal'>rouge</option>
+							<option value="noir" class='fs-1 fw-normal'>noir</option>
+						</select>
+					</div>
+					<div class="m-3">
+						<label for="recherche-creation-id-produit" class="form-label">
+							<span class='fs-1 fw-normal text-light'>ID produit</span>
+						</label>
+						<input type="text" class="form-control fs-1 fw-normal border-light border-2" id="recherche-creation-id-produit" name="recherche-creation-id-produit" placeholder="id">
+					</div>
+					<div class='my-5 d-flex justify-content-center'>
+						<button type="submit" class="btn btn-outline-light border-3 rounded-5">
+							<span class='fs-2 fw-normal'>Rechercher</span>
+						</button>
+					</div>
+					<input type="hidden" name="_token" value="{{ csrfTokenProduitPalette }}">
+				</form>
+			</div>
+		</div>
+		<h4 class="text-white my-5 fs-1 fw-normal text-center">Résultats recherche</h4>
+		<div class="d-flex justify-content-center mb-5">
+			<div class="d-flex flex-column">
+				{% if stockProduits %}
+					{% for stockProduit in stockProduits %}
+						{% if stockProduit.codecouleur == 'vert' %}
+							<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
+								<div class="container p-0 m-0">
+									<div class="form-check p-0 m-0">
+										<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduit.id }}">
+											<span class='fs-1 fw-normal text-white ms-1'>qte max</span>
+										</label>
+										<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduit.id }}" onchange='selectMaxQte({{ stockProduit.quantite }}, {{ stockProduit.id }})'>
+									</div>
+								</div>
+								<div>
+									<p class='fs-3 fw-bold p-2 text-center' style="background-color: green; color: black;">
+										{{ stockProduit.idproduit }}
+										*
+										{{ stockProduit.quantite }}</p>
+								</div>
+								<div class="d-flex flex-row">
+									<div>
+										<input type="number" min="1" max="{{ stockProduit.quantite }}" class="ms-1 mb-1 form-control fs-3 fw-bold border-primary border-2 w-50" name="quantite-produit-palette" id="inputQte_{{ stockProduit.id }}"/>
+										<input type="hidden" value="{{ stockProduit.id }}" name="produit-palette"/>
+										<input type="hidden" value="{{ stockProduit.idproduit }}" name="produit-id-palette"/>
+									</div>
+									<div>
+										<button type="submit" class="btn btn-outline-primary border-3 rounded-5 me-1 mb-1">
+											<span class='fs-3 fw-bold p-1'>Add</span>
+										</button>
+									</div>
+								</div>
+							</form>
 						{% endif %}
-						<option value="vert" class='fs-1 fw-normal'>vert</option>
-						<option value="jaune" class='fs-1 fw-normal'>jaune</option>
-						<option value="orange" class='fs-1 fw-normal'>orange</option>
-						<option value="rouge" class='fs-1 fw-normal'>rouge</option>
-						<option value="noir" class='fs-1 fw-normal'>noir</option>
-					</select>
-				</div>
-				<div class="m-3">
-					<label for="recherche-creation-id-produit" class="form-label">
-						<span class='fs-1 fw-normal text-light'>ID produit</span>
-					</label>
-					<input type="text" class="form-control fs-1 fw-normal border-light border-2" id="recherche-creation-id-produit" name="recherche-creation-id-produit" placeholder="id">
-				</div>
-				<div class='my-5 d-flex justify-content-center'>
-					<button type="submit" class="btn btn-outline-light border-3 rounded-5">
-						<span class='fs-2 fw-normal'>Rechercher</span>
-					</button>
-				</div>
-				<input type="hidden" name="_token" value="{{ csrfTokenProduitPalette }}">
-			</form>
-		</div>
-	</div>
-	<h4 class="text-white my-5 fs-1 fw-normal text-center">Résultats recherche</h4>
-	<div class="d-flex justify-content-center mb-5">
-		<div class="d-flex flex-column">
-			{% if stockProduits %}
-				{% for stockProduit in stockProduits %}
-					{% if stockProduit.codecouleur == 'vert' %}
-						<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
-							<div class="container p-0 m-0">
-								<div class="form-check p-0 m-0">
-									<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduit.id }}">
-										<span class='fs-1 fw-normal text-white ms-1'>qte max</span>
-									</label>
-									<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduit.id }}" onchange='selectMaxQte({{ stockProduit.quantite }}, {{ stockProduit.id }})'>
-								</div>
-							</div>
-							<div>
-								<p class='fs-3 fw-bold p-2 text-center' style="background-color: green; color: black;">
-									{{ stockProduit.idproduit }}
-									*
-									{{ stockProduit.quantite }}</p>
-							</div>
-							<div class="d-flex flex-row">
-								<div>
-									<input type="number" min="1" max="{{ stockProduit.quantite }}" class="ms-1 mb-1 form-control fs-3 fw-bold border-primary border-2 w-50" name="quantite-produit-palette" id="inputQte_{{ stockProduit.id }}"/>
-									<input type="hidden" value="{{ stockProduit.id }}" name="produit-palette"/>
-									<input type="hidden" value="{{ stockProduit.idproduit }}" name="produit-id-palette"/>
+						{% if stockProduit.codecouleur == 'orange' %}
+							<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
+								<div class="container p-0 m-0">
+									<div class="form-check p-0 m-0">
+										<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduit.id }}">
+											<span class='fs-1 fw-normal text-white'>qte max</span>
+										</label>
+										<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduit.id }}" onchange='selectMaxQte({{ stockProduit.quantite }}, {{ stockProduit.id }})'>
+									</div>
 								</div>
 								<div>
-									<button type="submit" class="btn btn-outline-primary border-3 rounded-5 me-1 mb-1">
-										<span class='fs-3 fw-bold p-1'>Add</span>
-									</button>
+									<p class='fs-2 fw-bold p-2 text-center' style="background-color: orange; color: black;">
+										{{ stockProduit.idproduit }}
+										*
+										{{ stockProduit.quantite }}</p>
 								</div>
-							</div>
-						</form>
-					{% endif %}
-					{% if stockProduit.codecouleur == 'orange' %}
-						<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
-							<div class="container p-0 m-0">
-								<div class="form-check p-0 m-0">
-									<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduit.id }}">
-										<span class='fs-1 fw-normal text-white'>qte max</span>
-									</label>
-									<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduit.id }}" onchange='selectMaxQte({{ stockProduit.quantite }}, {{ stockProduit.id }})'>
+								<div class="d-flex flex-row">
+									<div>
+										<input type="number" min="1" max="{{ stockProduit.quantite }}" class="ms-1 mb-1 form-control fs-3 fw-bold border-primary border-2 w-50" name="quantite-produit-palette" id="inputQte_{{ stockProduit.id }}"/>
+										<input type="hidden" value="{{ stockProduit.id }}" name="produit-palette"/>
+										<input type="hidden" value="{{ stockProduit.idproduit }}" name="produit-id-palette"/>
+									</div>
+									<div>
+										<button type="submit" class="btn btn-outline-primary border-3 rounded-5 me-1 mb-1">
+											<span class='fs-3 fw-bold p-1'>Add</span>
+										</button>
+									</div>
 								</div>
-							</div>
-							<div>
-								<p class='fs-2 fw-bold p-2 text-center' style="background-color: orange; color: black;">
-									{{ stockProduit.idproduit }}
-									*
-									{{ stockProduit.quantite }}</p>
-							</div>
-							<div class="d-flex flex-row">
-								<div>
-									<input type="number" min="1" max="{{ stockProduit.quantite }}" class="ms-1 mb-1 form-control fs-3 fw-bold border-primary border-2 w-50" name="quantite-produit-palette" id="inputQte_{{ stockProduit.id }}"/>
-									<input type="hidden" value="{{ stockProduit.id }}" name="produit-palette"/>
-									<input type="hidden" value="{{ stockProduit.idproduit }}" name="produit-id-palette"/>
-								</div>
-								<div>
-									<button type="submit" class="btn btn-outline-primary border-3 rounded-5 me-1 mb-1">
-										<span class='fs-3 fw-bold p-1'>Add</span>
-									</button>
-								</div>
-							</div>
-						</form>
-					{% endif %}
-					{% if stockProduit.codecouleur == 'jaune' %}
-						<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
-							<div class="container p-0 m-0">
-								<div class="form-check p-0 m-0">
-									<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduit.id }}">
-										<span class='fs-1 fw-normal text-white'>qte max</span>
-									</label>
-									<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduit.id }}" onchange='selectMaxQte({{ stockProduit.quantite }}, {{ stockProduit.id }})'>
-								</div>
-							</div>
-							<div>
-								<p class='fs-2 fw-bold p-2 text-center' style="background-color: yellow; color: black;">
-									{{ stockProduit.idproduit }}
-									*
-									{{ stockProduit.quantite }}</p>
-							</div>
-							<div class="d-flex flex-row">
-								<div>
-									<input type="number" min="1" max="{{ stockProduit.quantite }}" class="ms-1 mb-1 form-control fs-3 fw-bold border-primary border-2 w-50" name="quantite-produit-palette" id="inputQte_{{ stockProduit.id }}"/>
-									<input type="hidden" value="{{ stockProduit.id }}" name="produit-palette"/>
-									<input type="hidden" value="{{ stockProduit.idproduit }}" name="produit-id-palette"/>
+							</form>
+						{% endif %}
+						{% if stockProduit.codecouleur == 'jaune' %}
+							<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
+								<div class="container p-0 m-0">
+									<div class="form-check p-0 m-0">
+										<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduit.id }}">
+											<span class='fs-1 fw-normal text-white'>qte max</span>
+										</label>
+										<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduit.id }}" onchange='selectMaxQte({{ stockProduit.quantite }}, {{ stockProduit.id }})'>
+									</div>
 								</div>
 								<div>
-									<button type="submit" class="btn btn-outline-primary border-3 rounded-5 me-1 mb-1">
-										<span class='fs-3 fw-bold p-1'>Add</span>
-									</button>
+									<p class='fs-2 fw-bold p-2 text-center' style="background-color: yellow; color: black;">
+										{{ stockProduit.idproduit }}
+										*
+										{{ stockProduit.quantite }}</p>
 								</div>
-							</div>
-						</form>
-					{% endif %}
-					{% if stockProduit.codecouleur == 'rouge' %}
-						<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
-							<div class="container p-0 m-0">
-								<div class="form-check p-0 m-0">
-									<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduit.id }}">
-										<span class='fs-1 fw-normal text-white'>qte max</span>
-									</label>
-									<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduit.id }}" onchange='selectMaxQte({{ stockProduit.quantite }}, {{ stockProduit.id }})'>
+								<div class="d-flex flex-row">
+									<div>
+										<input type="number" min="1" max="{{ stockProduit.quantite }}" class="ms-1 mb-1 form-control fs-3 fw-bold border-primary border-2 w-50" name="quantite-produit-palette" id="inputQte_{{ stockProduit.id }}"/>
+										<input type="hidden" value="{{ stockProduit.id }}" name="produit-palette"/>
+										<input type="hidden" value="{{ stockProduit.idproduit }}" name="produit-id-palette"/>
+									</div>
+									<div>
+										<button type="submit" class="btn btn-outline-primary border-3 rounded-5 me-1 mb-1">
+											<span class='fs-3 fw-bold p-1'>Add</span>
+										</button>
+									</div>
 								</div>
-							</div>
-							<div>
-								<p class='fs-2 fw-bold p-2 text-center' style="background-color: red; color: black;">
-									{{ stockProduit.idproduit }}
-									*
-									{{ stockProduit.quantite }}</p>
-							</div>
-							<div class="d-flex flex-row">
-								<div>
-									<input type="number" min="1" max="{{ stockProduit.quantite }}" class="ms-1 mb-1 form-control fs-3 fw-bold border-primary border-2 w-50" name="quantite-produit-palette" id="inputQte_{{ stockProduit.id }}"/>
-									<input type="hidden" value="{{ stockProduit.id }}" name="produit-palette"/>
-									<input type="hidden" value="{{ stockProduit.idproduit }}" name="produit-id-palette"/>
-								</div>
-								<div>
-									<button type="submit" class="btn btn-outline-primary border-3 rounded-5 me-1 mb-1">
-										<span class='fs-3 fw-bold p-1'>Add</span>
-									</button>
-								</div>
-							</div>
-						</form>
-					{% endif %}
-					{% if stockProduit.codecouleur == 'noir' %}
-						<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
-							<div class="container p-0 m-0">
-								<div class="form-check p-0 m-0">
-									<label class="form-check-label m-0" for="CheckboxListe_{{ stockProduit.id }}">
-										<span class='fs-1 fw-normal text-white m-1'>qte max</span>
-									</label>
-									<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduit.id }}" onchange='selectMaxQte({{ stockProduit.quantite }}, {{ stockProduit.id }})'>
-								</div>
-							</div>
-							<div>
-								<p class='fs-2 fw-bold p-2 text-center' style="background-color: black; color: white;">
-									{{ stockProduit.idproduit }}
-									*
-									{{ stockProduit.quantite }}</p>
-							</div>
-							<div class="d-flex flex-row">
-								<div>
-									<input type="number" min="1" max="{{ stockProduit.quantite }}" class="ms-1 mb-1 form-control fs-3 fw-bold border-primary border-2 w-50" name="quantite-produit-palette" id="inputQte_{{ stockProduit.id }}"/>
-									<input type="hidden" value="{{ stockProduit.id }}" name="produit-palette"/>
-									<input type="hidden" value="{{ stockProduit.idproduit }}" name="produit-id-palette"/>
+							</form>
+						{% endif %}
+						{% if stockProduit.codecouleur == 'rouge' %}
+							<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
+								<div class="container p-0 m-0">
+									<div class="form-check p-0 m-0">
+										<label class="form-check-label m-1" for="CheckboxListe_{{ stockProduit.id }}">
+											<span class='fs-1 fw-normal text-white'>qte max</span>
+										</label>
+										<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduit.id }}" onchange='selectMaxQte({{ stockProduit.quantite }}, {{ stockProduit.id }})'>
+									</div>
 								</div>
 								<div>
-									<button type="submit" class="btn btn-outline-primary border-3 rounded-5 me-1 mb-1">
-										<span class='fs-3 fw-bold p-1'>Add</span>
-									</button>
+									<p class='fs-2 fw-bold p-2 text-center' style="background-color: red; color: black;">
+										{{ stockProduit.idproduit }}
+										*
+										{{ stockProduit.quantite }}</p>
 								</div>
-							</div>
-						</form>
-					{% endif %}
-				{% endfor %}
-			{% endif %}
-		</div>
-	</div>
+								<div class="d-flex flex-row">
+									<div>
+										<input type="number" min="1" max="{{ stockProduit.quantite }}" class="ms-1 mb-1 form-control fs-3 fw-bold border-primary border-2 w-50" name="quantite-produit-palette" id="inputQte_{{ stockProduit.id }}"/>
+										<input type="hidden" value="{{ stockProduit.id }}" name="produit-palette"/>
+										<input type="hidden" value="{{ stockProduit.idproduit }}" name="produit-id-palette"/>
+									</div>
+									<div>
+										<button type="submit" class="btn btn-outline-primary border-3 rounded-5 me-1 mb-1">
+											<span class='fs-3 fw-bold p-1'>Add</span>
+										</button>
+									</div>
+								</div>
+							</form>
+						{% endif %}
+						{% if stockProduit.codecouleur == 'noir' %}
+							<form class="d-flex flex-column border rounded-3 border-primary border-2 m-3" method="get" action="{{ path('app_creation_palette') }}">
+								<div class="container p-0 m-0">
+									<div class="form-check p-0 m-0">
+										<label class="form-check-label m-0" for="CheckboxListe_{{ stockProduit.id }}">
+											<span class='fs-1 fw-normal text-white m-1'>qte max</span>
+										</label>
+										<input class="form-check-input border-primary border-4 p-3 m-1" type="checkbox" id="CheckboxListe_{{ stockProduit.id }}" onchange='selectMaxQte({{ stockProduit.quantite }}, {{ stockProduit.id }})'>
+									</div>
+								</div>
+								<div>
+									<p class='fs-2 fw-bold p-2 text-center' style="background-color: black; color: white;">
+										{{ stockProduit.idproduit }}
+										*
+										{{ stockProduit.quantite }}</p>
+								</div>
+								<div class="d-flex flex-row">
+									<div>
+										<input type="number" min="1" max="{{ stockProduit.quantite }}" class="ms-1 mb-1 form-control fs-3 fw-bold border-primary border-2 w-50" name="quantite-produit-palette" id="inputQte_{{ stockProduit.id }}"/>
+										<input type="hidden" value="{{ stockProduit.id }}" name="produit-palette"/>
+										<input type="hidden" value="{{ stockProduit.idproduit }}" name="produit-id-palette"/>
+									</div>
+									<div>
+										<button type="submit" class="btn btn-outline-primary border-3 rounded-5 me-1 mb-1">
+											<span class='fs-3 fw-bold p-1'>Add</span>
+										</button>
+									</div>
+								</div>
+							</form>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div> #}
 	<script type="text/javascript">
 		function selectMaxQte(qteMax, idInput) {
 let inputElement = document.getElementById('inputQte_' + idInput);

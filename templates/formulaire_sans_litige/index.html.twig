@@ -26,7 +26,7 @@
 				<label for="transporteur-form-sans-litige" class="form-label">
 					<span class='fs-3 fw-normal text-warning'>Transporteur</span>
 				</label>
-				<select class="form-select w-100 fs-3 fw-normal border-dark border-2" id="transporteur-form-sans-litige" name="transporteur-form-sans-litige">
+				<select class="form-select fs-3 fw-normal border-dark border-2" id="transporteur-form-sans-litige" name="transporteur-form-sans-litige">
 					<option value="{{ transporteur }}" class='fs-3 fw-normal'>{{ transporteur }}</option>
 					<option value="shenker" class='fs-3 fw-normal'>shenker</option>
 					<option value="dpd" class='fs-3 fw-normal'>dpd</option>
@@ -57,20 +57,6 @@
 						<input type="number" class="form-control fs-3 fw-normal border-dark border-2" id="id-form-sans-litige_{{ retourProduit.id }}" value="{{ retourProduit.idproduit }}" name="id-form-sans-litige_{{ retourProduit.id }}">
 					</div>
 					{% for i in 1..retourProduit.quantite %}
-						{# <div class="m-3 d-flex justify-content-center flex-column">
-							<label for="code-couleur-form-sans-litige_{{ i }}" class="form-label">
-								<span class='fs-3 fw-normal text-warning'>Couleur produit
-									{{ i }}</span>
-							</label>
-							<select class="form-select w-75 fs-3 fw-normal border-dark border-2" id="code-couleur-form-sans-litige_{{ i }}" name="code-couleur-form-sans-litige_{{ i }}" required>
-								<option value="vert" class='fs-3 fw-normal'>vert</option>
-								<option value="jaune" class='fs-3 fw-normal'>jaune</option>
-								<option value="orange" class='fs-3 fw-normal'>orange</option>
-								<option value="rouge" class='fs-3 fw-normal'>rouge</option>
-								<option value="noir" class='fs-3 fw-normal'>noir</option>
-								<option value="pas-de-produit" class='fs-3 fw-normal'>pas de produit</option>
-							</select>
-						</div> #}
 						<div class="m-3">
 							<label for="form-sans-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" class="form-label">
 								<span class='fs-3 fw-normal text-warning'>Palette produit {{ i }}</span>
@@ -137,7 +123,6 @@ container.innerHTML = `
 									<option value="{{ palette.id }}" class='fs-3 fw-normal'>N°{{ palette.id }}
 										{{ palette.codeCouleur }}</option>
 								{% endfor %}		
-                                <option value="pas-de-produit" class='fs-3 fw-normal'>pas de produit</option>
 							</select>
 						</div>
 			<div class="m-3">

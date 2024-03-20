@@ -36,7 +36,7 @@
 			{% for retour in retours %}
 				<div class="card my-4 border-primary border-3 custom-width-desktop">
 					<div class="card-body p-0 ps-2">
-						{% if retourComplet[loop.index0] %}
+						{# {% if retourComplet[loop.index0] %}
 							<p class="card-text m-0">
 								<span class='fs-3 fw-bold text-success'>Complet</span>
 							</p>
@@ -44,7 +44,7 @@
 							<p class="card-text m-0">
 								<span class='fs-3 fw-bold text-danger'>Incomplet</span>
 							</p>
-						{% endif %}
+						{% endif %} #}
 						<p class="card-text m-0">
 							<span class='fs-3 fw-bold'>{{ retour.numretour }}</span>
 						</p>
@@ -57,11 +57,11 @@
 						</p>
 						{% if retourComplet[loop.index0] %}
 							<p class="card-text m-0">
-								<span class='fs-3 fw-bold text-success'>Réceptionnés</span>
+								<span class='fs-3 fw-bold text-success'>les réceptionnés sont identiques</span>
 							</p>
 						{% else %}
 							<p class="card-text m-0">
-								<span class='fs-3 fw-bold text-danger'>Réceptionnés</span>
+								<span class='fs-3 fw-bold text-danger'>les réceptionnés sont différent</span>
 							</p>
 						{% endif %}
 						{% for retourProduitReceptionne in retour.retourProduitReceptionnes %}
@@ -75,11 +75,20 @@
 							<p class="card-text m-0">
 								<span class='fs-3 fw-bold text-success'>Attendus</span>
 							</p>
-						{% else %}
+                        {% else %}
 							<p class="card-text m-0">
 								<span class='fs-3 fw-bold text-danger'>Attendus</span>
 							</p>
 						{% endif %}
+                        {# {% if retourSurplus[loop.index0] %}
+							<p class="card-text m-0">
+								<span class='fs-3 fw-bold text-success'>SURPLUS</span>
+							</p>
+                        {% else %}
+							<p class="card-text m-0">
+								<span class='fs-3 fw-bold text-danger'>PAS DE SURPLUS</span>
+							</p>
+						{% endif %} #}
 						{% for retourProduit in retour.retourProduits %}
 							<p class="card-text m-0">
 								<span class='fs-3 fw-bold'>{{ retourProduit.idproduit }}
