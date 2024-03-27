@@ -72,7 +72,7 @@ class ApiController extends AbstractController
             if ($receptionnesAcomparer === $produitsAcomparer) {
                 $retourComplet = 'complet';
             } else {
-                $retourComplet = 'incomplet';
+                $retourComplet = 'différent';
             }
 
             $retoursArray[] = [
@@ -82,7 +82,12 @@ class ApiController extends AbstractController
                 'prenomClient' => $retour->getPrenomClient(),
                 'transporteur' => $retour->getTransporteur(),
                 'dateTraitement' => $retour->getDateTraitement(),
-                'etat' => $retour->getEtat(),
+                'etat1' => $retour->getEtat(),
+                'etat2' => $retour->getEtat02(),
+                'etat3' => $retour->getEtat03(),
+                'etatProduit1' => $retour->getEtatProduit(),
+                'etatProduit2' => $retour->getEtatProduit02(),
+                'etatProduit3' => $retour->getEtatProduit03(),
                 'commentaire' => $retour->getCommentaire(),
                 'photo1' => $retour->getPhoto1(),
                 'photo2' => $retour->getPhoto2(),

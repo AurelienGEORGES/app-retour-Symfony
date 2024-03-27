@@ -81,6 +81,9 @@ class Retour
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $etat_produit_03 = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $commentaire_autorisation = null;
+
     public function __construct()
     {
         $this->retourProduits = new ArrayCollection();
@@ -381,6 +384,18 @@ class Retour
     public function setEtatProduit03(?string $etat_produit_03): static
     {
         $this->etat_produit_03 = $etat_produit_03;
+
+        return $this;
+    }
+
+    public function getCommentaireAutorisation(): ?string
+    {
+        return $this->commentaire_autorisation;
+    }
+
+    public function setCommentaireAutorisation(?string $commentaire_autorisation): static
+    {
+        $this->commentaire_autorisation = $commentaire_autorisation;
 
         return $this;
     }

@@ -41,7 +41,7 @@
 		</div>
 	</div>
 	<h2 class="text-white my-5 fs-1 fw-normal text-center mx-2">résultats attendus / sans attendus</h2>
-	{% for retour in retours %}
+	{% for retour in listeRetours %}
 		<div class="d-flex justify-content-center">
 			<div>
 				<div class="card my-3 border-primary border-3 custom-width-desktop">
@@ -92,5 +92,57 @@
 				</div>
 			</div>
 		</div>
-	{% endfor %}
+	{% endfor %} 
+    {# {% for item in data %}
+    <div class="d-flex justify-content-center">
+			<div>
+				<div class="card my-3 border-primary border-3 custom-width-desktop">
+					<div class="card-body">
+						<p class="card-text m-0">
+							<span class='fs-1 fw-normal'>{{ item.retour.numero_retour }}</span>
+						</p>
+						{% if retour.bordereau is defined and retour.bordereau.numbordereau is defined %}
+							<p class="card-text m-0">
+								<span class='fs-2 fw-normal'>{{ retour.bordereau.numbordereau }}</span>
+							</p>
+						{% else %} 
+							<p class="card-text m-0">
+								<span class='fs-2 fw-normal'>pas de bordereau.</span>
+							</p>
+						{% endif %}
+						<p class="card-text m-0">
+							<span class='fs-1 fw-normal'>{{ item.retour.prenom_client}}
+								{{ item.retour.nom_client}}</span>
+						</p>
+						<p class="card-text m-0">
+							<span class='fs-1 fw-normal'>{{ item.retour.transporteur }}</span>
+						</p>
+						{% for retourProduit in item.produits %}
+							<p class="card-text m-0">
+								<span class='fs-1 fw-normal'>{{ retourProduit.id_produit }}
+									*
+									{{ retourProduit.quantite }}</span>
+							</p>
+						{% endfor %}
+						<div class='d-flex flex-row justify-content-center'>
+							<div>
+								<button type="button" class="btn btn-outline-primary m-2 border-2 rounded-5">
+									<a href="{{ path('app_formulaire_litige', {'id': item.retour.id_commande}) }}">
+										<span class='fs-2 fw-normal'>Avec litige</span>
+									</a>
+								</button>
+							</div>
+							<div>
+								<button type="button" class="btn btn-outline-primary m-2 border-2 rounded-5">
+									<a href="{{ path('app_formulaire_sans_litige', {'id': item.retour.id_commande}) }}" class='fs-2 fw-normal'>
+										Sans litige
+									</a>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    {% endfor %}   #}
 {% endblock %}
