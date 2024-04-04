@@ -6,6 +6,7 @@ use App\Entity\Retour;
 use DateTimeImmutable;
 use App\Entity\RetourProduit;
 use App\Form\SearchRetourType;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,23 @@ class ListeAttendusController extends AbstractController
     #[Route('/liste/attendus', name: 'app_liste_attendus')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
+        //pour garder les paramètres de recherche entre chaques requettes (lors d'un enregistrement RETSA sur NT)
+        $session = $request->getSession();
+
+        //chargement lors de l'ouverture de la page
         $listeRetours = $entityManager->getRepository(Retour::class)->findAll();
+
+        // API ERP retours avec autorisation
+        $client_RET = HttpClient::create();
+        $response_RET = $client_RET->request('GET', 'http://negolux.test/z/zamback/ajax/action/action.php?menu=134&nosecurity=1');
+        $content_RET = $response_RET->getContent();
+        $data_RET = json_decode($content_RET, true);
+
+        // API ERP commandes sans attendus (donc sans autorisation)
+        $client_NT = HttpClient::create();
+        $response_NT = $client_NT->request('GET', 'http://negolux.test/z/zamback/ajax/action/action.php?menu=136&nosecurity=1');
+        $content_NT = $response_NT->getContent();
+        $data_NT = json_decode($content_NT, true);
 
         // $retours = $entityManager->getRepository(Retour::class)->findAll();
 
@@ -30,44 +47,114 @@ class ListeAttendusController extends AbstractController
         // }
 
         $form = $this->createForm(SearchRetourType::class);
-
         $form->handleRequest($request);
 
+        //initialisation pour la recherche dans l'API NT
+        $listeRetoursNT = [];
+
         if ($form->isSubmitted()) {
-            $data = $form->getData();
+            $dataForm = $form->getData();
 
             $criteria = [];
-            if (!empty($data['numRetour'])) {
-                $criteria['num_retour'] = $data['numRetour'];
+            if (!empty($dataForm['numRetour'])) {
+                $criteria['num_retour'] = $dataForm['numRetour'];
             }
 
-            if (!empty($data['prenomClient'])) {
-                $criteria['prenom_client'] = $data['prenomClient'];
+            if (!empty($dataForm['prenomClient'])) {
+                $criteria['prenom_client'] = $dataForm['prenomClient'];
             }
 
-            if (!empty($data['nomClient'])) {
-                $criteria['nom_client'] = $data['nomClient'];
+            if (!empty($dataForm['nomClient'])) {
+                $criteria['nom_client'] = $dataForm['nomClient'];
             }
 
-            if (!empty($data['transporteur'])) {
-                $criteria['transporteur'] = $data['transporteur'];
+            if (!empty($dataForm['transporteur'])) {
+                $criteria['transporteur'] = $dataForm['transporteur'];
             }
+
+            //recherche sur les RET
             $listeRetours = $entityManager->getRepository(Retour::class)->findByCriteria($criteria);
+
+            //recherche dans l'API NT
+            foreach ($data_NT as $retourNT) {
+                if (!empty($dataForm['numRetour']) && strpos($retourNT['retour_NT']['ID'], $dataForm['numRetour']) !== false) {
+                    $listeRetoursNT[] = $retourNT;
+                }
+                if (!empty($dataForm['transporteur']) && is_array($retourNT['retour_NT']['TRANSPORTEUR']) && isset($retourNT['retour_NT']['TRANSPORTEUR']['LIBELLE']) && stripos($retourNT['retour_NT']['TRANSPORTEUR']['LIBELLE'], $dataForm['transporteur']) !== false) {
+                // if (!empty($dataForm['transporteur']) && stripos($retourNT['retour_NT']['TRANSPORTEUR']['LIBELLE'], $dataForm['transporteur']) !== false) {
+                    $listeRetoursNT[] = $retourNT;
+                }
+                if (!empty($dataForm['prenomClient']) && stripos($retourNT['retour_NT']['CLIENT']['PRENOM'], $dataForm['prenomClient']) !== false) {
+                    $listeRetoursNT[] = $retourNT;
+                }
+                if (!empty($dataForm['nomClient']) && stripos($retourNT['retour_NT']['CLIENT']['NOM'], $dataForm['nomClient']) !== false) {
+                    $listeRetoursNT[] = $retourNT;
+                }
+            }
+
+            $session->set('formData', $dataForm);
         } else {
-            $listeRetours = $entityManager->getRepository(Retour::class)->findAll();
+            // Si le formulaire n'a pas été soumis, utiliser les valeurs par défaut
+            $dataForm = $session->get('formData', [
+                'numRetour' => null,
+                'prenomClient' => null,
+                'nomClient' => null,
+                'transporteur' => null,
+            ]);
         }
 
-        // Créer une instance de HttpClient
-        $client = HttpClient::create();
+        //conversion NT en RETSA et enregistrement dans la table RETOUR
+        if ($request->isMethod('POST') && !empty($request->request->get('cmd_id'))) {
 
-        // Envoyer une requête GET à l'URL spécifiée
-        $response = $client->request('GET', 'http://negolux.test/z/zamback/ajax/action/action.php?menu=134&nosecurity=1');
+            $cmd_NT_to_RETSA = new Retour();
+            $NumRetourRETSA = $request->request->get('cmd_id');
+            $NumRetourRETSA = 'RETSA00' . $NumRetourRETSA;
+            $cmd_NT_to_RETSA->setNumRetour($NumRetourRETSA);
+            $cmd_NT_to_RETSA->setTransporteur($request->request->get('cmd_transpoteur'));
+            $cmd_NT_to_RETSA->setNomClient($request->request->get('cmd_nom_client'));
+            $cmd_NT_to_RETSA->setPrenomClient($request->request->get('cmd_prenom_client'));
+            $currentDate = new \DateTime();
+            $cmd_NT_to_RETSA->setDateTraitement($currentDate);
+            $entityManager->persist($cmd_NT_to_RETSA);
+            $entityManager->flush();
 
-        // Récupérer le contenu de la réponse
-        $content = $response->getContent();
+            if (!empty($request->request->all('produit_id', [])) && !empty($request->request->all('produit_qty', []))) {
+                $produits_id_cmd_NT = $request->request->all('produit_id', []);
+                $produits_qty_cmd_NT = $request->request->all('produit_qty', []);
+                for ($i = 0; $i < count($produits_id_cmd_NT); $i++) {
+                    // Créer une nouvelle instance de RetourProduit pour chaque produit
+                    $produitAajouter_NT = new RetourProduit();
 
-        // Décoder le contenu JSON en tableau associatif
-        $data = json_decode($content, true);
+                    // Définir les attributs du produit avec les valeurs correspondantes
+                    $produitAajouter_NT->setIdProduit($produits_id_cmd_NT[$i]);
+                    $produitAajouter_NT->setQuantite($produits_qty_cmd_NT[$i]);
+                    $produitAajouter_NT->setRetour($cmd_NT_to_RETSA);
+
+                    // Persister l'entité
+                    $entityManager->persist($produitAajouter_NT);
+                    $entityManager->flush();
+                }
+            }
+            if (!empty($request->request->all('composant_id', [])) && !empty($request->request->all('composant_qty', []))) {
+                $composants_id_cmd_NT = $request->request->all('composant_id', []);
+                $composants_qty_cmd_NT = $request->request->all('composant_qty', []);
+                for ($i = 0; $i < count($composants_id_cmd_NT); $i++) {
+                    // Créer une nouvelle instance de RetourProduit pour chaque produit
+                    $composantAajouter_NT = new RetourProduit();
+
+                    // Définir les attributs du produit avec les valeurs correspondantes
+                    $composantAajouter_NT->setIdProduit($composants_id_cmd_NT[$i]);
+                    $composantAajouter_NT->setQuantite($composants_qty_cmd_NT[$i]);
+                    $composantAajouter_NT->setRetour($cmd_NT_to_RETSA);
+
+                    // Persister l'entité
+                    $entityManager->persist($composantAajouter_NT);
+                    $entityManager->flush();
+                }
+            }
+        }
+
+        $form = $this->createForm(SearchRetourType::class, $dataForm);
 
         $retoursDejaEnBase = $entityManager->getRepository(Retour::class)->findAll();
 
@@ -78,12 +165,12 @@ class ListeAttendusController extends AbstractController
 
         foreach ($listeNumeroRetours as $listeNumeroRetour) {
             $finDeChaine = substr($listeNumeroRetour, -3);
-            if (!in_array($finDeChaine, ["-01", "-02", "-03"])) {
-                $listeNumeroRetours[] = $listeNumeroRetour;
+            if (in_array($finDeChaine, ["-01", "-02", "-03"])) {
+                $listeNumeroRetours[] = substr($listeNumeroRetour, 0, -3);
             }
-        }    
+        }
 
-        foreach ($data as $retourData) {
+        foreach ($data_RET as $retourData) {
 
             $retour = $retourData['retour'];
 
@@ -100,6 +187,7 @@ class ListeAttendusController extends AbstractController
                 $dateAutorisation = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $retour['date_autorisation']);
                 $retourAajouter->setDateAutorisation($dateAutorisation);
                 $entityManager->persist($retourAajouter);
+                $entityManager->flush();
 
                 foreach ($retourData['produits'] as $produit) {
                     $produitAajouter = new RetourProduit();
@@ -107,12 +195,10 @@ class ListeAttendusController extends AbstractController
                     $produitAajouter->setQuantite($produit['quantite']);
                     $produitAajouter->setRetour($retourAajouter);
                     $entityManager->persist($produitAajouter);
+                    $entityManager->flush();
                 }
             }
         }
-        $entityManager->flush();
-
-        
 
         return $this->render('liste_attendus/index.html.twig', [
             'controller_name' => 'ListeAttendusController',
@@ -120,7 +206,8 @@ class ListeAttendusController extends AbstractController
             // 'retours' => $retours,
             // 'retourProduits' => $retourProduits
             // 'data' => $data
-            'listeRetours' => $listeRetours
+            'listeRetours' => $listeRetours,
+            'listeRetoursNT' => $listeRetoursNT
 
         ]);
     }

@@ -17,9 +17,10 @@
 			</div>
 		</div>
 	{% endfor %}
-	<h1 class="text-white my-5 fs-3 mx-2 fw-normal text-center">Reception
-		{{ numretour }}
-		sans litige</h1>
+	{# <h1 class="text-white my-5 fs-3 mx-2 fw-normal text-center">Reception
+			{{ numretour }}
+			sans litige</h1> #}
+	<h1 class="text-white my-5 fs-3 mx-2 fw-normal text-center">{{ ifRetourNT }}</h1>
 	<form method="post" action="{{ path('app_formulaire_sans_litige', {'id': id}) }}">
 		<div class="d-flex justify-content-center">
 			<div class="m-3">
@@ -59,14 +60,15 @@
 					{% for i in 1..retourProduit.quantite %}
 						<div class="m-3">
 							<label for="form-sans-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" class="form-label">
-								<span class='fs-3 fw-normal text-warning'>Palette produit {{ i }}</span>
+								<span class='fs-3 fw-normal text-warning'>Palette produit
+									{{ i }}</span>
 							</label>
 							<select class="form-select w-100 fs-3 fw-normal border-dark border-3 rounded-3" id="form-sans-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" name="form-sans-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" required>
 								{% for palette in palettes %}
 									<option value="{{ palette.id }}" class='fs-3 fw-normal'>N°{{ palette.id }}
 										{{ palette.codeCouleur }}</option>
 								{% endfor %}
-                                <option value="pas-de-produit" class='fs-3 fw-normal'>pas de produit</option>
+								<option value="pas-de-produit" class='fs-3 fw-normal'>pas de produit</option>
 							</select>
 						</div>
 					{% endfor %}

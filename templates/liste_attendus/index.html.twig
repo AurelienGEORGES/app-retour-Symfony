@@ -9,7 +9,7 @@
 		<div class="border border-2 border-warning mx-1 rounded-4 d-flex flex-column input-desktop">
 			{{ form_start(form) }}
 			<div class='m-2 d-flex justify-content-center'>
-				{{ form_label(form.numRetour, 'N° RET, RETSA, NT', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
+				{{ form_label(form.numRetour, 'ID RET, NT', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
 			</div>
 			<div class='m-2 d-flex justify-content-center'>
 				{{ form_widget(form.numRetour) }}
@@ -92,57 +92,110 @@
 				</div>
 			</div>
 		</div>
-	{% endfor %} 
-    {# {% for item in data %}
-    <div class="d-flex justify-content-center">
+	{% endfor %}
+	{% for listeRetourNT in listeRetoursNT %}
+		<form method="post" action="{{ path('app_liste_attendus') }}" class="d-flex justify-content-center">
 			<div>
 				<div class="card my-3 border-primary border-3 custom-width-desktop">
 					<div class="card-body">
 						<p class="card-text m-0">
-							<span class='fs-1 fw-normal'>{{ item.retour.numero_retour }}</span>
+							<span class='fs-1 fw-normal'>{{ listeRetourNT.retour_NT.REF_MORIN }}</span>
 						</p>
-						{% if retour.bordereau is defined and retour.bordereau.numbordereau is defined %}
-							<p class="card-text m-0">
-								<span class='fs-2 fw-normal'>{{ retour.bordereau.numbordereau }}</span>
-							</p>
-						{% else %} 
-							<p class="card-text m-0">
-								<span class='fs-2 fw-normal'>pas de bordereau.</span>
-							</p>
-						{% endif %}
+						<input type="hidden" value="{{ listeRetourNT.retour_NT.ID }}" name="cmd_id"/>
 						<p class="card-text m-0">
-							<span class='fs-1 fw-normal'>{{ item.retour.prenom_client}}
-								{{ item.retour.nom_client}}</span>
+							<span class='fs-1 fw-normal'>{{ listeRetourNT.retour_NT.CLIENT.NOM}}
+								{{ listeRetourNT.retour_NT.CLIENT.PRENOM}}</span>
 						</p>
+						<input type="hidden" value="{{ listeRetourNT.retour_NT.CLIENT.NOM }}" name="cmd_nom_client"/>
+						<input type="hidden" value="{{ listeRetourNT.retour_NT.CLIENT.PRENOM }}" name="cmd_prenom_client"/>
 						<p class="card-text m-0">
-							<span class='fs-1 fw-normal'>{{ item.retour.transporteur }}</span>
+							<span class='fs-1 fw-normal'>{{ listeRetourNT.retour_NT.TRANSPORTEUR.LIBELLE }}</span>
 						</p>
-						{% for retourProduit in item.produits %}
-							<p class="card-text m-0">
-								<span class='fs-1 fw-normal'>{{ retourProduit.id_produit }}
-									*
-									{{ retourProduit.quantite }}</span>
-							</p>
+						<input type="hidden" value="{{ listeRetourNT.retour_NT.TRANSPORTEUR.LIBELLE }}" name="cmd_transpoteur"/>
+						{% for produit in listeRetourNT.produits_NT.0 %}
+							{% if produit.COMPOSANTS is not defined %}
+								<p class="card-text m-0">
+									<span class='fs-1 fw-normal'>{{ produit.ID_PRODUIT }}
+										*
+										{{ produit.QTY }}</span>
+								</p>
+								<input type="hidden" value="{{ produit.ID_PRODUIT }}" name="produit_id[]"/>
+								<input type="hidden" value="{{ produit.QTY }}" name="produit_qty[]"/>
+							{% else %}
+								{% for produitComposant in produit.COMPOSANTS %}
+									<p class="card-text m-0">
+										<span class='fs-1 fw-normal'>{{ produitComposant.ID_PRODUIT }}
+											*
+											{{ produitComposant.QTY_PRODUIT }}</span>
+									</p>
+									<input type="hidden" value="{{ produitComposant.ID_PRODUIT }}" name="composant_id[]"/>
+									<input type="hidden" value="{{ produitComposant.QTY_PRODUIT }}" name="composant_qty[]"/>
+								{% endfor %}
+							{% endif %}
 						{% endfor %}
 						<div class='d-flex flex-row justify-content-center'>
 							<div>
-								<button type="button" class="btn btn-outline-primary m-2 border-2 rounded-5">
-									<a href="{{ path('app_formulaire_litige', {'id': item.retour.id_commande}) }}">
-										<span class='fs-2 fw-normal'>Avec litige</span>
-									</a>
-								</button>
-							</div>
-							<div>
-								<button type="button" class="btn btn-outline-primary m-2 border-2 rounded-5">
-									<a href="{{ path('app_formulaire_sans_litige', {'id': item.retour.id_commande}) }}" class='fs-2 fw-normal'>
-										Sans litige
-									</a>
+								<button type="submit" class="btn btn-outline-primary m-2 border-2 rounded-5">
+										<span class='fs-2 fw-normal'>Convertir en RETSA</span>
 								</button>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-    {% endfor %}   #}
+		</form>
+	{% endfor %}
+
+	{# {% for item in data %}
+				    <div class="d-flex justify-content-center">
+							<div>
+								<div class="card my-3 border-primary border-3 custom-width-desktop">
+									<div class="card-body">
+										<p class="card-text m-0">
+											<span class='fs-1 fw-normal'>{{ item.retour.numero_retour }}</span>
+										</p>
+										{% if retour.bordereau is defined and retour.bordereau.numbordereau is defined %}
+											<p class="card-text m-0">
+												<span class='fs-2 fw-normal'>{{ retour.bordereau.numbordereau }}</span>
+											</p>
+										{% else %} 
+											<p class="card-text m-0">
+												<span class='fs-2 fw-normal'>pas de bordereau.</span>
+											</p>
+										{% endif %}
+										<p class="card-text m-0">
+											<span class='fs-1 fw-normal'>{{ item.retour.prenom_client}}
+												{{ item.retour.nom_client}}</span>
+										</p>
+										<p class="card-text m-0">
+											<span class='fs-1 fw-normal'>{{ item.retour.transporteur }}</span>
+										</p>
+										{% for retourProduit in item.produits %}
+											<p class="card-text m-0">
+												<span class='fs-1 fw-normal'>{{ retourProduit.id_produit }}
+													*
+													{{ retourProduit.quantite }}</span>
+											</p>
+										{% endfor %}
+										<div class='d-flex flex-row justify-content-center'>
+											<div>
+												<button type="button" class="btn btn-outline-primary m-2 border-2 rounded-5">
+													<a href="{{ path('app_formulaire_litige', {'id': item.retour.id_commande}) }}">
+														<span class='fs-2 fw-normal'>Avec litige</span>
+													</a>
+												</button>
+											</div>
+											<div>
+												<button type="button" class="btn btn-outline-primary m-2 border-2 rounded-5">
+													<a href="{{ path('app_formulaire_sans_litige', {'id': item.retour.id_commande}) }}" class='fs-2 fw-normal'>
+														Sans litige
+													</a>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				    {% endfor %}   #}
 {% endblock %}

@@ -28,12 +28,26 @@ class FormulaireSansLitigeController extends AbstractController
     #[Route('/formulaire/sans/litige/{id}', name: 'app_formulaire_sans_litige')]
     public function index($id, EntityManagerInterface $entityManager, Request $request): Response
     {
-        $palettes = $entityManager->getRepository(Palette::class)->findAll();
-        $retour = $entityManager->getRepository(Retour::class)->find($id);
-        $retourObj = $entityManager->getRepository(Retour::class)->find($retour->getId());
-        $numretour = $retour->getNumRetour();
-        $transporteur = $retour->getTransporteur();
-        $retourProduits = array_merge($retour->getRetourProduits()->toArray());
+
+        $ifRetourNT = $entityManager->getRepository(Retour::class)->find($id);
+
+        if ($ifRetourNT == NULL) {
+
+            $ifRetourNT = 'retour sans attendu N°RETSA00' . $id;
+            $palettes = $entityManager->getRepository(Palette::class)->findAll();
+            $retour = new Retour;
+            $transporteur = '';
+            $retourProduits = '';
+        } else {
+
+            $ifRetourNT = 'retour avec attendu N°RET00' . $id;
+            $palettes = $entityManager->getRepository(Palette::class)->findAll();
+            $retour = $entityManager->getRepository(Retour::class)->find($id);
+            $retourObj = $entityManager->getRepository(Retour::class)->find($retour->getId());
+            // $numretour = $retour->getNumRetour();
+            $transporteur = $retour->getTransporteur();
+            $retourProduits = array_merge($retour->getRetourProduits()->toArray());
+        }
 
         if ($request->isMethod('POST')) {
 
@@ -145,7 +159,8 @@ class FormulaireSansLitigeController extends AbstractController
         return $this->render('formulaire_sans_litige/index.html.twig', [
             'controller_name' => 'FormulaireSansLitigeController',
             'transporteur' => $transporteur,
-            'numretour' => $numretour,
+            // 'numretour' => $numretour,
+            'ifRetourNT' => $ifRetourNT,
             'retourProduits' => $retourProduits,
             'id' => $id,
             'palettes' => $palettes

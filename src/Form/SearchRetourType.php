@@ -31,10 +31,10 @@ class SearchRetourType extends AbstractType
             ->add('transporteur', ChoiceType::class, [
                 'label' => 'Transporteur',
                 'choices' => [
-                    'shenker' => 'shenker',
+                    'schenker' => 'schenker',
                     'dpd' => 'dpd',
                     'mazet' => 'mazet',
-                    'geodis' => 'geodis',
+                    'calberson' => 'Calberson',
                     'gls' => 'gls',
                     'vir' => 'vir'
                 ],
