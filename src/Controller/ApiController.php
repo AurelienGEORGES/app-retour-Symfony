@@ -2,10 +2,15 @@
 
 namespace App\Controller;
 
+use stdClass;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use App\Entity\Retour;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -13,8 +18,19 @@ class ApiController extends AbstractController
 {
     //#[IsGranted("ROLE_USER")]
     #[Route('/api', name: 'app_api')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $token = $this->getRequestToken($request);
+
+        if (!$token) {
+            return new JsonResponse(['error' => 'Token manquant'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $decoded = $this->verifyToken($token);
+        if (!$decoded) {
+            return new JsonResponse(['error' => 'Token invalide'], Response::HTTP_UNAUTHORIZED);
+        }
+
         $retours = $entityManager->getRepository(Retour::class)->findAll();
 
         $retoursArray = [];
@@ -101,9 +117,32 @@ class ApiController extends AbstractController
             ];
         }
 
-        // Convertir le tableau en JSON et le renvoyer dans la réponse
         $response = new Response(json_encode($retoursArray));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
+    }
+
+    private function getRequestToken(Request $request): ?string
+    {
+        $token = $request->headers->get('Authorization');
+
+        if (!$token || !preg_match('/Bearer\s(\S+)/', $token, $matches)) {
+            return null;
+        }
+
+        return $matches[1];
+    }
+
+    private function verifyToken(string $token): ?object
+    {
+        try {
+            $secretKey = 'mysecretkey';
+            $options = new stdClass();
+            $options->algorithm = 'HS256';
+            $decoded = JWT::decode($token, new Key($secretKey, 'HS256'));
+            return $decoded;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }

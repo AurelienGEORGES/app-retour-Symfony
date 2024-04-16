@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
+use Firebase\JWT\JWT;
 use App\Entity\Retour;
+use App\Entity\User;
 use DateTimeImmutable;
 use App\Entity\RetourProduit;
 use App\Form\SearchRetourType;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ListeAttendusController extends AbstractController
 {
+    private $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
     #[IsGranted("ROLE_USER")]
     #[Route('/liste/attendus', name: 'app_liste_attendus')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
@@ -27,24 +35,38 @@ class ListeAttendusController extends AbstractController
         //chargement lors de l'ouverture de la page
         $listeRetours = $entityManager->getRepository(Retour::class)->findAll();
 
-        // API ERP retours avec autorisation
+        $secretKeyAppCommandes = 'mysecretkeyAppCommandes';
+        $secretKeyAppRetours = 'mysecretkeyAppRetours';
+        
+        $token_RET = JWT::encode([], $secretKeyAppRetours, 'HS256');
+        $token_NT = JWT::encode([], $secretKeyAppCommandes, 'HS256');
+        
         $client_RET = HttpClient::create();
-        $response_RET = $client_RET->request('GET', 'http://negolux.test/z/zamback/ajax/action/action.php?menu=134&nosecurity=1');
+        $response_RET = $client_RET->request('GET', 'http://negolux.test/z/zamback/ajax/action/action.php?menu=134&nosecurity=1', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $token_RET,
+            ],
+        ]);
+
+        $client_NT = HttpClient::create();
+        $response_NT = $client_NT->request('GET', 'http://negolux.test/z/zamback/ajax/action/action.php?menu=136&nosecurity=1', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $token_NT,
+            ],
+        ]);
+
+        // API ERP retours avec autorisation
+        // $client_RET = HttpClient::create();
+        // $response_RET = $client_RET->request('GET', 'http://negolux.test/z/zamback/ajax/action/action.php?menu=134&nosecurity=1');
         $content_RET = $response_RET->getContent();
         $data_RET = json_decode($content_RET, true);
 
         // API ERP commandes sans attendus (donc sans autorisation)
-        $client_NT = HttpClient::create();
-        $response_NT = $client_NT->request('GET', 'http://negolux.test/z/zamback/ajax/action/action.php?menu=136&nosecurity=1');
+        // $client_NT = HttpClient::create();
+        // $response_NT = $client_NT->request('GET', 'http://negolux.test/z/zamback/ajax/action/action.php?menu=136&nosecurity=1');
         $content_NT = $response_NT->getContent();
         $data_NT = json_decode($content_NT, true);
 
-        // $retours = $entityManager->getRepository(Retour::class)->findAll();
-
-        // $retourProduits = [];
-        // foreach ($retours as $retour) {
-        //     $retourProduits = array_merge($retourProduits, $retour->getRetourProduits()->toArray());
-        // }
 
         $form = $this->createForm(SearchRetourType::class);
         $form->handleRequest($request);
@@ -81,7 +103,7 @@ class ListeAttendusController extends AbstractController
                     $listeRetoursNT[] = $retourNT;
                 }
                 if (!empty($dataForm['transporteur']) && is_array($retourNT['retour_NT']['TRANSPORTEUR']) && isset($retourNT['retour_NT']['TRANSPORTEUR']['LIBELLE']) && stripos($retourNT['retour_NT']['TRANSPORTEUR']['LIBELLE'], $dataForm['transporteur']) !== false) {
-                // if (!empty($dataForm['transporteur']) && stripos($retourNT['retour_NT']['TRANSPORTEUR']['LIBELLE'], $dataForm['transporteur']) !== false) {
+                    // if (!empty($dataForm['transporteur']) && stripos($retourNT['retour_NT']['TRANSPORTEUR']['LIBELLE'], $dataForm['transporteur']) !== false) {
                     $listeRetoursNT[] = $retourNT;
                 }
                 if (!empty($dataForm['prenomClient']) && stripos($retourNT['retour_NT']['CLIENT']['PRENOM'], $dataForm['prenomClient']) !== false) {
@@ -203,9 +225,6 @@ class ListeAttendusController extends AbstractController
         return $this->render('liste_attendus/index.html.twig', [
             'controller_name' => 'ListeAttendusController',
             'form' => $form->createView(),
-            // 'retours' => $retours,
-            // 'retourProduits' => $retourProduits
-            // 'data' => $data
             'listeRetours' => $listeRetours,
             'listeRetoursNT' => $listeRetoursNT
 
