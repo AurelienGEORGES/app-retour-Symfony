@@ -35,8 +35,8 @@ class ListeAttendusController extends AbstractController
         //chargement lors de l'ouverture de la page
         $listeRetours = $entityManager->getRepository(Retour::class)->findAll();
 
-        $secretKeyAppCommandes = 'mysecretkeyAppCommandes';
-        $secretKeyAppRetours = 'mysecretkeyAppRetours';
+        $secretKeyAppCommandes = $this->getParameter('API_COMMANDE_SECRET_KEY');
+        $secretKeyAppRetours = $this->getParameter('API_RETOUR_SECRET_KEY');
         
         $token_RET = JWT::encode([], $secretKeyAppRetours, 'HS256');
         $token_NT = JWT::encode([], $secretKeyAppCommandes, 'HS256');

@@ -11,12 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiController extends AbstractController
 {
-    //#[IsGranted("ROLE_USER")]
     #[Route('/api', name: 'app_api')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -136,7 +134,7 @@ class ApiController extends AbstractController
     private function verifyToken(string $token): ?object
     {
         try {
-            $secretKey = 'mysecretkey';
+            $secretKey = $this->getParameter('API_SECRET_KEY');
             $options = new stdClass();
             $options->algorithm = 'HS256';
             $decoded = JWT::decode($token, new Key($secretKey, 'HS256'));
