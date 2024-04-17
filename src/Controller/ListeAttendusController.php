@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Firebase\JWT\JWT;
 use App\Entity\Retour;
-use App\Entity\User;
 use DateTimeImmutable;
 use App\Entity\RetourProduit;
 use App\Form\SearchRetourType;
@@ -18,13 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ListeAttendusController extends AbstractController
 {
-    private $user;
-
-    public function __construct(User $user)
-    {
-        $this->user = $user;
-    }
-
     #[IsGranted("ROLE_USER")]
     #[Route('/liste/attendus', name: 'app_liste_attendus')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
@@ -55,15 +47,9 @@ class ListeAttendusController extends AbstractController
             ],
         ]);
 
-        // API ERP retours avec autorisation
-        // $client_RET = HttpClient::create();
-        // $response_RET = $client_RET->request('GET', 'http://negolux.test/z/zamback/ajax/action/action.php?menu=134&nosecurity=1');
         $content_RET = $response_RET->getContent();
         $data_RET = json_decode($content_RET, true);
 
-        // API ERP commandes sans attendus (donc sans autorisation)
-        // $client_NT = HttpClient::create();
-        // $response_NT = $client_NT->request('GET', 'http://negolux.test/z/zamback/ajax/action/action.php?menu=136&nosecurity=1');
         $content_NT = $response_NT->getContent();
         $data_NT = json_decode($content_NT, true);
 
