@@ -186,7 +186,6 @@ class ListeAttendusController extends AbstractController
             if (!in_array($retour['numero_retour'], $listeNumeroRetours)) {
 
                 $retourAajouter = new Retour();
-
                 $retourAajouter->setCommentaireAutorisation($retour['commentaire_autorisation']);
                 $retourAajouter->setNumRetour($retour['numero_retour']);
                 $retourAajouter->setTransporteur($retour['transporteur']);
@@ -208,11 +207,52 @@ class ListeAttendusController extends AbstractController
             }
         }
 
+        // test retour complet ou pas
+        $retourComplet = [];
+        $retourProduitsReceptionnes = [];
+        $retourProduits = [];
+
+        foreach ($listeRetours as $retour) {
+
+            $receptionnesAcomparer = [];
+            $produitsReceptionnes = $retour->getRetourProduitReceptionnes();
+            foreach ($produitsReceptionnes as $produitReceptionne) {
+                $retourProduitsReceptionnes[] = $produitReceptionne;
+                $idProduit = $produitReceptionne->getIdProduit();
+                $quantite = $produitReceptionne->getQuantite();
+
+                if (isset($receptionnesAcomparer[$idProduit])) {
+                    $receptionnesAcomparer[$idProduit] += $quantite;
+                } else {
+                    $receptionnesAcomparer[$idProduit] = $quantite;
+                }
+            }
+
+            $produitsAcomparer = [];
+            $produits = $retour->getRetourProduits();
+            foreach ($produits as $produit) {
+                $retourProduits[] = $produit;
+                $idProduit = $produit->getIdProduit();
+                $quantite = $produit->getQuantite();
+                $produitsAcomparer[$idProduit] = $quantite;
+            }
+
+            ksort($produitsAcomparer);
+            ksort($receptionnesAcomparer);
+
+            if ($receptionnesAcomparer === $produitsAcomparer) {
+                $retourComplet[] = true; 
+            } else {
+                $retourComplet[] = false;
+            }   
+        }
+
         return $this->render('liste_attendus/index.html.twig', [
             'controller_name' => 'ListeAttendusController',
             'form' => $form->createView(),
             'listeRetours' => $listeRetours,
-            'listeRetoursNT' => $listeRetoursNT
+            'listeRetoursNT' => $listeRetoursNT,
+            'retourComplet' => $retourComplet
 
         ]);
     }

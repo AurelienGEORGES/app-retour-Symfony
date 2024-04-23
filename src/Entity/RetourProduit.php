@@ -25,6 +25,9 @@ class RetourProduit
     #[ORM\JoinColumn(nullable: false)]
     private ?Retour $retour = null;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $etat = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -81,5 +84,17 @@ class RetourProduit
     public function __toString()
     {
         return $this->retour;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?string $etat): static
+    {
+        $this->etat = $etat;
+
+        return $this;
     }
 }

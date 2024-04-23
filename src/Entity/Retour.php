@@ -84,6 +84,27 @@ class Retour
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $commentaire_autorisation = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $id_produit_photo1 = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $id_produit_photo2 = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $id_produit_photo3 = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $id_produit_photo4 = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $id_produit_photo5 = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_traitement_02 = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_traitement_03 = null;
+
     public function __construct()
     {
         $this->retourProduits = new ArrayCollection();
@@ -396,6 +417,90 @@ class Retour
     public function setCommentaireAutorisation(?string $commentaire_autorisation): static
     {
         $this->commentaire_autorisation = $commentaire_autorisation;
+
+        return $this;
+    }
+
+    public function getIdProduitPhoto1(): ?int
+    {
+        return $this->id_produit_photo1;
+    }
+
+    public function setIdProduitPhoto1(?int $id_produit_photo1): static
+    {
+        $this->id_produit_photo1 = $id_produit_photo1;
+
+        return $this;
+    }
+
+    public function getIdProduitPhoto2(): ?int
+    {
+        return $this->id_produit_photo2;
+    }
+
+    public function setIdProduitPhoto2(?int $id_produit_photo2): static
+    {
+        $this->id_produit_photo2 = $id_produit_photo2;
+
+        return $this;
+    }
+
+    public function getIdProduitPhoto3(): ?int
+    {
+        return $this->id_produit_photo3;
+    }
+
+    public function setIdProduitPhoto3(?int $id_produit_photo3): static
+    {
+        $this->id_produit_photo3 = $id_produit_photo3;
+
+        return $this;
+    }
+
+    public function getIdProduitPhoto4(): ?int
+    {
+        return $this->id_produit_photo4;
+    }
+
+    public function setIdProduitPhoto4(?int $id_produit_photo4): static
+    {
+        $this->id_produit_photo4 = $id_produit_photo4;
+
+        return $this;
+    }
+
+    public function getIdProduitPhoto5(): ?int
+    {
+        return $this->id_produit_photo5;
+    }
+
+    public function setIdProduitPhoto5(?int $id_produit_photo5): static
+    {
+        $this->id_produit_photo5 = $id_produit_photo5;
+
+        return $this;
+    }
+
+    public function getDateTraitement02(): ?\DateTimeInterface
+    {
+        return $this->date_traitement_02;
+    }
+
+    public function setDateTraitement02(?\DateTimeInterface $date_traitement_02): static
+    {
+        $this->date_traitement_02 = $date_traitement_02;
+
+        return $this;
+    }
+
+    public function getDateTraitement03(): ?\DateTimeInterface
+    {
+        return $this->date_traitement_03;
+    }
+
+    public function setDateTraitement03(?\DateTimeInterface $date_traitement_03): static
+    {
+        $this->date_traitement_03 = $date_traitement_03;
 
         return $this;
     }

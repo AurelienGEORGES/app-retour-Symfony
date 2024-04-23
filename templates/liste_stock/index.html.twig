@@ -9,14 +9,19 @@
 	<div class="border border-2 border-light rounded-3 mx-2 my-5">
 		<h2 class="text-white my-5 fs-1 fw-bold text-center">Import du stock</h2>
 		<a class='text-white m-3'>lien vers le modèle</a>
-		<div class="form-group m-3">
-			<div class="input-group">
-				<div class="custom-file">
-					<input type="file" class="form-control text-light" id="exampleFile" aria-describedby="fileHelp"/>
+		<form action="{{ path('app_liste_stock') }}" method="post" enctype="multipart/form-data">
+			<div class="form-group m-3">
+				<div class="input-group">
+					<div class="custom-file">
+						<input type="file" class="form-control text-light" id="csvFileInput" name="csv_file" aria-describedby="fileHelp" accept=".csv"/>
+					</div>
+					<p id="fileHelp" class="text-light">Format pris en charge csv.</p>
 				</div>
-				<p id="fileHelp" class="text-light">Format pris en charge csv.</p>
 			</div>
-		</div>
+			<button type="submit" class="btn btn-outline-light m-2 border-2 rounded-5">
+				<span class='fs-2 fw-normal'>Envoyer CSV</span>
+			</button>
+		</form>
 	</div>
 	<div class="d-flex justify-content-center">
 		<div class='border rounded-3 border-warning border-2 mx-2 my-5 input-desktop'>

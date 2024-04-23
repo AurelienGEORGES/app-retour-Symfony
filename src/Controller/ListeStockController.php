@@ -61,7 +61,7 @@ class ListeStockController extends AbstractController
 
             $idProduitAModifier = $request->query->get('id-produit-form-modif-palette');
             $ProduitAModifier = $entityManager->getRepository(PaletteProduit::class)->find($idProduitAModifier);
-            
+
 
             for ($p = $ProduitAModifier->getQuantite(); $p >= 1; $p--) {
 
@@ -81,6 +81,41 @@ class ListeStockController extends AbstractController
 
             $entityManager->remove($ProduitAModifier);
             $entityManager->flush();
+        }
+
+        if (!empty($request->files->get('csv_file'))) {
+            // Vérifie si un fichier a été téléchargé
+            $file = $request->files->get('csv_file');
+
+            // Lecture du contenu du fichier CSV
+            $csvData = file_get_contents($file->getPathname());
+
+            // Initialisation d'un tableau pour stocker toutes les données du CSV
+            // $csvDataArray = [];
+
+            // Traitement du contenu du fichier CSV
+            $lines = explode("\n", $csvData);
+            foreach ($lines as $line) {
+                // Ignorer les lignes vides
+                if (empty(trim($line))) {
+                    continue;
+                }
+
+                // Séparer la ligne en colonnes
+                $rowData = str_getcsv($line);
+                $produitImporter = new PaletteProduit();
+                $produitImporter->setIdProduit($rowData['0']);
+                $produitImporter->setQuantite($rowData['1']);
+                $produitImporter->setCodeCouleur($rowData['2']);
+                $paletteProduitImporter = $entityManager->getRepository(Palette::class)->find($rowData['3']);
+                $produitImporter->setPalette($paletteProduitImporter);
+                $currentDate = new \DateTime();
+                $produitImporter->setDateReception($currentDate);
+                $entityManager->persist($produitImporter);
+                $entityManager->flush();
+                // Ajouter les données de la ligne au tableau
+                // $csvDataArray[] = $rowData;    
+            }
         }
 
         $csrfTokenProduitStock = $this->csrfTokenManager->getToken('form-stock');
