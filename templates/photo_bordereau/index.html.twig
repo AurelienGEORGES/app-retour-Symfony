@@ -6,51 +6,12 @@
 {% block body %}
 	{% set csrfTokenPhotoBordereau = csrf_token('form-photo-bordereau') %}
 	{% for message in app.flashes('notice') %}
-		<div id="message">
-			<div class="flash-notice">
-				<p class="text-success my-3 fs-3 mx-2 fw-normal text-center">{{ message }}</p>
-			</div>
-			<div class='d-flex justify-content-center'>
-				<button type="submit" class="btn btn-outline-success border-3 rounded-5" onclick="(removeMessage())">
-					<span class='fs-3 fw-normal p-3'>OK!</span>
-				</button>
-			</div>
-		</div>
+		<div {{ react_component('FlashMessage', props={'message': message} ) }}></div>
 	{% endfor %}
 	<form method="post" enctype="multipart/form-data" action="{{ path('app_photo_bordereau') }}">
 		<h1 class="text-white my-5 fs-1 fw-normal text-center">Enregistrement du bordereau</h1>
 		<div class='d-flex justify-content-center flex-column my-3'>
-			<div class="my-3 d-flex justify-content-center">
-				<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="openCamera()">
-					<span class='fs-2 fw-normal'>Ouvrir caméra</span>
-				</button>
-			</div>
-			<div class="my-3 d-flex justify-content-center">
-				<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="closeCamera()">
-					<span class='fs-2 fw-normal'>Fermer caméra</span>
-				</button>
-			</div>
-			<div class="d-flex justify-content-center my-3">
-				<div class="scan border border-2 border-dark input-desktop m-1">
-					<video id="video" width="640" height="480"></video>
-					<canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
-				</div>
-			</div>
-			<div class="my-3 d-flex justify-content-center">
-				<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="takePhoto()">
-					<span class='fs-2 fw-normal'>Prendre photo</span>
-				</button>
-			</div>
-			<div class="my-3 d-flex justify-content-center">
-				<img src="" alt="photo" id="photo-bordereau" style="display: none;"/>
-			</div>
-			<div class="d-flex justify-content-center my-3">
-				<div class="m-1 border border-3 border-dark rounded-3">
-					<div class="input-group">
-						<input type="file" accept="image/*" capture="camera" id="photoInput" class="form-control m-0 input-desktop" name="photo" required/>
-					</div>
-				</div>
-			</div>
+			<div {{ react_component('Photo') }}></div>
 		</div>
 		<div class='d-flex flex-column mt-3'>
 			<div class='d-flex justify-content-center'>
@@ -69,105 +30,4 @@
 		</div>
 		<input type="hidden" name="_token" value="{{ csrfTokenPhotoBordereau }}">
 	</form>
-	<script type="text/javascript">
-
-		async function openCamera() {
-const video = document.getElementById('video');
-
-try {
-const stream = await navigator.mediaDevices.getUserMedia({video: true});
-video.srcObject = stream;
-video.play();
-} catch (error) {
-console.error('Error accessing the camera: ', error);
-}
-}
-
-function closeCamera() {
-const video = document.getElementById('video');
-const stream = video.srcObject;
-const tracks = stream.getTracks();
-
-tracks.forEach(track => {
-track.stop();
-});
-
-video.srcObject = null;
-}
-
-async function takePhoto() {
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-
-try {
-const stream = await navigator.mediaDevices.getUserMedia({video: true});
-video.srcObject = stream;
-
-video.onloadedmetadata = () => {
-video.play();
-};
-
-// document.body.appendChild(video);
-
-setTimeout(async () => {
-context.drawImage(video, 0, 0, canvas.width, canvas.height);
-const photo = canvas.toDataURL('image/png');
-
-// Insérer l'image capturée dans l'input file
-const photoInput = document.getElementById('photoInput');
-const blob = await dataURItoBlob(photo);
-const file = new File([blob], "photo_bordereau_" + Date.now() + ".png", {type: "image/png"});
-
-// Créer une nouvelle liste de fichiers contenant le fichier capturé
-const fileList = new DataTransfer();
-fileList.items.add(file);
-
-// Affecter la liste de fichiers à l'input file
-photoInput.files = fileList.files;
-if (fileList.files.length > 0) { // Obtenez l'URL du premier fichier dans la liste
-var imageUrl = URL.createObjectURL(fileList.files[0]);
-
-// Sélectionnez l'élément img avec l'ID "photo-bordereau"
-var voirPhoto = document.querySelector('#photo-bordereau');
-
-// Définissez l'attribut src de l'image avec l'URL de l'image
-voirPhoto.src = imageUrl;
-}
-
-if (voirPhoto.src.trim() !== "") { // Affichez l'image en changeant le style
-voirPhoto.style.display = "block";
-}
-
-video.srcObject = stream;
-// document.body.appendChild(video);
-// video.parentNode.removeChild(video);
-
-// Vous pouvez ensuite envoyer la photo à un serveur ou la manipuler dans votre application.
-}, 100); // Vous pouvez ajuster ce délai selon vos besoins pour capturer la photo au bon moment.
-} catch (error) {
-console.error('Error accessing the camera: ', error);
-}
-}
-
-// Convertir les données de l'URL en objet Blob
-function dataURItoBlob(dataURI) {
-return new Promise((resolve) => {
-const byteString = atob(dataURI.split(',')[1]);
-const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-const ab = new ArrayBuffer(byteString.length);
-const ia = new Uint8Array(ab);
-for (let i = 0; i < byteString.length; i++) {
-ia[i] = byteString.charCodeAt(i);
-}
-const blob = new Blob([ab], {type: mimeString});
-resolve(blob);
-});
-}
-
-function removeMessage() {
-var eltMessage = document.querySelector('#message')
-eltMessage.remove()
-}
-	</script>
 {% endblock %}
