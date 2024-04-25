@@ -6,12 +6,12 @@
 {% block body %}
 	{% set csrfTokenPhotoBordereau = csrf_token('form-photo-bordereau') %}
 	{% for message in app.flashes('notice') %}
-		<div {{ react_component('FlashMessage', props={'message': message} ) }}></div>
+		<div {{ react_component('FlashMessage', props={'message': message } ) }}></div>
 	{% endfor %}
 	<form method="post" enctype="multipart/form-data" action="{{ path('app_photo_bordereau') }}">
 		<h1 class="text-white my-5 fs-1 fw-normal text-center">Enregistrement du bordereau</h1>
 		<div class='d-flex justify-content-center flex-column my-3'>
-			<div {{ react_component('Photo') }}></div>
+			<div {{ react_component('Photo', props={video: 'video0', canvas: 'canvas0', photoBordereau: 'photoBordereau0', photoInput: 'photoInput0', photo: 'photo0', nbClose: 0, nbPhoto: 0, nbVideo: 0 } ) }}></div>
 		</div>
 		<div class='d-flex flex-column mt-3'>
 			<div class='d-flex justify-content-center'>

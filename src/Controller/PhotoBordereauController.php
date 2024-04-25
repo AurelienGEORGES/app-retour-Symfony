@@ -30,7 +30,7 @@ class PhotoBordereauController extends AbstractController
         if ($request->getMethod() === 'POST') {
 
             // récupération des données du formulaire
-            $photo = $request->files->get('photo');
+            $photo = $request->files->get('photo0');
             $commentaire = $request->request->get('commentaire');
 
             // enregistrement de la photo sur le serveur

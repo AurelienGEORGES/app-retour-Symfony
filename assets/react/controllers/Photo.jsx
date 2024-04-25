@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Photo = () => {
+const Photo = (props) => {
 
-    async function openCamera() {
-        const video = document.getElementById('video');
+    async function openCamera(nbVideo) {
+        const video = document.getElementById('video'+ nbVideo);
 
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -14,8 +14,8 @@ const Photo = () => {
         }
     }
 
-    function closeCamera() {
-        const video = document.getElementById('video');
+    function closeCamera(nbClose) {
+        const video = document.getElementById('video' + nbClose);
         const stream = video.srcObject;
         const tracks = stream.getTracks();
 
@@ -26,9 +26,9 @@ const Photo = () => {
         video.srcObject = null;
     }
 
-    async function takePhoto() {
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
+    async function takePhoto(nbPhoto) {
+        const video = document.getElementById('video' + nbPhoto);
+        const canvas = document.getElementById('canvas' + nbPhoto);
         const context = canvas.getContext('2d');
 
         try {
@@ -44,7 +44,7 @@ const Photo = () => {
                 const photo = canvas.toDataURL('image/png');
 
                 // Insérer l'image capturée dans l'input file
-                const photoInput = document.getElementById('photoInput');
+                const photoInput = document.getElementById('photoInput' + nbPhoto);
                 const blob = await dataURItoBlob(photo);
                 const file = new File([blob], "photo_bordereau_" + Date.now() + ".png", { type: "image/png" });
 
@@ -55,7 +55,7 @@ const Photo = () => {
                 if (fileList.files.length > 0) { 
                     var imageUrl = URL.createObjectURL(fileList.files[0]);
 
-                    var voirPhoto = document.querySelector('#photo-bordereau');
+                    var voirPhoto = document.querySelector('#photoBordereau' + nbPhoto);
 
                     voirPhoto.src = imageUrl;
                 }
@@ -89,33 +89,33 @@ const Photo = () => {
     return (
         <div>
             <div className="my-3 d-flex justify-content-center">
-                <button type="button" className="btn btn-outline-warning border-2 rounded-5" onClick={openCamera}>
+                <button type="button" className="btn btn-outline-primary border-2 rounded-5" onClick={() => openCamera(props.nbVideo)}>
                     <span className='fs-2 fw-normal'>Ouvrir caméra</span>
                 </button>
             </div>
             <div className="my-3 d-flex justify-content-center">
-                <button type="button" className="btn btn-outline-warning border-2 rounded-5" onClick={closeCamera}>
+                <button type="button" className="btn btn-outline-primary border-2 rounded-5" onClick={() => closeCamera(props.nbClose)}>
                     <span className='fs-2 fw-normal'>Fermer caméra</span>
                 </button>
             </div>
             <div className="d-flex justify-content-center my-3">
-                <div className="scan border border-2 border-dark input-desktop m-1">
-                    <video id="video" width="640" height="480"></video>
-                    <canvas id="canvas" width="640" height="480" style={{ display: 'none' }}></canvas>
+                <div className="scan border border-2 border-primary input-desktop m-1">
+                    <video id={props.video} width="640" height="480"></video>
+                    <canvas id={props.canvas} width="640" height="480" style={{ display: 'none' }}></canvas>
                 </div>
             </div>
             <div className="my-3 d-flex justify-content-center">
-                <button type="button" className="btn btn-outline-warning border-2 rounded-5" onClick={takePhoto}>
+                <button type="button" className="btn btn-outline-primary border-2 rounded-5" onClick={() => takePhoto(props.nbPhoto)}>
                     <span className='fs-2 fw-normal'>Prendre photo</span>
                 </button>
             </div>
             <div className="my-3 d-flex justify-content-center">
-                <img src="" alt="photo" id="photo-bordereau" style={{ display: 'none' }} />
+                <img src="" alt="photo" id={props.photoBordereau} style={{ display: 'none' }} />
             </div>
             <div className="d-flex justify-content-center my-3">
-                <div className="m-1 border border-3 border-dark rounded-3">
+                <div className="m-1 border border-3 border-primary rounded-3">
                     <div className="input-group">
-                        <input type="file" accept="image/*" capture="camera" id="photoInput" className="form-control m-0 input-desktop" name="photo" required />
+                        <input type="file" accept="image/*" capture="camera" id={props.photoInput} className="form-control m-0 input-desktop" name={props.photo} required />
                     </div>
                 </div>
             </div>
