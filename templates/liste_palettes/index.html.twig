@@ -22,9 +22,16 @@
 			<form method="get" action="{{ path('app_liste_palettes') }}">
 				<div class="form-group m-3">
 					<label for="recherche-palette" class="form-label">
-						<span class='fs-3 fw-normal text-warning'>N° :</span>
+						<span class='fs-3 fw-normal text-warning'>Palette :</span>
 					</label>
-					<input type="text" class="form-control fs-3 fw-normal border-dark border-2" id="recherche-palette" placeholder="palette" name="recherche-palette">
+					<select class="form-select fs-3 fw-normal border-dark border-3 rounded-3" id="recherche-palette" name="recherche-palette">
+						<option value="" class='fs-3 fw-normal'>choisir</option>
+						{% for palette in palettesSelect %}
+							<option value="{{palette.id}}" class='fs-3 fw-normal'>{{ palette.id }}
+								-
+								{{ palette.codeCouleur }}</option>
+						{% endfor %}
+					</select>
 				</div>
 				<div class="form-group m-3">
 					<label for="recherche-statut" class="form-label">
@@ -35,6 +42,17 @@
 						<option value="en-cours" class='fs-3 fw-normal'>en cours</option>
 						<option value="termine" class='fs-3 fw-normal'>terminée</option>
 						<option value="transmise" class='fs-3 fw-normal'>transmise</option>
+					</select>
+				</div>
+                <div class="form-group m-3">
+					<label for="recherche-depot" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Depot :</span>
+					</label>
+					<select class="form-select fs-3 fw-normal border-dark border-3 rounded-3" id="recherche-depot" name="recherche-depot">
+						<option value="" class='fs-3 fw-normal'>choisir</option>
+						<option value="abérial" class='fs-3 fw-normal'>abérial</option>
+						<option value="phyléa" class='fs-3 fw-normal'>phyléa</option>
+						<option value="SAV" class='fs-3 fw-normal'>SAV</option>
 					</select>
 				</div>
 				<div class='d-flex justify-content-center mb-4'>
@@ -76,7 +94,7 @@
 												<option value="{{ palette.statut }}" class='fs-3 fw-normal'>{{ palette.statut }}</option>
 												<option value="en cours" class='fs-3 fw-normal'>en cours</option>
 												<option value="terminée" class='fs-3 fw-normal'>terminée</option>
-												<option value="transmise" class='fs-3 fw-normal'>transmise</option>
+												<option value="transmise" class='fs-3 fw-normal'>transmettre</option>
 											</select>
 										</div>
 										<div class="form-group">
@@ -88,7 +106,7 @@
 												<option value="sans dépot" class='fs-3 fw-normal'>sans dépot</option>
 												<option value="phyléa" class='fs-3 fw-normal'>phyléa</option>
 												<option value="abérial" class='fs-3 fw-normal'>abérial</option>
-                                                <option value="SAV" class='fs-3 fw-normal'>SAV</option>
+												<option value="SAV" class='fs-3 fw-normal'>SAV</option>
 											</select>
 										</div>
 										<input type="hidden" value="{{ palette.codeCouleur }}" name="pdf-code-couleur"/>

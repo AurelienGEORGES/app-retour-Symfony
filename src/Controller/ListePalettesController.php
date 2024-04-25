@@ -17,10 +17,11 @@ class ListePalettesController extends AbstractController
 
         $palettes = $entityManager->getRepository(Palette::class)->findAll();
 
-        if (!empty($request->query->get('recherche-palette')) || !empty($request->query->get('recherche-statut'))) {
+        if (!empty($request->query->get('recherche-palette')) || !empty($request->query->get('recherche-statut')) || !empty($request->query->get('recherche-depot'))) {
 
             $idPalette = $request->query->get('recherche-palette');
             $statutPalette = $request->query->get('recherche-statut');
+            $depotPalette = $request->query->get('recherche-depot');
 
             $criteria = [];
 
@@ -33,12 +34,20 @@ class ListePalettesController extends AbstractController
                 $criteria['statut'] = $statutPalette;
                 $palettes = $entityManager->getRepository(Palette::class)->findByCriteria($criteria);
             }
+
+            if ($depotPalette) {
+                $criteria['depot'] = $depotPalette;
+                $palettes = $entityManager->getRepository(Palette::class)->findByCriteria($criteria);
+            }
             
         }
+
+        $palettesForSelect = $entityManager->getRepository(Palette::class)->findAll();
         
         return $this->render('liste_palettes/index.html.twig', [
             'controller_name' => 'ListePalettesController',
             'palettes' => $palettes,
+            'palettesSelect' => $palettesForSelect
         ]);
     }
 }

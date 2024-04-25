@@ -44,6 +44,12 @@ class ApiController extends AbstractController
                 $retourProduitArray[] = [
                     'idProduit' => $retourProduit->getIdProduit(),
                     'quantite' => $retourProduit->getQuantite(),
+                    //test ajout code couleur ok
+                    'codeCouleur' => $retourProduit->getCodeCouleur(),
+                    //test pour produits reçus
+                    'transporteur' => $retour->getTransporteur(),
+                    'dateReception' => $retourProduit->getDateReception(),
+                    'numRetour' => $retour->getNumRetour() 
                 ];
             }
 
