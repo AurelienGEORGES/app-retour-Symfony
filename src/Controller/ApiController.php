@@ -29,6 +29,9 @@ class ApiController extends AbstractController
             return new JsonResponse(['error' => 'Token invalide'], Response::HTTP_UNAUTHORIZED);
         }
 
+        // $payload = $decoded->payload;
+        // dd($payload);
+
         $retours = $entityManager->getRepository(Retour::class)->findAll();
 
         $retoursArray = [];
@@ -44,9 +47,7 @@ class ApiController extends AbstractController
                 $retourProduitArray[] = [
                     'idProduit' => $retourProduit->getIdProduit(),
                     'quantite' => $retourProduit->getQuantite(),
-                    //test ajout code couleur ok
                     'codeCouleur' => $retourProduit->getCodeCouleur(),
-                    //test pour produits reçus
                     'transporteur' => $retour->getTransporteur(),
                     'dateReception' => $retourProduit->getDateReception(),
                     'numRetour' => $retour->getNumRetour() 

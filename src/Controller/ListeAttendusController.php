@@ -18,35 +18,64 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ListeAttendusController extends AbstractController
 {
     #[IsGranted("ROLE_USER")]
-    #[Route('/liste/attendus', name: 'app_liste_attendus')]
+    #[Route('/liste/attendus', name: 'app_liste_attendus', methods: ['GET', 'POST'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        //pour garder les paramètres de recherche entre chaques requettes (lors d'un enregistrement RETSA sur NT)
+        // pour garder les paramètres de recherche entre chaques requettes (lors d'un enregistrement RETSA sur NT)
         $session = $request->getSession();
 
-        //chargement lors de l'ouverture de la page
-        $listeRetours = $entityManager->getRepository(Retour::class)->findAll();
-
+        $listeRetours = [];
+        $payload_NT = [];
+        $payload_RET = [];
+        // dd($request);
+        
+        $payload_RET['prenomClient'] = '';
+        $payload_NT['prenomClient'] = '';
+        $payload_RET['nomClient'] = '';
+        $payload_NT['nomClient'] = '';
+        $payload_RET['numRetour'] = '';
+        $payload_NT['numRetour'] = '';
+        $payload_RET['transporteur'] = '';
+        $payload_NT['transporteur'] = '';
+        if ($request->get('search_retour')) {
+            $payload_RET = $request->get('search_retour');
+        }
+        
+        // dd($payload_RET['prenomClient']);
+        if ($request->get('search_retour')) {
+            $payload_NT = $request->get('search_retour');
+        }
+        $payload_RET['menu'] = 134;
+        $payload_NT['menu'] = 136;
+        $payload_NT['nosecurity'] = 1;
+        $payload_RET['nosecurity'] = 1;
+        // dd($payload_RET);
         $secretKeyAppCommandes = $this->getParameter('API_COMMANDE_SECRET_KEY');
         $secretKeyAppRetours = $this->getParameter('API_RETOUR_SECRET_KEY');
-        
-        $token_RET = JWT::encode([], $secretKeyAppRetours, 'HS256');
-        $token_NT = JWT::encode([], $secretKeyAppCommandes, 'HS256');
-        
+
+        $token_RET = JWT::encode($payload_RET, $secretKeyAppRetours, 'HS256');
+        $token_NT = JWT::encode($payload_NT, $secretKeyAppCommandes, 'HS256');
+        // dd($token_NT);
         $client_RET = HttpClient::create();
-        $response_RET = $client_RET->request('GET', 'http://negolux.test/z/zamback/ajax/action/action.php?menu=134&nosecurity=1', [
+        // $response_RET = $client_RET->request('GET', $this->getParameter('URL_API_ERP') . http_build_query($payload_RET), [
+            $response_RET = $client_RET->request('GET', $this->getParameter('URL_API_ERP') .'menu=134&nosecurity=1&prenomClient='.$payload_RET['prenomClient'].'&nomClient='.$payload_RET['nomClient'].'&numRetour='.$payload_RET['numRetour'].'&transporteur='.$payload_RET['transporteur'], [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token_RET,
+                'Content-Type' => 'application/json'
             ],
         ]);
+        // dd($response_RET);
 
         $client_NT = HttpClient::create();
-        $response_NT = $client_NT->request('GET', 'http://negolux.test/z/zamback/ajax/action/action.php?menu=136&nosecurity=1', [
+        // $response_NT = $client_NT->request('GET', $this->getParameter('URL_API_ERP') . http_build_query($payload_NT), [
+            $response_NT = $client_NT->request('GET', $this->getParameter('URL_API_ERP') . 'menu=136&nosecurity=1&prenomClient='.$payload_NT['prenomClient'].'&nomClient='.$payload_NT['nomClient'].'&numRetour='.$payload_NT['numRetour'].'&transporteur='.$payload_NT['transporteur'], [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token_NT,
+                'Content-Type' => 'application/json'
             ],
         ]);
-
+        
+        // dd($response_NT);
         $content_RET = $response_RET->getContent();
         $data_RET = json_decode($content_RET, true);
 
@@ -84,19 +113,21 @@ class ListeAttendusController extends AbstractController
             $listeRetours = $entityManager->getRepository(Retour::class)->findByCriteria($criteria);
 
             //recherche dans l'API NT
-            foreach ($data_NT as $retourNT) {
-                if (!empty($dataForm['numRetour']) && strpos($retourNT['retour_NT']['ID'], $dataForm['numRetour']) !== false) {
-                    $listeRetoursNT[] = $retourNT;
-                }
-                if (!empty($dataForm['transporteur']) && is_array($retourNT['retour_NT']['TRANSPORTEUR']) && isset($retourNT['retour_NT']['TRANSPORTEUR']['LIBELLE']) && stripos($retourNT['retour_NT']['TRANSPORTEUR']['LIBELLE'], $dataForm['transporteur']) !== false) {
-                    // if (!empty($dataForm['transporteur']) && stripos($retourNT['retour_NT']['TRANSPORTEUR']['LIBELLE'], $dataForm['transporteur']) !== false) {
-                    $listeRetoursNT[] = $retourNT;
-                }
-                if (!empty($dataForm['prenomClient']) && stripos($retourNT['retour_NT']['CLIENT']['PRENOM'], $dataForm['prenomClient']) !== false) {
-                    $listeRetoursNT[] = $retourNT;
-                }
-                if (!empty($dataForm['nomClient']) && stripos($retourNT['retour_NT']['CLIENT']['NOM'], $dataForm['nomClient']) !== false) {
-                    $listeRetoursNT[] = $retourNT;
+            if ($data_NT != NULL) {
+                foreach ($data_NT as $retourNT) {
+                    if (is_array($retourNT['retour_NT']) && isset($retourNT['retour_NT']['ID']) && !empty($dataForm['numRetour']) && strpos($retourNT['retour_NT']['ID'], $dataForm['numRetour']) !== false) {
+                        $listeRetoursNT[] = $retourNT;
+                    }
+                    if (!empty($dataForm['transporteur']) && is_array($retourNT['retour_NT']['TRANSPORTEUR']) && isset($retourNT['retour_NT']['TRANSPORTEUR']['LIBELLE']) && stripos($retourNT['retour_NT']['TRANSPORTEUR']['LIBELLE'], $dataForm['transporteur']) !== false) {
+                        // if (!empty($dataForm['transporteur']) && stripos($retourNT['retour_NT']['TRANSPORTEUR']['LIBELLE'], $dataForm['transporteur']) !== false) {
+                        $listeRetoursNT[] = $retourNT;
+                    }
+                    if (!empty($dataForm['prenomClient']) && stripos($retourNT['retour_NT']['CLIENT']['PRENOM'], $dataForm['prenomClient']) !== false) {
+                        $listeRetoursNT[] = $retourNT;
+                    }
+                    if (!empty($dataForm['nomClient']) && stripos($retourNT['retour_NT']['CLIENT']['NOM'], $dataForm['nomClient']) !== false) {
+                        $listeRetoursNT[] = $retourNT;
+                    }
                 }
             }
 
@@ -132,13 +163,10 @@ class ListeAttendusController extends AbstractController
                 for ($i = 0; $i < count($produits_id_cmd_NT); $i++) {
                     // Créer une nouvelle instance de RetourProduit pour chaque produit
                     $produitAajouter_NT = new RetourProduit();
-
                     // Définir les attributs du produit avec les valeurs correspondantes
                     $produitAajouter_NT->setIdProduit($produits_id_cmd_NT[$i]);
                     $produitAajouter_NT->setQuantite($produits_qty_cmd_NT[$i]);
                     $produitAajouter_NT->setRetour($cmd_NT_to_RETSA);
-
-                    // Persister l'entité
                     $entityManager->persist($produitAajouter_NT);
                     $entityManager->flush();
                 }
@@ -147,15 +175,12 @@ class ListeAttendusController extends AbstractController
                 $composants_id_cmd_NT = $request->request->all('composant_id', []);
                 $composants_qty_cmd_NT = $request->request->all('composant_qty', []);
                 for ($i = 0; $i < count($composants_id_cmd_NT); $i++) {
-                    // Créer une nouvelle instance de RetourProduit pour chaque produit
+                    // Créer une nouvelle instance de RetourProduit pour chaque composant
                     $composantAajouter_NT = new RetourProduit();
-
-                    // Définir les attributs du produit avec les valeurs correspondantes
+                    // Définir les attributs du composant avec les valeurs correspondantes
                     $composantAajouter_NT->setIdProduit($composants_id_cmd_NT[$i]);
                     $composantAajouter_NT->setQuantite($composants_qty_cmd_NT[$i]);
                     $composantAajouter_NT->setRetour($cmd_NT_to_RETSA);
-
-                    // Persister l'entité
                     $entityManager->persist($composantAajouter_NT);
                     $entityManager->flush();
                 }
@@ -164,6 +189,7 @@ class ListeAttendusController extends AbstractController
 
         $form = $this->createForm(SearchRetourType::class, $dataForm);
 
+        // enregistrement des retours lorsqu'il y a des RET arrivant de l'ERP
         $retoursDejaEnBase = $entityManager->getRepository(Retour::class)->findAll();
 
         $listeNumeroRetours = [];
@@ -171,6 +197,7 @@ class ListeAttendusController extends AbstractController
             $listeNumeroRetours[] = $retourDejaEnBase->getNumRetour();
         }
 
+        // traiter cas retour en -01 -02 -03 sinon il recrée un retour
         foreach ($listeNumeroRetours as $listeNumeroRetour) {
             $finDeChaine = substr($listeNumeroRetour, -3);
             if (in_array($finDeChaine, ["-01", "-02", "-03"])) {
@@ -178,35 +205,35 @@ class ListeAttendusController extends AbstractController
             }
         }
 
-        foreach ($data_RET as $retourData) {
+        if ($data_RET != NULL) {
+            foreach ($data_RET as $retourData) {
 
-            $retour = $retourData['retour'];
+                $retour = $retourData['retour'];
 
-            // attention traiter cas retour en -01 -02 sinon il recrée un retour
-            if (!in_array($retour['numero_retour'], $listeNumeroRetours)) {
+                if (!in_array($retour['numero_retour'], $listeNumeroRetours)) {
 
-                $retourAajouter = new Retour();
-                $retourAajouter->setCommentaireAutorisation($retour['commentaire_autorisation']);
-                $retourAajouter->setNumRetour($retour['numero_retour']);
-                $retourAajouter->setTransporteur($retour['transporteur']);
-                $retourAajouter->setNomClient($retour['nom_client']);
-                $retourAajouter->setPrenomClient($retour['prenom_client']);
-                $dateAutorisation = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $retour['date_autorisation']);
-                $retourAajouter->setDateAutorisation($dateAutorisation);
-                $entityManager->persist($retourAajouter);
-                $entityManager->flush();
-
-                foreach ($retourData['produits'] as $produit) {
-                    $produitAajouter = new RetourProduit();
-                    $produitAajouter->setIdProduit($produit['id_produit']);
-                    $produitAajouter->setQuantite($produit['quantite']);
-                    $produitAajouter->setRetour($retourAajouter);
-                    $entityManager->persist($produitAajouter);
+                    $retourAajouter = new Retour();
+                    $retourAajouter->setCommentaireAutorisation($retour['commentaire_autorisation']);
+                    $retourAajouter->setNumRetour($retour['numero_retour']);
+                    $retourAajouter->setTransporteur($retour['transporteur']);
+                    $retourAajouter->setNomClient($retour['nom_client']);
+                    $retourAajouter->setPrenomClient($retour['prenom_client']);
+                    $dateAutorisation = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $retour['date_autorisation']);
+                    $retourAajouter->setDateAutorisation($dateAutorisation);
+                    $entityManager->persist($retourAajouter);
                     $entityManager->flush();
+
+                    foreach ($retourData['produits'] as $produit) {
+                        $produitAajouter = new RetourProduit();
+                        $produitAajouter->setIdProduit($produit['id_produit']);
+                        $produitAajouter->setQuantite($produit['quantite']);
+                        $produitAajouter->setRetour($retourAajouter);
+                        $entityManager->persist($produitAajouter);
+                        $entityManager->flush();
+                    }
                 }
             }
         }
-
         // test retour complet ou pas
         $retourComplet = [];
         $retourProduitsReceptionnes = [];
@@ -241,10 +268,10 @@ class ListeAttendusController extends AbstractController
             ksort($receptionnesAcomparer);
 
             if ($receptionnesAcomparer === $produitsAcomparer) {
-                $retourComplet[] = true; 
+                $retourComplet[] = true;
             } else {
                 $retourComplet[] = false;
-            }   
+            }
         }
 
         return $this->render('liste_attendus/index.html.twig', [

@@ -8,7 +8,7 @@ parameters:
     API_COMMANDE_SECRET_KEY: '%env(API_COMMANDE_SECRET_KEY)%'
     API_RETOUR_SECRET_KEY: '%env(API_RETOUR_SECRET_KEY)%'
     API_SECRET_KEY_PALETTES: '%env(API_SECRET_KEY_PALETTES)%'
-
+    URL_API_ERP: '%env(URL_API_ERP)%'
 services:
     App\Entity\User: ~
     # default configuration for services in *this* file

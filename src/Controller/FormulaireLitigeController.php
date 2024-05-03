@@ -45,33 +45,7 @@ class FormulaireLitigeController extends AbstractController
         $photoIdProduit4 = $retour->getIdProduitPhoto4();
         $photoRetour5 = $retour->getPhoto5();
         $photoIdProduit5 = $retour->getIdProduitPhoto5();
-        // $retourProduits = array_merge($retour->getRetourProduits()->toArray());
-        // $retourProduitsDejaReceptionnes = array_merge($retour->getRetourProduitReceptionnes()->toArray());
 
-        // // Convertir $retourProduits en un tableau d'ID produit et quantité
-        // $retourProduitsFormatted = [];
-        // foreach ($retourProduits as $produit) {
-        //     $retourProduitsFormatted[$produit->getIdProduit()] = $produit->getQuantite();
-        // }
-
-        // // Convertir $retourProduitsDejaReceptionnes en un tableau d'ID produit et quantité
-        // $retourProduitsDejaReceptionnesFormatted = [];
-        // foreach ($retourProduitsDejaReceptionnes as $produitReceptionne) {
-        //     $retourProduitsDejaReceptionnesFormatted[$produitReceptionne->getIdProduit()] = $produitReceptionne->getQuantite();
-        // }
-
-        // // Produits à réceptionner (produits présents dans $retourProduits mais pas dans $retourProduitsDejaReceptionnes)
-        // $difference = array_diff_assoc($retourProduitsFormatted, $retourProduitsDejaReceptionnesFormatted);
-        // // Formatage des produits à réceptionner dans le format souhaité
-        // $retourProduitsAReceptionner = [];
-        // $idCounter = 1;
-        // foreach ($difference as $idProduit => $quantite) {
-        //     $retourProduitsAReceptionner[] = [
-        //         'id' => $idCounter++,
-        //         'idproduit' => $idProduit,
-        //         'quantite' => $quantite
-        //     ];
-        // }
         $retourProduits = array_merge($retour->getRetourProduits()->toArray());
         $retourProduitsDejaReceptionnes = array_merge($retour->getRetourProduitReceptionnes()->toArray());
 
@@ -208,13 +182,11 @@ class FormulaireLitigeController extends AbstractController
                 $retourTraite->setDateTraitement($currentDate);
             }
             $retourTraite->setNumretour($numRetourTraite);
-            // $retourTraite->setEtat($etat);
-            // $retourTraite->setEtatProduit($etatProduit);
+
             if (isset($commentaire)) {
                 $retourTraite->setCommentaire($commentaire);
             }
-            // $currentDate = new \DateTime();
-            // $retourTraite->setDateTraitement($currentDate);
+
             if (isset($photoPath1)) {
                 $retourTraite->setPhoto1($photoPath1);
             }
@@ -233,17 +205,14 @@ class FormulaireLitigeController extends AbstractController
             $entityManager->persist($retourTraite);
             $entityManager->flush();
 
-            //foreach ($retourProduits as $retourProduit) {
             foreach ($retourProduitsAReceptionner as $retourProduit) {
-                // $idProduitReceptionne = $request->request->get('id-form-litige_' . $retourProduit->getId());
+
                 $idProduitReceptionne = $request->request->get('id-form-litige_' . $retourProduit['id']);
-                // for ($p = $retourProduit->getQuantite(); $p >= 1; $p--) {
+
                 for ($p = $retourProduit['quantite']; $p >= 1; $p--) {
                     if (
-                        // $request->request->get('code-couleur-form-litige_' . $p) !== 'pas-de-produit'
                         $paletteId = $request->request->get('form-litige-palette_' . $idProduitReceptionne . '_' . $p) !== 'pas-de-produit'
                     ) {
-                        // $codeCouleur = $request->request->get('code-couleur-form-litige_' . $p);
                         $paletteProduit = new PaletteProduit();
                         $paletteId = $request->request->get('form-litige-palette_' . $idProduitReceptionne . '_' . $p);
                         $palette = $entityManager->getRepository(Palette::class)->find($paletteId);
@@ -273,7 +242,6 @@ class FormulaireLitigeController extends AbstractController
             }
 
             $idProduits = $request->request->all('id-form-litige', []);
-            // $codeCouleurs = $request->request->all('code-couleur-form-litige', []);
             $quantites = $request->request->all('quantite-form-litige', []);
             $idPaletteProduitReceptionne = $request->request->all('form-litige-palette', []);
 
@@ -298,7 +266,6 @@ class FormulaireLitigeController extends AbstractController
             }
 
             $idStockProduits = $request->request->all('id-form-litige', []);
-            // $codeCouleursStock = $request->request->all('code-couleur-form-litige', []);
             $quantitesStock = $request->request->all('quantite-form-litige', []);
             $idPaletteProduitStock = $request->request->all('form-litige-palette', []);
 

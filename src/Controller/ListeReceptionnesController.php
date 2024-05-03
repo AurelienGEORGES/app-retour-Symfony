@@ -56,7 +56,6 @@ class ListeReceptionnesController extends AbstractController
         }
 
         $retourComplet = [];
-        $retourSurplus = [];
         $retourProduitsReceptionnes = [];
         $retourProduits = [];
 
@@ -100,10 +99,7 @@ class ListeReceptionnesController extends AbstractController
         return $this->render('liste_receptionnes/index.html.twig', [
             'controller_name' => 'ListeReceptionnesController',
             'retours' => $retours,
-            'retourProduitsReceptionnes' => $retourProduitsReceptionnes,
-            '$retourProduits' => $retourProduits,
             'retourComplet' => $retourComplet,
-            'retourSurplus' => $retourSurplus
         ]);
     }
 }

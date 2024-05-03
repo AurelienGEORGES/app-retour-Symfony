@@ -29,27 +29,6 @@ class FormulaireSansLitigeController extends AbstractController
     public function index($id, EntityManagerInterface $entityManager, Request $request): Response
     {
 
-        // $ifRetourNT = $entityManager->getRepository(Retour::class)->find($id);
-
-        // if ($ifRetourNT == NULL) {
-
-        //     $ifRetourNT = 'retour sans attendu N°RETSA00' . $id;
-        //     $palettes = $entityManager->getRepository(Palette::class)->findAll();
-        //     $retour = new Retour;
-        //     $transporteur = '';
-        //     $retourProduits = '';
-        // } else {
-
-        //     $ifRetourNT = 'retour avec attendu N°RET00' . $id;
-        //     $palettes = $entityManager->getRepository(Palette::class)->findAll();
-        //     $retour = $entityManager->getRepository(Retour::class)->find($id);
-        //     $retourObj = $entityManager->getRepository(Retour::class)->find($retour->getId());
-        //     // $numretour = $retour->getNumRetour();
-        //     $transporteur = $retour->getTransporteur();
-        //     $retourProduits = array_merge($retour->getRetourProduits()->toArray());
-        // }
-
-
         $palettes = $entityManager->getRepository(Palette::class)->findAll();
         $retour = $entityManager->getRepository(Retour::class)->find($id);
         $numretour = $retour->getNumRetour();
@@ -122,12 +101,11 @@ class FormulaireSansLitigeController extends AbstractController
             $retourTraite->setNumretour($numRetourTraite);
             $entityManager->persist($retourTraite);
 
-            // foreach ($retourProduits as $retourProduit) {
-                foreach ($retourProduitsAReceptionner as $retourProduit) {
-                // $idProduitReceptionne = $request->request->get('id-form-sans-litige_' . $retourProduit->getId());
+            foreach ($retourProduitsAReceptionner as $retourProduit) {
+
                 $idProduitReceptionne = $request->request->get('id-form-sans-litige_' . $retourProduit['id']);
-                // for ($p = $retourProduit->getQuantite(); $p >= 1; $p--) {
-                    for ($p = $retourProduit['quantite']; $p >= 1; $p--) {
+
+                for ($p = $retourProduit['quantite']; $p >= 1; $p--) {
                     if (
                         // $request->request->get('code-couleur-form-sans-litige_' . $p) !== 'pas-de-produit'
                         $paletteId = $request->request->get('form-sans-litige-palette_' . $idProduitReceptionne . '_' . $p) !== 'pas-de-produit'
@@ -162,7 +140,6 @@ class FormulaireSansLitigeController extends AbstractController
             }
 
             $idProduits = $request->request->all('id-form-sans-litige', []);
-            // $codeCouleurs = $request->request->all('code-couleur-form-sans-litige', []);
             $idPaletteProduitReceptionne = $request->request->all('form-sans-litige-palette', []);
             $quantites = $request->request->all('quantite-form-sans-litige', []);
 
@@ -187,7 +164,6 @@ class FormulaireSansLitigeController extends AbstractController
             }
 
             $idStockProduits = $request->request->all('id-form-sans-litige', []);
-            // $codeCouleursStock = $request->request->all('code-couleur-form-sans-litige', []);
             $idPaletteProduitStock = $request->request->all('form-sans-litige-palette', []);
             $quantitesStock = $request->request->all('quantite-form-sans-litige', []);
 
@@ -215,7 +191,6 @@ class FormulaireSansLitigeController extends AbstractController
             'controller_name' => 'FormulaireSansLitigeController',
             'transporteur' => $transporteur,
             'numretour' => $numretour,
-            // 'ifRetourNT' => $ifRetourNT,
             'retourProduits' => $retourProduitsAReceptionner,
             'id' => $id,
             'palettes' => $palettes

@@ -27,7 +27,8 @@ class ListeBordereauxController extends AbstractController
     #[Route('/liste/bordereaux', name: 'app_liste_bordereaux')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $bordereaux = $entityManager->getRepository(Bordereau::class)->findAll();
+        $retours = [];
+        $bordereaux = [];
 
         $criteria = [];
         if (!empty($request->query->get('date_reception'))) {
@@ -36,13 +37,6 @@ class ListeBordereauxController extends AbstractController
             $formattedDate = $dateTime->format('Y-m-d H:i:s');
             $criteria['date_reception'] = $formattedDate;
             $bordereaux = $entityManager->getRepository(Bordereau::class)->findByDate($criteria);
-        }
-
-        $retours = $entityManager->getRepository(Retour::class)->findAll();
-
-        $retourProduits = [];
-        foreach ($retours as $retour) {
-            $retourProduits = array_merge($retourProduits, $retour->getRetourProduits()->toArray());
         }
 
         $form = $this->createForm(SearchRetourType::class);
@@ -70,38 +64,32 @@ class ListeBordereauxController extends AbstractController
             }
             $retours = $entityManager->getRepository(Retour::class)->findByCriteria($criteria);
             
-        } else {
-            $retours = $entityManager->getRepository(Retour::class)->findAll();
-        }
+        } 
 
         if ($request->isMethod('GET') && !empty($request->query->get('bordereau')) && !empty($request->query->all('liste', []))) {
             $bordereauId = $request->query->get('bordereau');
             $linkedRetours = $request->query->all('liste', []);
 
             if ($bordereauId) {
-                // Récupérer le Bordereau associé à l'ID
+
                 $bordereau = $entityManager->getRepository(Bordereau::class)->find($bordereauId);
 
-                // Vérifier si le Bordereau existe
                 if ($bordereau) {
-                    // Parcourir les Retours liés et associer le Bordereau à chaque Retour
+
                     foreach ($linkedRetours as $retourId) {
+
                         $retour = $entityManager->getRepository(Retour::class)->find($retourId);
 
-                        // Vérifier si le Retour existe
                         if ($retour) {
                             // Définir le Bordereau associé au Retour
                             $retour->setBordereau($bordereau);
                             $retourToModified = $retour->getNumRetour();
                             $chaine = preg_replace('/^NT/', 'RETSA', $retourToModified);
                             $retour->setNumRetour($chaine);
-
-                            // Enregistrer les modifications dans la base de données
                             $entityManager->persist($retour);
                         }
                     }
 
-                    // Exécuter les modifications
                     $entityManager->flush();
 
                     $this->addFlash(
@@ -120,7 +108,6 @@ class ListeBordereauxController extends AbstractController
             'bordereaux' => $bordereaux,
             'form' => $form->createView(),
             'retours' => $retours,
-            'retourProduits' => $retourProduits,
         ]);
     }
 }
