@@ -28,7 +28,7 @@ class ListeAttendusController extends AbstractController
         $payload_NT = [];
         $payload_RET = [];
         // dd($request);
-        
+
         $payload_RET['prenomClient'] = '';
         $payload_NT['prenomClient'] = '';
         $payload_RET['nomClient'] = '';
@@ -40,7 +40,7 @@ class ListeAttendusController extends AbstractController
         if ($request->get('search_retour')) {
             $payload_RET = $request->get('search_retour');
         }
-        
+
         // dd($payload_RET['prenomClient']);
         if ($request->get('search_retour')) {
             $payload_NT = $request->get('search_retour');
@@ -58,7 +58,7 @@ class ListeAttendusController extends AbstractController
         // dd($token_NT);
         $client_RET = HttpClient::create();
         // $response_RET = $client_RET->request('GET', $this->getParameter('URL_API_ERP') . http_build_query($payload_RET), [
-            $response_RET = $client_RET->request('GET', $this->getParameter('URL_API_ERP') .'menu=134&nosecurity=1&prenomClient='.$payload_RET['prenomClient'].'&nomClient='.$payload_RET['nomClient'].'&numRetour='.$payload_RET['numRetour'].'&transporteur='.$payload_RET['transporteur'], [
+        $response_RET = $client_RET->request('GET', $this->getParameter('URL_API_ERP') . 'menu=134&nosecurity=1&prenomClient=' . $payload_RET['prenomClient'] . '&nomClient=' . $payload_RET['nomClient'] . '&numRetour=' . $payload_RET['numRetour'] . '&transporteur=' . $payload_RET['transporteur'], [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token_RET,
                 'Content-Type' => 'application/json'
@@ -68,13 +68,13 @@ class ListeAttendusController extends AbstractController
 
         $client_NT = HttpClient::create();
         // $response_NT = $client_NT->request('GET', $this->getParameter('URL_API_ERP') . http_build_query($payload_NT), [
-            $response_NT = $client_NT->request('GET', $this->getParameter('URL_API_ERP') . 'menu=136&nosecurity=1&prenomClient='.$payload_NT['prenomClient'].'&nomClient='.$payload_NT['nomClient'].'&numRetour='.$payload_NT['numRetour'].'&transporteur='.$payload_NT['transporteur'], [
+        $response_NT = $client_NT->request('GET', $this->getParameter('URL_API_ERP') . 'menu=136&nosecurity=1&prenomClient=' . $payload_NT['prenomClient'] . '&nomClient=' . $payload_NT['nomClient'] . '&numRetour=' . $payload_NT['numRetour'] . '&transporteur=' . $payload_NT['transporteur'], [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token_NT,
                 'Content-Type' => 'application/json'
             ],
         ]);
-        
+
         // dd($response_NT);
         $content_RET = $response_RET->getContent();
         $data_RET = json_decode($content_RET, true);
@@ -145,44 +145,57 @@ class ListeAttendusController extends AbstractController
         //conversion NT en RETSA et enregistrement dans la table RETOUR
         if ($request->isMethod('POST') && !empty($request->request->get('cmd_id'))) {
 
-            $cmd_NT_to_RETSA = new Retour();
-            $NumRetourRETSA = $request->request->get('cmd_id');
-            $NumRetourRETSA = 'RETSA00' . $NumRetourRETSA;
-            $cmd_NT_to_RETSA->setNumRetour($NumRetourRETSA);
-            $cmd_NT_to_RETSA->setTransporteur($request->request->get('cmd_transpoteur'));
-            $cmd_NT_to_RETSA->setNomClient($request->request->get('cmd_nom_client'));
-            $cmd_NT_to_RETSA->setPrenomClient($request->request->get('cmd_prenom_client'));
-            $currentDate = new \DateTime();
-            $cmd_NT_to_RETSA->setDateTraitement($currentDate);
-            $entityManager->persist($cmd_NT_to_RETSA);
-            $entityManager->flush();
+            // vérification si le RETSA n'existe pas déjà
+            $criteria0['num_retour'] = 'RETSA00' . $request->request->get('cmd_id');
+            $criteria1['num_retour'] = 'RETSA00' . $request->request->get('cmd_id') . '-01';
+            $criteria2['num_retour'] = 'RETSA00' . $request->request->get('cmd_id') . '-02';
+            $criteria3['num_retour'] = 'RETSA00' . $request->request->get('cmd_id') . '-03';
+            $RetourExistant0 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria0);
+            $RetourExistant1 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria1);
+            $RetourExistant2 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria2);
+            $RetourExistant3 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria3);
+            
+            if (empty($RetourExistant0) && empty($RetourExistant1) && empty($RetourExistant2) && empty($RetourExistant3)) {
 
-            if (!empty($request->request->all('produit_id', [])) && !empty($request->request->all('produit_qty', []))) {
-                $produits_id_cmd_NT = $request->request->all('produit_id', []);
-                $produits_qty_cmd_NT = $request->request->all('produit_qty', []);
-                for ($i = 0; $i < count($produits_id_cmd_NT); $i++) {
-                    // Créer une nouvelle instance de RetourProduit pour chaque produit
-                    $produitAajouter_NT = new RetourProduit();
-                    // Définir les attributs du produit avec les valeurs correspondantes
-                    $produitAajouter_NT->setIdProduit($produits_id_cmd_NT[$i]);
-                    $produitAajouter_NT->setQuantite($produits_qty_cmd_NT[$i]);
-                    $produitAajouter_NT->setRetour($cmd_NT_to_RETSA);
-                    $entityManager->persist($produitAajouter_NT);
-                    $entityManager->flush();
+                $cmd_NT_to_RETSA = new Retour();
+                $NumRetourRETSA = $request->request->get('cmd_id');
+                $NumRetourRETSA = 'RETSA00' . $NumRetourRETSA;
+                $cmd_NT_to_RETSA->setNumRetour($NumRetourRETSA);
+                $cmd_NT_to_RETSA->setTransporteur($request->request->get('cmd_transpoteur'));
+                $cmd_NT_to_RETSA->setNomClient($request->request->get('cmd_nom_client'));
+                $cmd_NT_to_RETSA->setPrenomClient($request->request->get('cmd_prenom_client'));
+                $currentDate = new \DateTime();
+                $cmd_NT_to_RETSA->setDateTraitement($currentDate);
+                $entityManager->persist($cmd_NT_to_RETSA);
+                $entityManager->flush();
+
+                if (!empty($request->request->all('produit_id', [])) && !empty($request->request->all('produit_qty', []))) {
+                    $produits_id_cmd_NT = $request->request->all('produit_id', []);
+                    $produits_qty_cmd_NT = $request->request->all('produit_qty', []);
+                    for ($i = 0; $i < count($produits_id_cmd_NT); $i++) {
+                        // Créer une nouvelle instance de RetourProduit pour chaque produit
+                        $produitAajouter_NT = new RetourProduit();
+                        // Définir les attributs du produit avec les valeurs correspondantes
+                        $produitAajouter_NT->setIdProduit($produits_id_cmd_NT[$i]);
+                        $produitAajouter_NT->setQuantite($produits_qty_cmd_NT[$i]);
+                        $produitAajouter_NT->setRetour($cmd_NT_to_RETSA);
+                        $entityManager->persist($produitAajouter_NT);
+                        $entityManager->flush();
+                    }
                 }
-            }
-            if (!empty($request->request->all('composant_id', [])) && !empty($request->request->all('composant_qty', []))) {
-                $composants_id_cmd_NT = $request->request->all('composant_id', []);
-                $composants_qty_cmd_NT = $request->request->all('composant_qty', []);
-                for ($i = 0; $i < count($composants_id_cmd_NT); $i++) {
-                    // Créer une nouvelle instance de RetourProduit pour chaque composant
-                    $composantAajouter_NT = new RetourProduit();
-                    // Définir les attributs du composant avec les valeurs correspondantes
-                    $composantAajouter_NT->setIdProduit($composants_id_cmd_NT[$i]);
-                    $composantAajouter_NT->setQuantite($composants_qty_cmd_NT[$i]);
-                    $composantAajouter_NT->setRetour($cmd_NT_to_RETSA);
-                    $entityManager->persist($composantAajouter_NT);
-                    $entityManager->flush();
+                if (!empty($request->request->all('composant_id', [])) && !empty($request->request->all('composant_qty', []))) {
+                    $composants_id_cmd_NT = $request->request->all('composant_id', []);
+                    $composants_qty_cmd_NT = $request->request->all('composant_qty', []);
+                    for ($i = 0; $i < count($composants_id_cmd_NT); $i++) {
+                        // Créer une nouvelle instance de RetourProduit pour chaque composant
+                        $composantAajouter_NT = new RetourProduit();
+                        // Définir les attributs du composant avec les valeurs correspondantes
+                        $composantAajouter_NT->setIdProduit($composants_id_cmd_NT[$i]);
+                        $composantAajouter_NT->setQuantite($composants_qty_cmd_NT[$i]);
+                        $composantAajouter_NT->setRetour($cmd_NT_to_RETSA);
+                        $entityManager->persist($composantAajouter_NT);
+                        $entityManager->flush();
+                    }
                 }
             }
         }
