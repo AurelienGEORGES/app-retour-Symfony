@@ -27,10 +27,18 @@ class ListeStockController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
 
-        $produitsPalettes = $entityManager->getRepository(PaletteProduit::class)->findAll();
-        foreach ($produitsPalettes as $produitPalette) {
-            $palette = $produitPalette->getPalette();
+        $tousProduitsPalettes = $entityManager->getRepository(PaletteProduit::class)->findAll();
+        $produitsPalettes = [];
+        foreach ($tousProduitsPalettes as $produitPalette) {
+            if ($produitPalette->getStatut() !== 'archive') {
+                $produitsPalettes[] = $produitPalette;
+            }
         }
+
+        // foreach ($produitsPalettes as $produitPalette) {
+        // // foreach ($tousProduitsPalettes as $produitPalette) {
+        //     $palette = $produitPalette->getPalette();
+        // }
         $palettes = $entityManager->getRepository(Palette::class)->findAll();
 
         if (!empty($request)) {
@@ -43,17 +51,35 @@ class ListeStockController extends AbstractController
 
             if ($idProduitStock) {
                 $criteria['id_produit'] = $idProduitStock;
-                $produitsPalettes = $entityManager->getRepository(PaletteProduit::class)->findByCriteria($criteria);
+                $allproduitsPalettes = $entityManager->getRepository(PaletteProduit::class)->findByCriteria($criteria);
+                $produitsPalettes = [];
+                foreach ($allproduitsPalettes as $produitPalette) {
+                    if ($produitPalette->getStatut() !== 'archive') {
+                        $produitsPalettes[] = $produitPalette;
+                    }
+                }
             }
             if ($couleurProduitStock) {
                 $criteria['code_couleur'] = $couleurProduitStock;
-                $produitsPalettes = $entityManager->getRepository(PaletteProduit::class)->findByCriteria($criteria);
+                $allproduitsPalettes = $entityManager->getRepository(PaletteProduit::class)->findByCriteria($criteria);
+                $produitsPalettes = [];
+                foreach ($allproduitsPalettes as $produitPalette) {
+                    if ($produitPalette->getStatut() !== 'archive') {
+                        $produitsPalettes[] = $produitPalette;
+                    }
+                }
             }
             if ($dateReceptionProduitStock) {
                 $dateTime = new \DateTime($dateReceptionProduitStock);
                 $formattedDate = $dateTime->format('Y-m-d H:i:s');
                 $criteria['date_reception'] = $formattedDate;
-                $produitsPalettes = $entityManager->getRepository(PaletteProduit::class)->findByDate($criteria);
+                $allproduitsPalettes = $entityManager->getRepository(PaletteProduit::class)->findByDate($criteria);
+                $produitsPalettes = [];
+                foreach ($allproduitsPalettes as $produitPalette) {
+                    if ($produitPalette->getStatut() !== 'archive') {
+                        $produitsPalettes[] = $produitPalette;
+                    }
+                }
             }
         }
 
@@ -90,9 +116,6 @@ class ListeStockController extends AbstractController
             // Lecture du contenu du fichier CSV
             $csvData = file_get_contents($file->getPathname());
 
-            // Initialisation d'un tableau pour stocker toutes les données du CSV
-            // $csvDataArray = [];
-
             // Traitement du contenu du fichier CSV
             $lines = explode("\n", $csvData);
             foreach ($lines as $line) {
@@ -112,9 +135,7 @@ class ListeStockController extends AbstractController
                 $currentDate = new \DateTime();
                 $produitImporter->setDateReception($currentDate);
                 $entityManager->persist($produitImporter);
-                $entityManager->flush();
-                // Ajouter les données de la ligne au tableau
-                // $csvDataArray[] = $rowData;    
+                $entityManager->flush();    
             }
         }
 
@@ -123,7 +144,7 @@ class ListeStockController extends AbstractController
         return $this->render('liste_stock/index.html.twig', [
             'controller_name' => 'ListeStockController',
             'produitsPalettes' => $produitsPalettes,
-            'palette' => $palette,
+            // 'palette' => $palette,
             'palettes' => $palettes
         ]);
     }

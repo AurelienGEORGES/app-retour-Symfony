@@ -25,6 +25,8 @@ class PaletteProduitCrudController extends AbstractCrudController
             AssociationField::new('palette'),
             IntegerField::new('id_produit'),
             IntegerField::new('quantite'),
+            TextField::new('statut'),
+
         ];
     }
     

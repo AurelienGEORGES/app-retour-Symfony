@@ -105,6 +105,9 @@
 										{% for produitPalette in palette.getPaletteProduits %}
 											<input type="hidden" value="{{ produitPalette.idProduit }}" name="pdf-id-produit[]"/>
 											<input type="hidden" value="{{ produitPalette.quantite }}" name="pdf-quantite[]"/>
+                                            {# ajout fields id pour archiver ces produits #}
+                                            <input type="hidden" value="{{ produitPalette.id }}" name="id-produit[]"/>
+                                            {# ajout code couleur et n°palette #}
 											<p class='fs-3 fw-normal my-2'>-
 												{{ produitPalette.idProduit }}
 												*

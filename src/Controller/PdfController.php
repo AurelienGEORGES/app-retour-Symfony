@@ -5,6 +5,7 @@ namespace App\Controller;
 use Dompdf\Dompdf;
 use Twig\Environment;
 use App\Entity\Palette;
+use App\Entity\PaletteProduit;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +33,13 @@ class PdfController extends AbstractController
             $produits[] = [
                 'idProduit' => $idProduit,
                 'quantite' => $formData['pdf-quantite'][$key],
+                'codeCouleur' => $formData['id-produit']
+            ];
+        }
+
+        foreach ($formData['id-produit'] as $idProduitAarchiver) {
+            $produitsAarchiver[] = [
+                'idProduitAarchiver' => $idProduitAarchiver,
             ];
         }
 
@@ -71,10 +79,26 @@ class PdfController extends AbstractController
             'La palette bien été modifiée!'
         );
 
-        $response = new Response();
-        $response->setContent($dompdf->output());
-        $response->headers->set('Content-Type', 'application/pdf');
-        $response->headers->set('Content-Disposition', 'attachment; filename=palette_' . $numeroPalette . '_negolux.pdf');
-        return $response;
+        if ($statut === 'transmise') {
+
+            //on archive les produits contenu dans la palette transmise
+            foreach ($produitsAarchiver as $produitAarchiver) {
+                // dd($produitAarchiver['idProduitAarchiver']);
+                $produitAmodifierLeStatut = $entityManager->getRepository(PaletteProduit::class)->find($produitAarchiver['idProduitAarchiver']);
+                $produitAmodifierLeStatut->setStatut('archive');
+                $entityManager->persist($produitAmodifierLeStatut);
+                $entityManager->flush();
+            }
+
+            $response = new Response();
+            $response->setContent($dompdf->output());
+            $response->headers->set('Content-Type', 'application/pdf');
+            $response->headers->set('Content-Disposition', 'attachment; filename=palette_' . $numeroPalette . '_negolux.pdf');
+
+            return $response;
+        } else {
+            // Redirigez vers une autre page
+            return $this->redirectToRoute('app_liste_palettes');
+        }
     }
 }

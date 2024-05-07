@@ -29,6 +29,9 @@ class PaletteProduit
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $code_couleur = null;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $statut = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +93,18 @@ class PaletteProduit
     public function setCodeCouleur(?string $code_couleur): static
     {
         $this->code_couleur = $code_couleur;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?string $statut): static
+    {
+        $this->statut = $statut;
 
         return $this;
     }

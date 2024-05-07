@@ -115,7 +115,7 @@ const Photo = (props) => {
             <div className="d-flex justify-content-center my-3">
                 <div className="m-1 border border-3 border-primary rounded-3">
                     <div className="input-group">
-                        <input type="file" accept="image/*" capture="camera" id={props.photoInput} className="form-control m-0 input-desktop" name={props.photo} required />
+                        <input type="file" accept="image/*" capture="camera" id={props.photoInput} className="form-control m-0 input-desktop" name={props.photo} />
                     </div>
                 </div>
             </div>
