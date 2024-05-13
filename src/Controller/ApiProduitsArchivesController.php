@@ -38,7 +38,7 @@ class ApiProduitsArchivesController extends AbstractController
                     'codeCouleur' => $produit->getCodeCouleur(),
                     'quantite' => $produit->getQuantite(),
                     'dateReceptionne' => $produit->getDateReception(),
-                ];;
+                ];
             }
         }
         $response = new Response(json_encode($produitsArchivés));

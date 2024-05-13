@@ -164,8 +164,9 @@ class ListeAttendusController extends AbstractController
                 $cmd_NT_to_RETSA->setTransporteur($request->request->get('cmd_transpoteur'));
                 $cmd_NT_to_RETSA->setNomClient($request->request->get('cmd_nom_client'));
                 $cmd_NT_to_RETSA->setPrenomClient($request->request->get('cmd_prenom_client'));
-                $currentDate = new \DateTime();
-                $cmd_NT_to_RETSA->setDateTraitement($currentDate);
+                // ajustement pour enlever la date de traitement lors de la conversion en RETSA
+                // $currentDate = new \DateTime();
+                // $cmd_NT_to_RETSA->setDateTraitement($currentDate);
                 $entityManager->persist($cmd_NT_to_RETSA);
                 $entityManager->flush();
 
