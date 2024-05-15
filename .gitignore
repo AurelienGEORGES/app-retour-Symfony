@@ -15,5 +15,8 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
-/public/uploads/photos/
-/public/litiges/photos/
+
+/public/uploads/photos/*
+!/public/uploads/photos/.gitkeep
+/public/litiges/photos/*
+!/public/litiges/photos/.gitkeep
