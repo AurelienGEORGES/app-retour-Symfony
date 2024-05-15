@@ -145,17 +145,28 @@ class ListeAttendusController extends AbstractController
         //conversion NT en RETSA et enregistrement dans la table RETOUR
         if ($request->isMethod('POST') && !empty($request->request->get('cmd_id'))) {
 
-            // vérification si le RETSA n'existe pas déjà
+            // vérification si le RETSA n'existe pas déjà ou si le RET n'existe pas déjà
+            
             $criteria0['num_retour'] = 'RETSA00' . $request->request->get('cmd_id');
             $criteria1['num_retour'] = 'RETSA00' . $request->request->get('cmd_id') . '-01';
             $criteria2['num_retour'] = 'RETSA00' . $request->request->get('cmd_id') . '-02';
             $criteria3['num_retour'] = 'RETSA00' . $request->request->get('cmd_id') . '-03';
+            $criteria4['num_retour'] = 'RET00' . $request->request->get('cmd_id');
+            $criteria5['num_retour'] = 'RET00' . $request->request->get('cmd_id') . '-01';
+            $criteria6['num_retour'] = 'RET00' . $request->request->get('cmd_id') . '-02';
+            $criteria7['num_retour'] = 'RET00' . $request->request->get('cmd_id') . '-03';
             $RetourExistant0 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria0);
             $RetourExistant1 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria1);
             $RetourExistant2 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria2);
             $RetourExistant3 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria3);
+            $RetourExistant0 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria4);
+            $RetourExistant1 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria5);
+            $RetourExistant2 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria6);
+            $RetourExistant3 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria7);
             
-            if (empty($RetourExistant0) && empty($RetourExistant1) && empty($RetourExistant2) && empty($RetourExistant3)) {
+            if (empty($RetourExistant0) && empty($RetourExistant1) && empty($RetourExistant2) && empty($RetourExistant3)
+            && empty($RetourExistant4) && empty($RetourExistant5) && empty($RetourExistant6) && empty($RetourExistant7)
+            ) {
 
                 $cmd_NT_to_RETSA = new Retour();
                 $NumRetourRETSA = $request->request->get('cmd_id');

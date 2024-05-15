@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Stock;
 use App\Entity\Palette;
 use App\Entity\PaletteProduit;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,11 +34,14 @@ class ListeStockController extends AbstractController
             }
         }
 
-        // foreach ($produitsPalettes as $produitPalette) {
-        // // foreach ($tousProduitsPalettes as $produitPalette) {
-        //     $palette = $produitPalette->getPalette();
-        // }
-        $palettes = $entityManager->getRepository(Palette::class)->findAll();
+        // modification pour récupérer uniquement les pallettes en cours ou terminées
+        $allpalettesForSelect = $entityManager->getRepository(Palette::class)->findAll();
+        $PalettesForSelect = [];
+        foreach ($allpalettesForSelect as $Palette) {
+            if ($Palette->getStatut() !== 'transmise') {
+                $PalettesForSelect[] = $Palette;
+            }
+        }
 
         if (!empty($request)) {
 
@@ -145,7 +147,7 @@ class ListeStockController extends AbstractController
             'controller_name' => 'ListeStockController',
             'produitsPalettes' => $produitsPalettes,
             // 'palette' => $palette,
-            'palettes' => $palettes
+            'palettes' => $PalettesForSelect
         ]);
     }
 }

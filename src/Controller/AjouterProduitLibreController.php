@@ -27,7 +27,13 @@ class AjouterProduitLibreController extends AbstractController
     #[Route('/produit', name: 'app_ajouter_produit_libre')]
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
-        $palettes = $entityManager->getRepository(Palette::class)->findAll();
+        $allpalettesForSelect = $entityManager->getRepository(Palette::class)->findAll();
+        $PalettesForSelect = [];
+        foreach ($allpalettesForSelect as $Palette) {
+            if ($Palette->getStatut() !== 'transmise') {
+                $PalettesForSelect[] = $Palette;
+            }
+        }
 
         if ($request->isMethod('POST')) {
 
@@ -70,7 +76,7 @@ class AjouterProduitLibreController extends AbstractController
 
         return $this->render('ajouter_produit_libre/index.html.twig', [
             'controller_name' => 'AjouterProduitLibreController',
-            'palettes' => $palettes
+            'palettes' => $PalettesForSelect
         ]);
     }
 }

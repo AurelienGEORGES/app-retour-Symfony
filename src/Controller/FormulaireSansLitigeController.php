@@ -29,7 +29,14 @@ class FormulaireSansLitigeController extends AbstractController
     public function index($id, EntityManagerInterface $entityManager, Request $request): Response
     {
 
-        $palettes = $entityManager->getRepository(Palette::class)->findAll();
+        // modification pour récupérer uniquement les pallettes en cours ou terminées
+        $allpalettesForSelect = $entityManager->getRepository(Palette::class)->findAll();
+        $PalettesForSelect = [];
+        foreach ($allpalettesForSelect as $Palette) {
+            if ($Palette->getStatut() !== 'transmise') {
+                $PalettesForSelect[] = $Palette;
+            }
+        }
         $retour = $entityManager->getRepository(Retour::class)->find($id);
         $numretour = $retour->getNumRetour();
         $transporteur = $retour->getTransporteur();
@@ -107,8 +114,10 @@ class FormulaireSansLitigeController extends AbstractController
 
                 for ($p = $retourProduit['quantite']; $p >= 1; $p--) {
                     if (
-                        // $request->request->get('code-couleur-form-sans-litige_' . $p) !== 'pas-de-produit'
-                        $paletteId = $request->request->get('form-sans-litige-palette_' . $idProduitReceptionne . '_' . $p) !== 'pas-de-produit'
+                        $request->request->get('form-sans-litige-palette_' . $idProduitReceptionne . '_' . $p) !== 'pas-de-produit' &&
+                        // fix pb lorsqu'on Supprime le produit lorsqu'il n'existe pas pour aller vite
+                        // $paletteId = $request->request->get('form-sans-litige-palette_' . $idProduitReceptionne . '_' . $p) !== 'pas-de-produit'
+                        !empty($request->request->get('form-sans-litige-palette_' . $idProduitReceptionne . '_' . $p))
                     ) {
                         // $codeCouleur = $request->request->get('code-couleur-form-sans-litige_' . $p);
                         $paletteProduit = new PaletteProduit();
@@ -193,7 +202,7 @@ class FormulaireSansLitigeController extends AbstractController
             'numretour' => $numretour,
             'retourProduits' => $retourProduitsAReceptionner,
             'id' => $id,
-            'palettes' => $palettes
+            'palettes' => $PalettesForSelect
         ]);
     }
 }

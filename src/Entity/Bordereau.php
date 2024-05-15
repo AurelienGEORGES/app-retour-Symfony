@@ -26,9 +26,6 @@ class Bordereau
     private ?string $photo_1 = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $photo_2 = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
     private ?string $commentaire = null;
 
     #[ORM\OneToMany(mappedBy: 'bordereau', targetEntity: Retour::class)]
@@ -76,18 +73,6 @@ class Bordereau
     public function setPhoto1(string $photo_1): static
     {
         $this->photo_1 = $photo_1;
-
-        return $this;
-    }
-
-    public function getPhoto2(): ?string
-    {
-        return $this->photo_2;
-    }
-
-    public function setPhoto2(?string $photo_2): static
-    {
-        $this->photo_2 = $photo_2;
 
         return $this;
     }

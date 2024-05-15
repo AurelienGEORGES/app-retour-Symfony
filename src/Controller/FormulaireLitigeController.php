@@ -28,7 +28,14 @@ class FormulaireLitigeController extends AbstractController
     #[Route('/formulaire/litige/{id}', name: 'app_formulaire_litige')]
     public function index($id, EntityManagerInterface $entityManager, Request $request): Response
     {
-        $palettes = $entityManager->getRepository(Palette::class)->findAll();
+        // modification pour récupérer uniquement les pallettes en cours ou terminées
+        $allpalettesForSelect = $entityManager->getRepository(Palette::class)->findAll();
+        $PalettesForSelect = [];
+        foreach ($allpalettesForSelect as $Palette) {
+            if ($Palette->getStatut() !== 'transmise') {
+                $PalettesForSelect[] = $Palette;
+            }
+        }
         $retour = $entityManager->getRepository(Retour::class)->find($id);
         $numretour = $retour->getNumRetour();
         $transporteur = $retour->getTransporteur();
@@ -211,10 +218,13 @@ class FormulaireLitigeController extends AbstractController
 
                 for ($p = $retourProduit['quantite']; $p >= 1; $p--) {
                     if (
-                        $paletteId = $request->request->get('form-litige-palette_' . $idProduitReceptionne . '_' . $p) !== 'pas-de-produit'
+                        $request->request->get('form-litige-palette_' . $idProduitReceptionne . '_' . $p) !== 'pas-de-produit' &&
+                        // fix pb lorsqu'on Supprime le produit lorsqu'il n'existe pas pour aller vite
+                        !empty($request->request->get('form-litige-palette_' . $idProduitReceptionne . '_' . $p))
                     ) {
                         $paletteProduit = new PaletteProduit();
                         $paletteId = $request->request->get('form-litige-palette_' . $idProduitReceptionne . '_' . $p);
+                        // dd($paletteId);
                         $palette = $entityManager->getRepository(Palette::class)->find($paletteId);
                         $codeCouleur = $palette->getCodeCouleur();
                         $paletteProduit->setPalette($palette);
@@ -308,7 +318,7 @@ class FormulaireLitigeController extends AbstractController
             'commentaire' => $commentaireRetour,
             'retourProduits' => $retourProduitsAReceptionner,
             'id' => $id,
-            'palettes' => $palettes
+            'palettes' => $PalettesForSelect
         ]);
     }
 }
