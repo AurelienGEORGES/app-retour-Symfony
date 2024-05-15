@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Retour;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,29 +15,30 @@ class SearchRetourType extends AbstractType
         $builder
             ->add('numRetour', TextType::class, [
                 'label' => 'N° RET, RETSA, NT',
-                'attr' => ['class' => 'form-control fs-1 fw-bold border-primary border-3'],
+                'attr' => ['class' => 'form-control fs-3 fw-normal border-dark border-2 input-desktop'],
                 'required' => false,
             ])
             ->add('prenomClient', TextType::class, [
                 'label' => 'Prénom client',
-                'attr' => ['class' => 'form-control fs-1 fw-bold border-primary border-3'],
+                'attr' => ['class' => 'form-control fs-3 fw-normal border-dark border-2 input-desktop'],
                 'required' => false,
             ])
             ->add('nomClient', TextType::class, [
                 'label' => 'Nom client',
-                'attr' => ['class' => 'form-control fs-1 fw-bold border-primary border-3'],
+                'attr' => ['class' => 'form-control fs-3 fw-normal border-dark border-2 input-desktop'],
                 'required' => false,
             ])
             ->add('transporteur', ChoiceType::class, [
                 'label' => 'Transporteur',
                 'choices' => [
-                    'shenker' => 'shenker',
+                    'schenker' => 'schenker',
                     'dpd' => 'dpd',
                     'mazet' => 'mazet',
-                    'geodis' => 'geodis',
+                    'calberson' => 'Calberson',
                     'gls' => 'gls',
+                    'vir' => 'vir'
                 ],
-                'attr' => ['class' => 'form-select fs-1 fw-bold border-primary border-2'],
+                'attr' => ['class' => 'form-select fs-3 fw-normal border-dark border-2 input-desktop'],
                 'required' => false,
                 'placeholder' => 'Sélectionnez',
             ]);

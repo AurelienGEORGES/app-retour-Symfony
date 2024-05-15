@@ -4,51 +4,60 @@
 {% endblock %}
 
 {% block body %}
-	<h1 class="text-white my-5 fs-1 fw-bold text-center">recherche attendus ou sans attendus</h1>
-	<div class="border border-2 border-primary mx-1 rounded-3">
-		{{ form_start(form) }}
-		<div class='m-1'>
-			{{ form_label(form.numRetour, 'N° RET, RETSA, NT', {'label_attr': {'class': 'form-label text-white fs-3 fw-bold fs-1'}}) }}
-			{{ form_widget(form.numRetour) }}
+	<h1 class="text-white my-5 fs-1 fw-normal text-center mx-2">recherche attendus ou sans attendus</h1>
+	<div class="d-flex justify-content-center">
+		<div class="border border-2 border-warning mx-1 rounded-4 d-flex flex-column input-desktop">
+			{{ form_start(form) }}
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_label(form.numRetour, 'ID RET, NT', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_widget(form.numRetour) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_label(form.prenomClient, 'Prénom client', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_widget(form.prenomClient) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_label(form.nomClient, 'Nom client', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_widget(form.nomClient) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_label(form.transporteur, 'Transporteur', {'label_attr': {'class': 'form-label text-warning fs-3 fw-normal'}}) }}
+			</div>
+			<div class='m-2 d-flex justify-content-center'>
+				{{ form_widget(form.transporteur) }}
+			</div>
+			<div class='d-flex justify-content-center'>
+				<button type="submit" class="btn btn-outline-warning my-3 border-2 rounded-5">
+					<span class='fs-2 fw-normal'>Recherche</span>
+				</button>
+			</div>
+			{{ form_end(form) }}
 		</div>
-		<div class='m-1'>
-			{{ form_label(form.prenomClient, 'Prénom client', {'label_attr': {'class': 'form-label text-white fs-3 fw-bold fs-1'}}) }}
-			{{ form_widget(form.prenomClient) }}
-		</div>
-		<div class='m-1'>
-			{{ form_label(form.nomClient, 'Nom client', {'label_attr': {'class': 'form-label text-white fs-3 fw-bold fs-1'}}) }}
-			{{ form_widget(form.nomClient) }}
-		</div>
-		<div class='m-1'>
-			{{ form_label(form.transporteur, 'Transporteur', {'label_attr': {'class': 'form-label text-white fs-3 fw-bold fs-1'}}) }}
-			{{ form_widget(form.transporteur) }}
-		</div>
-		<div class='d-flex justify-content-center'>
-			<button type="submit" class="btn btn-outline-primary my-3 border-3">
-				<span class='fs-2 fw-bold p-1'>Recherche</span>
-			</button>
-		</div>
-		{{ form_end(form) }}
 	</div>
-	<h2 class="text-white my-5 fs-1 fw-bold text-center">résultats attendus/sans attendus</h2>
-	{% for retour in retours %}
+	<h2 class="text-white my-5 fs-1 fw-normal text-center mx-2">résultats attendus / sans attendus</h2>
+	{% for retour in listeRetours %}
 		<div class="d-flex justify-content-center">
 			<div>
-				<div class="card m-1 border-primary border-3" style="width: 15rem;">
+				<div class="card my-3 border-primary border-3 custom-width-desktop">
 					<div class="card-body">
-						<div class="container p-0 m-0">
-							{# <div class="form-check p-0 m-0">
-								<input class="form-check-input border-primary border-4 p-3 m-0" type="checkbox" id="CheckboxListe_{{ retour.id }}" onchange='isCheckedListe({{ retour.id }})'> #}
-								<label class="form-check-label m-0" for="CheckboxListe_{{ retour.id }}">
-									<span class='fs-1 fw-normal'>{{ retour.numretour }}</span>
-								</label>
-							{# </div> #}
-						</div>
-                        {% if retour.bordereau.numbordereau %}
-                        <p class="card-text m-0">
-							<span class='fs-1 fw-normal'>{{ retour.bordereau.numbordereau }}</span>
+						<p class="card-text m-0">
+							<span class='fs-1 fw-normal'>{{ retour.numretour }}</span>
 						</p>
-                        {% endif %}
+						{% if retour.bordereau is defined and retour.bordereau.numbordereau is defined %}
+							<p class="card-text m-0">
+								<span class='fs-2 fw-normal'>{{ retour.bordereau.numbordereau }}</span>
+							</p>
+						{% else %}
+							<p class="card-text m-0">
+								<span class='fs-2 fw-normal'>pas de bordereau.</span>
+							</p>
+						{% endif %}
 						<p class="card-text m-0">
 							<span class='fs-1 fw-normal'>{{ retour.prenomclient}}
 								{{ retour.nomclient}}</span>
@@ -56,25 +65,47 @@
 						<p class="card-text m-0">
 							<span class='fs-1 fw-normal'>{{ retour.transporteur }}</span>
 						</p>
+                        {% if retourComplet[loop.index0] %}
+							<p class="card-text m-0">
+								<span class='fs-3 fw-bold text-success'>Complet</span>
+							</p>
+						{% else %}
+							<p class="card-text m-0">
+								<span class='fs-3 fw-bold text-danger'>Incomplet</span>
+							</p>
+						{% endif %}
+						<p class="card-text m-0">
+							<span class='fs-1 fw-normal'>Produits du retour :</span>
+						</p>
 						{% for retourProduit in retour.retourProduits %}
 							<p class="card-text m-0">
-								<span class='fs-1 fw-normal'>{{ retourProduit.idproduit }}
+								<span class='fs-1 fw-normal'>- {{ retourProduit.idproduit }}
 									*
 									{{ retourProduit.quantite }}</span>
 							</p>
 						{% endfor %}
-						<div class='d-flex flex-row'>
+						<p class="card-text m-0">
+							<span class='fs-1 fw-normal'>Produits déjà réceptionnés :</span>
+						</p>
+						{% for retourProduit in retour.RetourProduitReceptionnes %}
+							<p class="card-text m-0">
+								<span class='fs-1 fw-normal'>- {{ retourProduit.idproduit }}
+									*
+									{{ retourProduit.quantite }}</span>
+							</p>
+						{% endfor %}
+						<div class='d-flex flex-row justify-content-center'>
 							<div>
-								<button type="button" class="btn btn-outline-primary m-2 border-2">
+								<button type="button" class="btn btn-outline-primary m-2 border-2 rounded-5">
 									<a href="{{ path('app_formulaire_litige', {'id': retour.id}) }}">
-										<span class='fs-2 fw-bold'>Avec litige</span>
+										<span class='fs-2 fw-normal'>Avec litige</span>
 									</a>
 								</button>
 							</div>
 							<div>
-								<button type="button" class="btn btn-outline-primary m-2 border-2">
-									<a href="{{ path('app_formulaire_sans_litige', {'id': retour.id}) }}">
-										<span class='fs-2 fw-bold'>Sans litige</span>
+								<button type="button" class="btn btn-outline-primary m-2 border-2 rounded-5">
+									<a href="{{ path('app_formulaire_sans_litige', {'id': retour.id}) }}" class='fs-2 fw-normal'>
+										Sans litige
 									</a>
 								</button>
 							</div>
@@ -83,5 +114,57 @@
 				</div>
 			</div>
 		</div>
+	{% endfor %}
+	{% for listeRetourNT in listeRetoursNT %}
+		<form method="post" action="{{ path('app_liste_attendus') }}" class="d-flex justify-content-center">
+			<div>
+				<div class="card my-3 border-primary border-3 custom-width-desktop">
+					<div class="card-body">
+						<p class="card-text m-0">
+							<span class='fs-1 fw-normal'>{{ listeRetourNT.retour_NT.REF_MORIN }}</span>
+						</p>
+						<input type="hidden" value="{{ listeRetourNT.retour_NT.ID }}" name="cmd_id"/>
+						<p class="card-text m-0">
+							<span class='fs-1 fw-normal'>{{ listeRetourNT.retour_NT.CLIENT.NOM}}
+								{{ listeRetourNT.retour_NT.CLIENT.PRENOM}}</span>
+						</p>
+						<input type="hidden" value="{{ listeRetourNT.retour_NT.CLIENT.NOM }}" name="cmd_nom_client"/>
+						<input type="hidden" value="{{ listeRetourNT.retour_NT.CLIENT.PRENOM }}" name="cmd_prenom_client"/>
+						<p class="card-text m-0">
+							<span class='fs-1 fw-normal'>{{ listeRetourNT.retour_NT.TRANSPORTEUR.LIBELLE }}</span>
+						</p>
+						<input type="hidden" value="{{ listeRetourNT.retour_NT.TRANSPORTEUR.LIBELLE }}" name="cmd_transpoteur"/>
+						{% for produit in listeRetourNT.produits_NT.0 %}
+							{% if produit.COMPOSANTS is not defined %}
+								<p class="card-text m-0">
+									<span class='fs-1 fw-normal'>{{ produit.ID_PRODUIT }}
+										*
+										{{ produit.QTY }}</span>
+								</p>
+								<input type="hidden" value="{{ produit.ID_PRODUIT }}" name="produit_id[]"/>
+								<input type="hidden" value="{{ produit.QTY }}" name="produit_qty[]"/>
+							{% else %}
+								{% for produitComposant in produit.COMPOSANTS %}
+									<p class="card-text m-0">
+										<span class='fs-1 fw-normal'>{{ produitComposant.ID_PRODUIT }}
+											*
+											{{ produitComposant.QTY_PRODUIT }}</span>
+									</p>
+									<input type="hidden" value="{{ produitComposant.ID_PRODUIT }}" name="composant_id[]"/>
+									<input type="hidden" value="{{ produitComposant.QTY_PRODUIT }}" name="composant_qty[]"/>
+								{% endfor %}
+							{% endif %}
+						{% endfor %}
+						<div class='d-flex flex-row justify-content-center'>
+							<div>
+								<button type="submit" class="btn btn-outline-primary m-2 border-2 rounded-5">
+									<span class='fs-2 fw-normal'>Convertir en RETSA</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
 	{% endfor %}
 {% endblock %}
