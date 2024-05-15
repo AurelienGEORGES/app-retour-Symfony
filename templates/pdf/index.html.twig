@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pdf
+{% endblock %}
+
+{% block body %}
+	<h1>Bordereau Negolux</h1>
+	<h2>Destination : {{ depot }}</h2>
+    <h2>couleur : {{ codeCouleur }}</h2> 
+    <h2>N° palette : {{ numero }}</h2>
+	<h2>Liste des produits : </h2>
+	{% for produit in produits %}
+		<h3>- id produit :
+			{{ produit.idProduit }}
+			* quantité
+			{{ produit.quantite }}</h3>
+	{% endfor %}
+{% endblock %}

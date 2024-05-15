@@ -4,116 +4,131 @@
 {% endblock %}
 
 {% block body %}
-	<h1 class="text-white my-5 fs-1 mx-2 fw-bold text-center">Ajouter des produits à la reception
+	{% set csrfTokenSansLitige = csrf_token('form-sans-litige') %}
+	{% for message in app.flashes('notice') %}
+		<div {{ react_component('FlashMessage', props={'message': message } ) }}></div>
+	{% endfor %}
+	<h1 class="text-white my-5 fs-3 mx-2 fw-normal text-center">Reception
 		{{ numretour }}
 		sans litige</h1>
-        <form method="post" action="{{ path('app_formulaire_sans_litige', {'id': id}) }}">
-	<div class="m-3">
-		<label for="transporteur-form-sans-litige" class="form-label">
-			<span class='fs-1 fw-bold text-warning'>Transporteur</span>
-		</label>
-		<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="transporteur-form-sans-litige" name="transporteur-form-sans-litige">
-			<option value="{{ transporteur }}" class='fs-1 fw-bold'>{{ transporteur }}</option>
-			<option value="shenker" class='fs-1 fw-bold'>shenker</option>
-			<option value="dpd" class='fs-1 fw-bold'>dpd</option>
-			<option value="mazet" class='fs-1 fw-bold'>mazet</option>
-			<option value="geodis" class='fs-1 fw-bold'>geodis</option>
-			<option value="gls" class='fs-1 fw-bold'>gls</option>
-		</select>
-	</div>
-	{% for retourProduit in retourProduits %}
-		<div class='border rounded-3 border-warning border-2 mx-1 my-4'>
-			<div class='d-flex justify-content-center my-3'>
-				<button type="button" class="btn btn-outline-warning mt-3 mb-2 border-2 rounded-5">
-					<span class='fs-2 fw-bold p-2'>Scan produit</span>
-				</button>
-			</div>
+	{# <h1 class="text-white my-5 fs-3 mx-2 fw-normal text-center">{{ ifRetourNT }}</h1> #}
+	<form method="post" action="{{ path('app_formulaire_sans_litige', {'id': id}) }}">
+		<div class="d-flex justify-content-center">
 			<div class="m-3">
-				<label for="id-form-sans-litige_{{ retourProduit.id }}" class="form-label">
-					<span class='fs-1 fw-bold text-warning'>ID produit</span>
+				<label for="transporteur-form-sans-litige" class="form-label">
+					<span class='fs-3 fw-normal text-warning'>Transporteur</span>
 				</label>
-				<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-sans-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.idproduit }}" name="id-form-sans-litige_{{ retourProduit.id }}">
-			</div>
-			<div class="m-3">
-				<label for="code-couleur-form-sans-litige_{{ retourProduit.id }}" class="form-label">
-					<span class='fs-1 fw-bold text-warning'>Code couleur</span>
-				</label>
-				<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="code-couleur-form-sans-litige_{{ retourProduit.id }}" name="code-couleur-form-sans-litige_{{ retourProduit.id }}">
-					<option value="vert" class='fs-1 fw-bold'>vert</option>
-					<option value="jaune" class='fs-1 fw-bold'>jaune</option>
-					<option value="orange" class='fs-1 fw-bold'>orange</option>
-					<option value="rouge" class='fs-1 fw-bold'>rouge</option>
-					<option value="noir" class='fs-1 fw-bold'>noir</option>
+				<select class="form-select fs-3 fw-normal border-dark border-2" id="transporteur-form-sans-litige" name="transporteur-form-sans-litige">
+					<option value="{{ transporteur }}" class='fs-3 fw-normal'>{{ transporteur }}</option>
+					<option value="DB Schenker" class='fs-3 fw-normal'>DB Schenker</option>
+					<option value="DPD" class='fs-3 fw-normal'>DPD</option>
+					<option value="Mazet" class='fs-3 fw-normal'>Mazet</option>
+					<option value="Calberson" class='fs-3 fw-normal'>Calberson</option>
+					<option value="GLS" class='fs-3 fw-normal'>GLS</option>
+					<option value="VIR" class='fs-3 fw-normal'>VIR</option>
 				</select>
-			</div>
-			<div class="m-3">
-				<div class="form-group">
-					<label for="quantite-form-sans-litige_{{ retourProduit.id }}">
-						<span class='fs-1 fw-bold text-warning'>Quantité</span>
-					</label>
-					<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="quantite-form-sans-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.quantite }}" name="quantite-form-sans-litige_{{ retourProduit.id }}"/>
-				</div>
-			</div>
-			<div class='ms-3 my-5 d-flex justify-content-center'>
-				<button type="button" class="btn btn-outline-warning border-2 rounded-5">
-					<span class='fs-2 fw-bold p-2'>Supprimmer</span>
-				</button>
 			</div>
 		</div>
-	{% endfor %}
-	<div id="ajoutProduit"></div>
-	<div class="d-flex justify-content-center my-4">
-		<button type="button" class="btn btn-outline-warning m-2 border-2 rounded-5" onclick="ajoutProduit()">
-			<span class='fs-2 fw-bold p-2'>Ajouter produit</span>
-		</button>
-	</div>
-	<div class='ms-3 my-5 d-flex justify-content-center'>
-		<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
-			<span class='fs-2 fw-bold p-2'>Enregistrer</span>
-		</button>
-	</div>
-</form>
-<script type="text/javascript">
-		function ajoutProduit() {
+		{% for retourProduit in retourProduits %}
+			<div class="d-flex justify-content-center">
+				<div class='border rounded-3 border-warning border-2 mx-1 my-4 custom-width-desktop'>
+					<div class='d-flex justify-content-center flex-column'>
+						<div class='d-flex justify-content-center'>
+							<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga({{ retourProduit.id }})">
+								<span class='fs-3 fw-normal'>Scan produit</span>
+							</button>
+						</div>
+						<div class='d-flex justify-content-center'>
+							<div id='scan_{{ retourProduit.id }}' class='d-flex justify-content-center flex-column scan mt-3'></div>
+						</div>
+					</div>
+					<div class="m-3">
+						<label for="id-form-sans-litige_{{ retourProduit.id }}" class="form-label">
+							<span class='fs-3 fw-normal text-warning'>ID produit</span>
+						</label>
+						<input type="number" class="form-control fs-3 fw-normal border-dark border-2" id="id-form-sans-litige_{{ retourProduit.id }}" value="{{ retourProduit.idproduit }}" name="id-form-sans-litige_{{ retourProduit.id }}">
+					</div>
+					{% for i in 1..retourProduit.quantite %}
+						<div class="m-3">
+							<label for="form-sans-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" class="form-label">
+								<span class='fs-3 fw-normal text-warning'>Palette produit
+									{{ i }}</span>
+							</label>
+							<select class="form-select w-100 fs-3 fw-normal border-dark border-3 rounded-3" id="form-sans-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" name="form-sans-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" required>
+								{% for palette in palettes %}
+									<option value="{{ palette.id }}" class='fs-3 fw-normal'>N°{{ palette.id }}
+										{{ palette.codeCouleur }}</option>
+								{% endfor %}
+								<option value="pas-de-produit" class='fs-3 fw-normal'>pas de produit</option>
+							</select>
+						</div>
+					{% endfor %}
+					<div class='ms-3 my-5 d-flex justify-content-center'>
+						<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
+							<span class='fs-3 fw-normal'>Supprimer</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		<div id="ajoutProduit"></div>
+		<div class="d-flex justify-content-center my-5">
+			<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="ajoutProduit()">
+				<span class='fs-3 fw-normal'>Ajouter produit</span>
+			</button>
+		</div>
+		<div class='my-5 d-flex justify-content-center'>
+			<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
+				<span class='fs-3 fw-normal'>Enregistrer</span>
+			</button>
+		</div>
+		<input type="hidden" name="_token" value="{{ csrfTokenSansLitige }}">
+	</form>
+	<script type="text/javascript">
+		let compteurSans = 0;
+function ajoutProduit() {
 let container = document.createElement('div');
-container.className = 'border rounded-3 border-warning border-2 m-1';
-
-// Ajoutez les champs de formulaire au conteneur
+container.className = 'd-flex justify-content-center';
 container.innerHTML = `
-        <div class='d-flex justify-content-center my-3'>
-            <button type="button" class="btn btn-outline-warning mt-3 mb-2 border-2 rounded-5">
-                <span class='fs-2 fw-bold p-2'>Scan produit</span>
-            </button>
-        </div>
+<div class="border rounded-3 border-warning border-2 mx-1 my-4 custom-width-desktop">
+        <div class='d-flex justify-content-center flex-column m-3'>
+					<div class='d-flex justify-content-center'>
+						<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga_on_add_product_sans(${compteurSans})">
+							<span class='fs-3 fw-normal'>Scan produit</span>
+						</button>
+					</div>
+					<div class='d-flex justify-content-center'>
+						<div id='scan_${compteurSans}' class='d-flex justify-content-center flex-column scan mt-3'></div>
+					</div>
+				</div>
         <div class="m-3">
-        <label for="id-form-sans-litige" class="form-label">
-					<span class='fs-1 fw-bold text-warning'>ID produit</span>
+        <label for="id-form-sans-litige_${compteurSans}" class="form-label">
+					<span class='fs-3 fw-normal text-warning'>ID produit</span>
 				</label>
-				<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-sans-litige" placeholder="remplir ou scanner" name="id-form-sans-litige[]">
+				<input type="number" class="form-control fs-3 fw-normal border-dark border-2" id="id-form-sans-litige_${compteurSans}" placeholder="id" name="id-form-sans-litige[]" required>
 			</div>
 			<div class="m-3">
-				<label for="code-couleur-form-sans-litige" class="form-label">
-					<span class='fs-1 fw-bold text-warning'>Code couleur</span>
-				</label>
-				<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="code-couleur-form-sans-litige" name="code-couleur-form-sans-litige[]">
-					<option value="vert" class='fs-1 fw-bold'>vert</option>
-					<option value="jaune" class='fs-1 fw-bold'>jaune</option>
-					<option value="orange" class='fs-1 fw-bold'>orange</option>
-					<option value="rouge" class='fs-1 fw-bold'>rouge</option>
-					<option value="noir" class='fs-1 fw-bold'>noir</option>
-				</select>
-			</div>
+							<label for="form-sans-litige-palette_${compteurSans}" class="form-label">
+								<span class='fs-3 fw-normal text-warning'>Palette produit</span>
+							</label>
+							<select class="form-select w-100 fs-3 fw-normal border-dark border-3 rounded-3" id="form-sans-litige-palette_${compteurSans}" name="form-sans-litige-palette[]" required>				
+									{% for palette in palettes %}
+									<option value="{{ palette.id }}" class='fs-3 fw-normal'>N°{{ palette.id }}
+										{{ palette.codeCouleur }}</option>
+								{% endfor %}		
+							</select>
+						</div>
 			<div class="m-3">
 				<div class="form-group">
 					<label for="quantite-form-sans-litige">
-						<span class='fs-1 fw-bold text-warning'>Quantité</span>
+						<span class='fs-3 fw-normal text-warning'>Quantité</span>
 					</label>
-					<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="quantite-form-sans-litige" placeholder="1" name="quantite-form-sans-litige[]"/>
+					<input type="number" min="1" class="form-control fs-3 fw-normal border-dark border-2" id="quantite-form-sans-litige" name="quantite-form-sans-litige[]" required value="1"/>
 				</div>
 			</div>
         <div class='ms-3 my-5 d-flex justify-content-center'>
-            <button type="button" class="btn btn-outline-warning border-2 rounded-5">
-                <span class='fs-2 fw-bold p-2'>Supprimer</span>
+            <button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
+                <span class='fs-3 fw-normal'>Supprimer</span>
             </button>
         </div>
     `;
@@ -121,7 +136,66 @@ container.innerHTML = `
 // Ajoutez le conteneur au formulaire
 let formulaire = document.getElementById('ajoutProduit');
 formulaire.appendChild(container);
+compteurSans--;
+}
+function supprimerProduit(event) { // Récupérer l'élément parent du bouton sur lequel on a cliqué
+var produitElement = event.target.closest('.border');
+
+// Supprimer l'élément parent
+produitElement.remove();
 }
 	</script>
-
+	<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.js"></script>
+	<script type="text/javascript">
+		function load_quagga(idInput) {
+if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+Quagga.init({
+inputStream: {
+name: "Live",
+type: "LiveStream",
+target: document.querySelector('#scan_' + idInput)
+},
+decoder: {
+readers: ["ean_reader"]
+}
+}, function (err) {
+if (err) {
+console.log(err);
+return
+}
+console.log("Initialization finished. Ready to start");
+Quagga.start();
+});
+Quagga.onDetected(function (data) {
+document.querySelector('#id-form-sans-litige_' + idInput).value = data.codeResult.code;
+Quagga.stop();
+});
+}
+}
+function load_quagga_on_add_product_sans(compteurSans) {
+if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+Quagga.init({
+inputStream: {
+name: "Live",
+type: "LiveStream",
+target: document.querySelector('#scan_' + compteurSans)
+},
+decoder: {
+readers: ["ean_reader"]
+}
+}, function (err) {
+if (err) {
+console.log(err);
+return
+}
+console.log("Initialization finished. Ready to start");
+Quagga.start();
+});
+Quagga.onDetected(function (data) {
+document.querySelector('#id-form-sans-litige_' + compteurSans).value = data.codeResult.code;
+Quagga.stop();
+});
+}
+}
+	</script>
 {% endblock %}

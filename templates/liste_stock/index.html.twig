@@ -1,143 +1,113 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ListeStockController!
+{% block title %}Liste du Stock
 {% endblock %}
 
 {% block body %}
-	<h1 class="text-white my-5 fs-1 fw-bold text-center">Liste du stock</h1>
+	{% set csrfTokenStock = csrf_token('form-stock') %}
+	<h1 class="text-white my-5 fs-1 fw-normal text-center">Liste du stock</h1>
 	<div class="border border-2 border-light rounded-3 mx-2 my-5">
 		<h2 class="text-white my-5 fs-1 fw-bold text-center">Import du stock</h2>
 		<a class='text-white m-3'>lien vers le modèle</a>
-		<div class="form-group m-3">
-			<div class="input-group">
-				<div class="custom-file">
-					<input type="file" class="form-control text-light" id="exampleFile" aria-describedby="fileHelp"/>
+		<form action="{{ path('app_liste_stock') }}" method="post" enctype="multipart/form-data">
+			<div class="form-group m-3">
+				<div class="input-group">
+					<div class="custom-file">
+						<input type="file" class="form-control text-light" id="csvFileInput" name="csv_file" aria-describedby="fileHelp" accept=".csv"/>
+					</div>
+					<p id="fileHelp" class="text-light">Format pris en charge csv.</p>
 				</div>
-				<p id="fileHelp" class="text-light">Format pris en charge csv.</p>
 			</div>
-		</div>
-	</div>
-	<div class='border rounded-3 border-info border-2 mx-2 my-5'>
-		<h3 class="text-white my-5 fs-1 fw-bold text-center">Recherche produit</h3>
-		<form method="get" action="{{ path('app_liste_stock') }}">
-			<div class="m-3">
-				<label for="recherche-stock-code-couleur" class="form-label">
-					<span class='fs-1 fw-bold text-info'>Code couleur</span>
-				</label>
-				<select class="form-select w-75 fs-1 fw-bold border-info border-2" id="recherche-stock-code-couleur" name="recherche-stock-code-couleur">
-					<option value="" class='fs-1 fw-bold'>choisir</option>
-					<option value="vert" class='fs-1 fw-bold'>vert</option>
-					<option value="jaune" class='fs-1 fw-bold'>jaune</option>
-					<option value="orange" class='fs-1 fw-bold'>orange</option>
-					<option value="rouge" class='fs-1 fw-bold'>rouge</option>
-					<option value="noir" class='fs-1 fw-bold'>noir</option>
-				</select>
-			</div>
-			<div class="m-3">
-				<label for="recherche-stock-id-produit" class="form-label">
-					<span class='fs-1 fw-bold text-info'>ID produit</span>
-				</label>
-				<input type="text" class="form-control fs-1 fw-bold border-info border-2" id="recherche-stock-id-produit" placeholder="ID" name="recherche-stock-id-produit">
-			</div>
-			<div class='d-flex justify-content-center mb-4'>
-				<button type="submit" class="btn btn-outline-info my-2 border-2 rounded-5">
-					<span class='fs-2 fw-bold p-2'>Rechercher</span>
-				</button>
-			</div>
+			<button type="submit" class="btn btn-outline-light m-2 border-2 rounded-5">
+				<span class='fs-2 fw-normal'>Envoyer CSV</span>
+			</button>
 		</form>
 	</div>
-	<h4 class="text-white my-5 fs-1 fw-bold text-center">Résultat de la recherche</h4>
+	<div class="d-flex justify-content-center">
+		<div class='border rounded-3 border-warning border-2 mx-2 my-5 input-desktop'>
+			<form method="get" action="{{ path('app_liste_stock') }}">
+				<div class="form-group m-3">
+					<label for="recherche-stock-code-couleur" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Code couleur :</span>
+					</label>
+					<select class="form-select fs-3 fw-normal border-dark border-2" id="recherche-stock-code-couleur" name="recherche-stock-code-couleur">
+						<option value="" class='fs-3 fw-normal'>choisir</option>
+						<option value="vert" class='fs-3 fw-normal'>vert</option>
+						<option value="jaune" class='fs-3 fw-normal'>jaune</option>
+						<option value="orange" class='fs-3 fw-normal'>orange</option>
+						<option value="rouge" class='fs-3 fw-normal'>rouge</option>
+						<option value="noir" class='fs-3 fw-normal'>noir</option>
+                        <option value="SAV" class='fs-3 fw-normal'>SAV</option>
+					</select>
+				</div>
+				<div class="form-group m-3">
+					<label for="recherche-stock-id-produit" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>ID produit :</span>
+					</label>
+					<input type="text" class="form-control fs-3 fw-normal border-dark border-2" id="recherche-stock-id-produit" placeholder="ID" name="recherche-stock-id-produit">
+				</div>
+				<div class="form-group m-3">
+					<label for="recherche-stock-date-reception" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Date :</span>
+					</label>
+					<input type="date" name="recherche-stock-date-reception" class="form-control fs-3 fw-normal border-dark border-2" id="recherche-stock-date-reception"/>
+				</div>
+				<div class='d-flex justify-content-center mb-4'>
+					<button type="submit" class="btn btn-outline-warning my-2 border-2 rounded-5">
+						<span class='fs-2 fw-normal'>Rechercher</span>
+					</button>
+				</div>
+				<input type="hidden" name="_token" value="{{ csrfTokenStock }}">
+			</form>
+		</div>
+	</div>
+	<h4 class="text-white my-5 fs-1 fw-normal text-center mx-1">Résultat de la recherche</h4>
 	<div class="d-flex justify-content-center mb-5">
 		<div>
 			<div class="d-flex flex-column">
-				{% for stockProduitsReceptionne in stockProduitsReceptionnes %}
-					{% if stockProduitsReceptionne.codecouleur == 'vert' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: green; color: black;">
-								{{ stockProduitsReceptionne.idproduit }}
-								*
-								{{ stockProduitsReceptionne.quantite }}</p>
+				{% for produitPalette in produitsPalettes %}
+					<form method="get" action="{{ path('app_liste_stock') }}">
+						<div class="card my-4 border-primary border-3 custom-width-desktop">
+							<div class="card-body p-0 ps-2">
+								<p class="card-text m-0">
+									<span class='fs-3 fw-bold'>{{ produitPalette.idProduit }}
+										*
+										{{ produitPalette.quantite }}</span>
+								</p>
+								<p class="card-text m-0">
+									<span class='fs-3 fw-bold'>{{ produitPalette.dateReception|date('d/m/Y H:i:s') }}</span>
+								</p>
+								<p class="card-text m-0">
+									<span class='fs-3 fw-bold'>palette N°{{ produitPalette.getPalette() }}
+										-
+										{{ produitPalette.codeCouleur }}</span>
+								</p>
+								<p class="card-text m-0 fs-3">Modification palettes</p>
+								{% for i in 1..produitPalette.quantite %}
+									<div class="m-3">
+										<label for="form-modif-palette_{{ i }}" class="form-label">
+											<span class='fs-3 fw-normal'>Palette produit
+												{{ i }}</span>
+										</label>
+										<select class="form-select w-100 fs-3 fw-normal border-dark border-3 rounded-3" id="form-modif-palette_{{ i }}" name="form-modif-palette_{{ i }}" required>
+											<option value="{{ produitPalette.getPalette() }}" class='fs-3 fw-normal'>N°{{ produitPalette.getPalette() }}
+												{{ produitPalette.codeCouleur }}</option>
+											{% for palette in palettes %}
+												<option value="{{ palette.id }}" class='fs-3 fw-normal'>N°{{ palette.id }}
+													{{ palette.codeCouleur }}</option>
+											{% endfor %}
+										</select>
+									</div>
+								{% endfor %}
+								<div class='d-flex justify-content-center mb-2'>
+									<button type="submit" class="btn btn-outline-primary my-2 border-2 rounded-5">
+										<span class='fs-3 fw-normal'>Modifier</span>
+									</button>
+								</div>
+							</div>
 						</div>
-					{% endif %}
-					{% if stockProduitsReceptionne.codecouleur == 'orange' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: orange; color: black;">
-								{{ stockProduitsReceptionne.idproduit }}
-								*
-								{{ stockProduitsReceptionne.quantite }}</p>
-						</div>
-					{% endif %}
-					{% if stockProduitsReceptionne.codecouleur == 'jaune' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: yellow; color: black;">
-								{{ stockProduitsReceptionne.idproduit }}
-								*
-								{{ stockProduitsReceptionne.quantite }}</p>
-						</div>
-					{% endif %}
-					{% if stockProduitsReceptionne.codecouleur == 'rouge' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: red; color: black;">
-								{{ stockProduitsReceptionne.idproduit }}
-								*
-								{{ stockProduitsReceptionne.quantite }}</p>
-						</div>
-					{% endif %}
-					{% if stockProduitsReceptionne.codecouleur == 'noir' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: black; color: white;">
-								{{ stockProduitsReceptionne.idproduit }}
-								*
-								{{ stockProduitsReceptionne.quantite }}</p>
-						</div>
-					{% endif %}
-				{% endfor %}
-				{% for stockProduitsLibre in stockProduitsLibres %}
-					{% if stockProduitsLibre.codecouleur == 'vert' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: green; color: black;">
-								{{ stockProduitsLibre.idproduit }}
-								*
-								{{ stockProduitsLibre.quantite }}
-							</p>
-						</div>
-					{% endif %}
-					{% if stockProduitsLibre.codecouleur == 'orange' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: orange; color: black;">
-								{{ stockProduitsLibre.idproduit }}
-								*
-								{{ stockProduitsLibre.quantite }}
-							</p>
-						</div>
-					{% endif %}
-					{% if stockProduitsLibre.codecouleur == 'jaune' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: yellow; color: black;">
-								{{ stockProduitsLibre.idproduit }}
-								*
-								{{ stockProduitsLibre.quantite }}
-							</p>
-						</div>
-					{% endif %}
-					{% if stockProduitsLibre.codecouleur == 'rouge' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: red; color: black;">
-								{{ stockProduitsLibre.idproduit }}
-								*
-								{{ stockProduitsLibre.quantite }}
-							</p>
-						</div>
-					{% endif %}
-					{% if stockProduitsLibre.codecouleur == 'noir' %}
-						<div>
-							<p class='fs-2 fw-bold p-2 text-center' style="background-color: black; color: white;">
-								{{ stockProduitsLibre.idproduit }}
-								*
-								{{ stockProduitsLibre.quantite }}
-							</p>
-						</div>
-					{% endif %}
+						<input type="hidden" value="{{ produitPalette.id }}" name="id-produit-form-modif-palette"/>
+					</form>
 				{% endfor %}
 			</div>
 		</div>

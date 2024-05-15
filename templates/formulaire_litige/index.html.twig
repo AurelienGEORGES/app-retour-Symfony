@@ -4,172 +4,398 @@
 {% endblock %}
 
 {% block body %}
-	<h1 class="text-white my-5 mx-2 fs-1 fw-bold text-center">Ajouter des produits à la reception
+	{% set csrfTokenLitige = csrf_token('form-litige') %}
+	{% for message in app.flashes('notice') %}
+		<div {{ react_component('FlashMessage', props={'message': message } ) }}></div>
+	{% endfor %}
+	<h1 class="text-white my-5 mx-2 fs-3 fw-normal text-center">Reception
 		{{ numretour }}
 		avec litige</h1>
 	<form method="post" enctype="multipart/form-data" action="{{ path('app_formulaire_litige', {'id': id}) }}">
-		<div class="m-2">
-			<div class="input-group">
-				<label class="input-group-text" for="inputGroupFile01">photo 1</label>
-				<input type="file" accept="image/*" capture="camera" id="inputGroupFile01" class="form-control" name="photo1">
-			</div>
-		</div>
-		<div class="m-2">
-			<div class="input-group">
-				<label class="input-group-text" for="inputGroupFile02">photo 2</label>
-				<input type="file" accept="image/*" capture="camera" id="inputGroupFile02" class="form-control" name="photo2">
-			</div>
-		</div>
-		<div class="m-2">
-			<div class="input-group">
-				<label class="input-group-text" for="inputGroupFile03">photo 3</label>
-				<input type="file" accept="image/*" capture="camera" id="inputGroupFile03" class="form-control" name="photo3">
-			</div>
-		</div>
-		<div class="m-2">
-			<div class="input-group">
-				<label class="input-group-text" for="inputGroupFile04">photo 4</label>
-				<input type="file" accept="image/*" capture="camera" id="inputGroupFile04" class="form-control" name="photo4">
-			</div>
-		</div>
-		<div class="m-2">
-			<div class="input-group">
-				<label class="input-group-text" for="inputGroupFile05">photo 5</label>
-				<input type="file" accept="image/*" capture="camera" id="inputGroupFile05" class="form-control" name="photo5">
-			</div>
-		</div>
-		<div class="m-3">
-			<label for="transporteur-form-litige" class="form-label">
-				<span class='fs-1 fw-bold text-warning'>Transporteur</span>
-			</label>
-			<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="transporteur-form-litige" name="transporteur-form-litige">
-				<option value="{{ transporteur }}" class='fs-1 fw-bold'>{{ transporteur }}</option>
-				<option value="shenker" class='fs-1 fw-bold'>shenker</option>
-				<option value="dpd" class='fs-1 fw-bold'>dpd</option>
-				<option value="mazet" class='fs-1 fw-bold'>mazet</option>
-				<option value="geodis" class='fs-1 fw-bold'>geodis</option>
-				<option value="gls" class='fs-1 fw-bold'>gls</option>
-			</select>
-		</div>
-		<div class="m-3">
-			<label for="etat-form-litige" class="form-label">
-				<span class='fs-1 fw-bold text-warning'>Etat du colis</span>
-			</label>
-			<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="etat-form-litige" name="etat-form-litige">
-				<option value="brisé" class='fs-1 fw-bold'>brisé</option>
-				<option value="cassé" class='fs-1 fw-bold'>cassé</option>
-				<option value="tordu" class='fs-1 fw-bold'>tordu</option>
-				<option value="déchiré" class='fs-1 fw-bold'>déchiré</option>
-				<option value="abimé" class='fs-1 fw-bold'>abimé</option>
-			</select>
-		</div>
-		<div class="m-3">
-			<label for="commentaire-form-litige">
-				<span class='fs-1 fw-bold text-warning'>Commentaires</span>
-			</label>
-			<textarea class="form-control fs-2 fw-bold mt-3 border-warning border-2 " id="commentaire-form-litige" style="height: 150px; width: 15rem;" name="commentaire-form-litige"></textarea>
-		</div>
-		{% for retourProduit in retourProduits %}
-			<div class='border rounded-3 border-warning border-2 mx-1 my-4'>
-				<div class='d-flex justify-content-center my-3'>
-					<button type="button" class="btn btn-outline-warning mt-3 mb-2 border-2 rounded-5">
-						<span class='fs-2 fw-bold p-2'>Scan produit</span>
+		<div class="accordion mx-1 border border-4 border-dark rounded-3 input-desktop" id="accordionExample">
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+						Photo 1
 					</button>
-				</div>
-				<div class="m-3">
-					<label for="id-form-litige_{{ retourProduit.id }}" class="form-label">
-						<span class='fs-1 fw-bold text-warning'>ID produit</span>
-					</label>
-					<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.idproduit }}" name="id-form-litige_{{ retourProduit.id }}">
-				</div>
-				<div class="m-3">
-					<label for="code-couleur-form-litige_{{ retourProduit.id }}" class="form-label">
-						<span class='fs-1 fw-bold text-warning'>Code couleur</span>
-					</label>
-					<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="code-couleur-form-litige_{{ retourProduit.id }}" name="code-couleur-form-litige_{{ retourProduit.id }}">
-						<option value="vert" class='fs-1 fw-bold'>vert</option>
-						<option value="jaune" class='fs-1 fw-bold'>jaune</option>
-						<option value="orange" class='fs-1 fw-bold'>orange</option>
-						<option value="rouge" class='fs-1 fw-bold'>rouge</option>
-						<option value="noir" class='fs-1 fw-bold'>noir</option>
-					</select>
-				</div>
-				<div class="m-3">
-					<div class="form-group">
-						<label for="quantite-form-litige_{{ retourProduit.id }}">
-							<span class='fs-1 fw-bold text-warning'>Quantité</span>
-						</label>
-						<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="quantite-form-litige_{{ retourProduit.id }}" placeholder="{{ retourProduit.quantite }}" name="quantite-form-litige_{{ retourProduit.id }}"/>
+				</h2>
+				<div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<div class='d-flex justify-content-center flex-column my-3'>
+							{% if photo1 %}
+								<p class='fs-3 fw-normal text-center'>Photo 1 déjà prise avec
+									{{ photoIdProduit1 }}</p>
+							{% else %}
+								<p class='fs-3 fw-normal text-center'>Photo 1 libre</p>
+							{% endif %}
+							<div {{ react_component('Photo', props={video: 'video1', canvas: 'canvas1', photoBordereau: 'photoBordereau1', photoInput: 'photoInput1', photo: 'photo1', nbClose: 1, nbPhoto: 1, nbVideo: 1 } ) }}></div>
+							{% if photo1 is empty %}
+								<div class="my-3">
+									<label for="produit-photo-id-1" class="form-label">
+										<span class='fs-3 fw-normal text-black'>ID produit</span>
+									</label>
+									<select class="form-select fs-3 fw-normal border-dark border-2" id="produit-photo-id-1" name="produit-photo-id-1">
+										<option value="" class='fs-3 fw-normal'>Choisir ID</option>
+										{% for retourProduit in retourProduits %}
+											<option value="{{ retourProduit.idproduit }}" class='fs-3 fw-normal'>{{ retourProduit.idproduit }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							{% endif %}
+						</div>
 					</div>
 				</div>
-				<div class='ms-3 my-5 d-flex justify-content-center'>
-					<button type="button" class="btn btn-outline-warning border-2 rounded-5">
-						<span class='fs-2 fw-bold p-2'>Supprimmer</span>
+			</div>
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+						Photo 2
 					</button>
+				</h2>
+				<div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<div class='d-flex justify-content-center flex-column my-3'>
+							{% if photo2 %}
+								<p class='fs-3 fw-normal text-center'>Photo 2 déjà prise avec
+									{{ photoIdProduit2 }}</p>
+							{% else %}
+								<p class='fs-3 fw-normal text-center'>Photo 2 libre</p>
+							{% endif %}
+							<div {{ react_component('Photo', props={video: 'video2', canvas: 'canvas2', photoBordereau: 'photoBordereau2', photoInput: 'photoInput2', photo: 'photo2', nbClose: 2, nbPhoto: 2, nbVideo: 2 } ) }}></div>
+							{% if photo2 is empty %}
+								<div class="my-3">
+									<label for="produit-photo-id-2" class="form-label">
+										<span class='fs-3 fw-normal text-black'>ID produit</span>
+									</label>
+									<select class="form-select fs-3 fw-normal border-dark border-2" id="produit-photo-id-2" name="produit-photo-id-2">
+										<option value="" class='fs-3 fw-normal'>Choisir ID</option>
+										{% for retourProduit in retourProduits %}
+											<option value="{{ retourProduit.idproduit }}" class='fs-3 fw-normal'>{{ retourProduit.idproduit }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+						Photo 3
+					</button>
+				</h2>
+				<div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<div class='d-flex justify-content-center flex-column my-3'>
+							{% if photo3 %}
+								<p class='fs-3 fw-normal text-center'>Photo 3 déjà prise avec
+									{{ photoIdProduit3 }}</p>
+							{% else %}
+								<p class='fs-3 fw-normal text-center'>Photo 3 libre</p>
+							{% endif %}
+							<div {{ react_component('Photo', props={video: 'video3', canvas: 'canvas3', photoBordereau: 'photoBordereau3', photoInput: 'photoInput3', photo: 'photo3', nbClose: 3, nbPhoto: 3, nbVideo: 3 } ) }}></div>
+							{% if photo3 is empty %}
+								<div class="my-3">
+									<label for="produit-photo-id-3" class="form-label">
+										<span class='fs-3 fw-normal text-black'>ID produit</span>
+									</label>
+									<select class="form-select fs-3 fw-normal border-dark border-2" id="produit-photo-id-3" name="produit-photo-id-3">
+										<option value="" class='fs-3 fw-normal'>Choisir ID</option>
+										{% for retourProduit in retourProduits %}
+											<option value="{{ retourProduit.idproduit }}" class='fs-3 fw-normal'>{{ retourProduit.idproduit }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+						Photo 4
+					</button>
+				</h2>
+				<div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<div class='d-flex justify-content-center flex-column my-3'>
+							{% if photo4 %}
+								<p class='fs-3 fw-normal text-center'>Photo 4 déjà prise avec
+									{{ photoIdProduit4 }}</p>
+							{% else %}
+								<p class='fs-3 fw-normal text-center'>Photo 4 libre</p>
+							{% endif %}
+							<div {{ react_component('Photo', props={video: 'video4', canvas: 'canvas4', photoBordereau: 'photoBordereau4', photoInput: 'photoInput4', photo: 'photo4', nbClose: 4, nbPhoto: 4, nbVideo: 4 } ) }}></div>
+							{% if photo4 is empty %}
+								<div class="my-3">
+									<label for="produit-photo-id-4" class="form-label">
+										<span class='fs-3 fw-normal text-black'>ID produit</span>
+									</label>
+									<select class="form-select fs-3 fw-normal border-dark border-2" id="produit-photo-id-4" name="produit-photo-id-4">
+										<option value="" class='fs-3 fw-normal'>Choisir ID</option>
+										{% for retourProduit in retourProduits %}
+											<option value="{{ retourProduit.idproduit }}" class='fs-3 fw-normal'>{{ retourProduit.idproduit }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+						Photo 5
+					</button>
+				</h2>
+				<div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+						<div class='d-flex justify-content-center flex-column my-3'>
+							{% if photo5 %}
+								<p class='fs-3 fw-normal text-center'>Photo 5 déjà prise avec
+									{{ photoIdProduit5 }}</p>
+							{% else %}
+								<p class='fs-3 fw-normal text-center'>Photo 5 libre</p>
+							{% endif %}
+							<div {{ react_component('Photo', props={video: 'video5', canvas: 'canvas5', photoBordereau: 'photoBordereau5', photoInput: 'photoInput5', photo: 'photo5', nbClose: 5, nbPhoto: 5, nbVideo: 5 } ) }}></div>
+							{% if photo5 is empty %}
+								<div class="my-3">
+									<label for="produit-photo-id-5" class="form-label">
+										<span class='fs-3 fw-normal text-black'>ID produit</span>
+									</label>
+									<select class="form-select fs-3 fw-normal border-dark border-2" id="produit-photo-id-5" name="produit-photo-id-5">
+										<option value="" class='fs-3 fw-normal'>Choisir ID</option>
+										{% for retourProduit in retourProduits %}
+											<option value="{{ retourProduit.idproduit }}" class='fs-3 fw-normal'>{{ retourProduit.idproduit }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="d-flex justify-content-center">
+			<div class="d-flex flex-column justify-content-center">
+				<div class="m-1 d-flex justify-content-center flex-column">
+					<label for="transporteur-form-litige" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Transporteur</span>
+					</label>
+					<select class="form-select fs-3 fw-normal border-dark border-2" id="transporteur-form-litige" name="transporteur-form-litige">
+						<option value="{{ transporteur }}" class='fs-3 fw-normal'>{{ transporteur }}</option>
+						<option value="DB Schenker" class='fs-3 fw-normal'>DB Schenker</option>
+						<option value="DPD" class='fs-3 fw-normal'>DPD</option>
+						<option value="Mazet" class='fs-3 fw-normal'>Mazet</option>
+						<option value="Calberson" class='fs-3 fw-normal'>Calberson</option>
+						<option value="GLS" class='fs-3 fw-normal'>GLS</option>
+						<option value="VIR" class='fs-3 fw-normal'>VIR</option>
+					</select>
+				</div>
+				<div class="m-1 d-flex justify-content-center flex-column">
+					<label for="etat-form-litige" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Etat du colis</span>
+					</label>
+					<select class="form-select fs-3 fw-normal border-dark border-2" id="etat-form-litige" name="etat-form-litige">
+						<option value="" class='fs-3 fw-normal'>choisir</option>
+						<option value="ouvert" class='fs-3 fw-normal'>ouvert</option>
+						<option value="manquant" class='fs-3 fw-normal'>manquant</option>
+						<option value="déchiré" class='fs-3 fw-normal'>déchiré</option>
+						<option value="troué" class='fs-3 fw-normal'>troué</option>
+						<option value="pas d'info" class='fs-3 fw-normal'>pas d'info</option>
+					</select>
+				</div>
+				<div class="m-1 d-flex justify-content-center flex-column">
+					<label for="etat-produit-form-litige" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Etat du produit</span>
+					</label>
+					<select class="form-select fs-3 fw-normal border-dark border-2" id="etat-produit-form-litige" name="etat-produit-form-litige">
+						<option value="" class='fs-3 fw-normal'>choisir</option>
+						<option value="pièce manquante" class='fs-3 fw-normal'>pièce manquante</option>
+						<option value="abimé" class='fs-3 fw-normal'>abimé</option>
+						<option value="pas d'info" class='fs-3 fw-normal'>pas d'info</option>
+					</select>
+				</div>
+				<div class="m-1 d-flex justify-content-center flex-column">
+					<label for="commentaire-form-litige">
+						<span class='fs-3 fw-normal text-warning'>Commentaires</span>
+					</label>
+					<textarea class="form-control fs-3 fw-normal mt-3 border-dark border-2" id="commentaire-form-litige" name="commentaire-form-litige" rows="5" cols="33">{{ commentaire }}</textarea>
+				</div>
+			</div>
+		</div>
+		{% for retourProduit in retourProduits %}
+			<div class="d-flex justify-content-center">
+				<div class='border rounded-3 border-warning border-2 mx-1 my-4 custom-width-desktop'>
+					<div class='d-flex justify-content-center flex-column'>
+						<div class='d-flex justify-content-center'>
+							<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga({{ retourProduit.id }})">
+								<span class='fs-3 fw-normal'>Scan produit</span>
+							</button>
+						</div>
+						<div class='d-flex justify-content-center'>
+							<div id='scan_{{ retourProduit.id }}' class='d-flex justify-content-center flex-column scan mt-3'></div>
+						</div>
+					</div>
+					<div class="m-3 d-flex justify-content-center flex-column">
+						<label for="id-form-litige_{{ retourProduit.id }}" class="form-label">
+							<span class='fs-3 fw-normal text-warning'>ID produit</span>
+						</label>
+						<input type="number" class="form-control fs-3 fw-normal border-dark border-2 input-desktop" id="id-form-litige_{{ retourProduit.id }}" name="id-form-litige_{{ retourProduit.id }}" required value="{{ retourProduit.idproduit }}">
+					</div>
+					{% for i in 1..retourProduit.quantite %}
+						<div class="m-3">
+							<label for="form-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" class="form-label">
+								<span class='fs-3 fw-normal text-warning'>Palette produit
+									{{ i }}</span>
+							</label>
+							<select class="form-select w-100 fs-3 fw-normal border-dark border-3 rounded-3" id="form-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" name="form-litige-palette_{{ retourProduit.idproduit }}_{{ i }}" required>
+								{% for palette in palettes %}
+									<option value="{{ palette.id }}" class='fs-3 fw-normal'>N°{{ palette.id }}
+										{{ palette.codeCouleur }}</option>
+								{% endfor %}
+								<option value="pas-de-produit" class='fs-3 fw-normal'>pas de produit</option>
+							</select>
+						</div>
+					{% endfor %}
+					<div class='my-5 d-flex justify-content-center'>
+						<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
+							<span class='fs-3 fw-normal'>Supprimer</span>
+						</button>
+					</div>
 				</div>
 			</div>
 		{% endfor %}
 		<div id="ajoutProduit"></div>
-		<div class="d-flex justify-content-center my-4">
-			<button type="button" class="btn btn-outline-warning m-2 border-2 rounded-5" onclick="ajoutProduit()">
-				<span class='fs-2 fw-bold p-2'>Ajouter produit</span>
+		<div class="d-flex justify-content-center my-5">
+			<button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="ajoutProduit()">
+				<span class='fs-3 fw-normal'>Ajouter produit</span>
 			</button>
 		</div>
-		<div class='ms-3 my-5 d-flex justify-content-center'>
+		<div class='my-5 d-flex justify-content-center'>
 			<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
-				<span class='fs-2 fw-bold p-2'>Enregistrer</span>
+				<span class='fs-3 fw-normal'>Enregistrer</span>
 			</button>
 		</div>
+		<input type="hidden" name="_token" value="{{ csrfTokenLitige }}">
 	</form>
 	<script type="text/javascript">
-		function ajoutProduit() {
+		let compteur = 0;
+function ajoutProduit() {
 let container = document.createElement('div');
-container.className = 'border rounded-3 border-warning border-2 m-1';
-
-// Ajoutez les champs de formulaire au conteneur
+container.className = 'd-flex justify-content-center';
 container.innerHTML = `
-        <div class='d-flex justify-content-center my-3'>
-            <button type="button" class="btn btn-outline-warning mt-3 mb-2 border-2 rounded-5">
-                <span class='fs-2 fw-bold p-2'>Scan produit</span>
-            </button>
-        </div>
+<div class="border rounded-3 border-warning border-2 mx-1 my-4 custom-width-desktop">
+        <div class='d-flex justify-content-center flex-column m-3'>
+					<div class='d-flex justify-content-center'>
+						<button type="button" class="btn btn-outline-warning mt-5 mb-2 border-2 rounded-5" onclick="load_quagga_on_add_product(${compteur})">
+							<span class='fs-3 fw-normal'>Scan produit</span>
+						</button>
+					</div>
+					<div class='d-flex justify-content-center'>
+						<div id='scan_${compteur}' class='d-flex justify-content-center flex-column scan mt-3'></div>
+					</div>
+				</div>
         <div class="m-3">
-        <label for="id-form-litige" class="form-label">
-					<span class='fs-1 fw-bold text-warning'>ID produit</span>
+        <label for="id-form-litige_${compteur}" class="form-label">
+					<span class='fs-3 fw-normal text-warning'>ID produit</span>
 				</label>
-				<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="id-form-litige" placeholder="remplir ou scanner" name="id-form-litige[]">
+				<input type="number" class="form-control fs-3 fw-normal border-dark border-2" id="id-form-litige_${compteur}" placeholder="id" name="id-form-litige[]" required>
 			</div>
 			<div class="m-3">
-				<label for="code-couleur-form-litige" class="form-label">
-					<span class='fs-1 fw-bold text-warning'>Code couleur</span>
-				</label>
-				<select class="form-select w-75 fs-1 fw-bold border-warning border-2" id="code-couleur-form-litige" name="code-couleur-form-litige[]">
-					<option value="vert" class='fs-1 fw-bold'>vert</option>
-					<option value="jaune" class='fs-1 fw-bold'>jaune</option>
-					<option value="orange" class='fs-1 fw-bold'>orange</option>
-					<option value="rouge" class='fs-1 fw-bold'>rouge</option>
-					<option value="noir" class='fs-1 fw-bold'>noir</option>
-				</select>
-			</div>
+							<label for="form-litige-palette_${compteur}" class="form-label">
+								<span class='fs-3 fw-normal text-warning'>Palette produit</span>
+							</label>
+							<select class="form-select w-100 fs-3 fw-normal border-dark border-3 rounded-3" id="form-litige-palette_${compteur}" name="form-litige-palette[]" required>				
+									{% for palette in palettes %}
+									<option value="{{ palette.id }}" class='fs-3 fw-normal'>N°{{ palette.id }}
+										{{ palette.codeCouleur }}</option>
+								{% endfor %}		
+							</select>
+						</div>
 			<div class="m-3">
 				<div class="form-group">
 					<label for="quantite-form-litige">
-						<span class='fs-1 fw-bold text-warning'>Quantité</span>
+						<span class='fs-3 fw-normal text-warning'>Quantité</span>
 					</label>
-					<input type="number" class="form-control fs-1 fw-bold border-warning border-2" id="quantite-form-litige" placeholder="1" name="quantite-form-litige[]"/>
+					<input type="number" min="1" class="form-control fs-3 fw-normal border-dark border-2" id="quantite-form-litige" placeholder="1" name="quantite-form-litige[]" required value="1"/>
 				</div>
 			</div>
-        <div class='ms-3 my-5 d-flex justify-content-center'>
-            <button type="button" class="btn btn-outline-warning border-2 rounded-5">
-                <span class='fs-2 fw-bold p-2'>Supprimer</span>
+        <div class='my-5 d-flex justify-content-center'>
+            <button type="button" class="btn btn-outline-warning border-2 rounded-5" onclick="supprimerProduit(event)">
+                <span class='fs-3 fw-normal'>Supprimer</span>
             </button>
         </div>
+    </div>    
     `;
 
 // Ajoutez le conteneur au formulaire
 let formulaire = document.getElementById('ajoutProduit');
 formulaire.appendChild(container);
+compteur--;
+}
+
+function supprimerProduit(event) { // Récupérer l'élément parent du bouton sur lequel on a cliqué
+var produitElement = event.target.closest('.border');
+
+// Supprimer l'élément parent
+produitElement.remove();
 }
 	</script>
-
+	<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.js"></script>
+	<script type="text/javascript">
+		function load_quagga(idInput) {
+if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+Quagga.init({
+inputStream: {
+name: "Live",
+type: "LiveStream",
+target: document.querySelector('#scan_' + idInput)
+},
+decoder: {
+readers: ["ean_reader"]
+}
+}, function (err) {
+if (err) {
+console.log(err);
+return
+}
+console.log("Initialization finished. Ready to start");
+Quagga.start();
+});
+Quagga.onDetected(function (data) {
+document.querySelector('#id-form-litige_' + idInput).value = data.codeResult.code;
+Quagga.stop();
+});
+}
+}
+function load_quagga_on_add_product(compteur) {
+if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+Quagga.init({
+inputStream: {
+name: "Live",
+type: "LiveStream",
+target: document.querySelector('#scan_' + compteur)
+},
+decoder: {
+readers: ["ean_reader"]
+}
+}, function (err) {
+if (err) {
+console.log(err);
+return
+}
+console.log("Initialization finished. Ready to start");
+Quagga.start();
+});
+Quagga.onDetected(function (data) {
+document.querySelector('#id-form-litige_' + compteur).value = data.codeResult.code;
+Quagga.stop();
+});
+}
+}
+	</script>
 {% endblock %}
