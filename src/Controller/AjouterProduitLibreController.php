@@ -24,7 +24,7 @@ class AjouterProduitLibreController extends AbstractController
     }
 
     #[IsGranted("ROLE_USER")]
-    #[Route('/produit', name: 'app_ajouter_produit_libre')]
+    #[Route('/produit', name: 'app_ajouter_produit_libre', methods: ['GET', 'POST'])]
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
         $allpalettesForSelect = $entityManager->getRepository(Palette::class)->findAll();
@@ -39,7 +39,6 @@ class AjouterProduitLibreController extends AbstractController
 
             $currentDate = new \DateTime();
             $idProduitLibre = $request->request->get('form-produit-libre-id');
-            //$codeCouleur = $request->request->get('form-produit-libre-code-couleur');
             $quantite = $request->request->get('form-produit-libre-quantite');
             $transporteur = $request->request->get('form-produit-libre-transporteur');
             $paletteId = $request->request->get('form-produit-libre-palette');

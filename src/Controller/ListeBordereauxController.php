@@ -24,7 +24,7 @@ class ListeBordereauxController extends AbstractController
     }
 
     #[IsGranted("ROLE_USER")]
-    #[Route('/liste/bordereaux', name: 'app_liste_bordereaux')]
+    #[Route('/liste/bordereaux', name: 'app_liste_bordereaux', methods: ['GET', 'POST'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         $retours = [];

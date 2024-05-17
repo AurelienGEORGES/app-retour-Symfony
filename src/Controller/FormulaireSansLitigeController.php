@@ -25,7 +25,7 @@ class FormulaireSansLitigeController extends AbstractController
     }
 
     #[IsGranted("ROLE_USER")]
-    #[Route('/formulaire/sans/litige/{id}', name: 'app_formulaire_sans_litige')]
+    #[Route('/formulaire/sans/litige/{id}', name: 'app_formulaire_sans_litige', methods: ['GET', 'POST'])]
     public function index($id, EntityManagerInterface $entityManager, Request $request): Response
     {
 
@@ -115,11 +115,9 @@ class FormulaireSansLitigeController extends AbstractController
                 for ($p = $retourProduit['quantite']; $p >= 1; $p--) {
                     if (
                         $request->request->get('form-sans-litige-palette_' . $idProduitReceptionne . '_' . $p) !== 'pas-de-produit' &&
-                        // fix pb lorsqu'on Supprime le produit lorsqu'il n'existe pas pour aller vite
-                        // $paletteId = $request->request->get('form-sans-litige-palette_' . $idProduitReceptionne . '_' . $p) !== 'pas-de-produit'
                         !empty($request->request->get('form-sans-litige-palette_' . $idProduitReceptionne . '_' . $p))
                     ) {
-                        // $codeCouleur = $request->request->get('code-couleur-form-sans-litige_' . $p);
+                        
                         $paletteProduit = new PaletteProduit();
                         $paletteId = $request->request->get('form-sans-litige-palette_' . $idProduitReceptionne . '_'  . $p);
                         $palette = $entityManager->getRepository(Palette::class)->find($paletteId);

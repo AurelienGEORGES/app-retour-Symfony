@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ListePalettesController extends AbstractController
 {
-    #[Route('/liste/palettes', name: 'app_liste_palettes')]
+    #[Route('/liste/palettes', name: 'app_liste_palettes', methods: ['GET', 'POST'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
 
