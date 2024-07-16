@@ -22,7 +22,7 @@ class ListeStockController extends AbstractController
     }
 
     #[IsGranted("ROLE_USER")]
-    #[Route('/liste/stock', name: 'app_liste_stock')]
+    #[Route('/liste/stock', name: 'app_liste_stock', methods: ['GET', 'POST'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
 
@@ -146,7 +146,6 @@ class ListeStockController extends AbstractController
         return $this->render('liste_stock/index.html.twig', [
             'controller_name' => 'ListeStockController',
             'produitsPalettes' => $produitsPalettes,
-            // 'palette' => $palette,
             'palettes' => $PalettesForSelect
         ]);
     }

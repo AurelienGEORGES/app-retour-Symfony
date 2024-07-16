@@ -23,7 +23,7 @@ class PhotoBordereauController extends AbstractController
     }
 
     #[IsGranted("ROLE_USER")]
-    #[Route('/photo/bordereau', name: 'app_photo_bordereau')]
+    #[Route('/photo/bordereau', name: 'app_photo_bordereau', methods: ['GET', 'POST'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
 

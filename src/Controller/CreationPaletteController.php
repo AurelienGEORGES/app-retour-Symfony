@@ -24,7 +24,7 @@ class CreationPaletteController extends AbstractController
     }
 
     #[IsGranted("ROLE_USER")]
-    #[Route('/creation/palette', name: 'app_creation_palette')]
+    #[Route('/creation/palette', name: 'app_creation_palette', methods: ['GET', 'POST'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         if (!empty($request->query->get('choix-couleur-palette'))) {

@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PdfController extends AbstractController
 {
-    #[Route('/pdf', name: 'app_pdf')]
+    #[Route('/pdf', name: 'app_pdf', methods: ['GET', 'POST'])]
     public function generatePdf(Request $request, Environment $twig, EntityManagerInterface $entityManager): Response
     {
 
@@ -83,7 +83,7 @@ class PdfController extends AbstractController
 
             //on archive les produits contenu dans la palette transmise
             foreach ($produitsAarchiver as $produitAarchiver) {
-                // dd($produitAarchiver['idProduitAarchiver']);
+                
                 $produitAmodifierLeStatut = $entityManager->getRepository(PaletteProduit::class)->find($produitAarchiver['idProduitAarchiver']);
                 $produitAmodifierLeStatut->setStatut('archive');
                 $entityManager->persist($produitAmodifierLeStatut);

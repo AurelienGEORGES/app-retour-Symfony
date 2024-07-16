@@ -27,8 +27,6 @@ class ListeAttendusController extends AbstractController
         $listeRetours = [];
         $payload_NT = [];
         $payload_RET = [];
-        // dd($request);
-
         $payload_RET['prenomClient'] = '';
         $payload_NT['prenomClient'] = '';
         $payload_RET['nomClient'] = '';
@@ -41,7 +39,6 @@ class ListeAttendusController extends AbstractController
             $payload_RET = $request->get('search_retour');
         }
 
-        // dd($payload_RET['prenomClient']);
         if ($request->get('search_retour')) {
             $payload_NT = $request->get('search_retour');
         }
@@ -49,33 +46,32 @@ class ListeAttendusController extends AbstractController
         $payload_NT['menu'] = 136;
         $payload_NT['nosecurity'] = 1;
         $payload_RET['nosecurity'] = 1;
-        // dd($payload_RET);
+
         $secretKeyAppCommandes = $this->getParameter('API_COMMANDE_SECRET_KEY');
         $secretKeyAppRetours = $this->getParameter('API_RETOUR_SECRET_KEY');
 
         $token_RET = JWT::encode($payload_RET, $secretKeyAppRetours, 'HS256');
         $token_NT = JWT::encode($payload_NT, $secretKeyAppCommandes, 'HS256');
-        // dd($token_NT);
+
         $client_RET = HttpClient::create();
         // $response_RET = $client_RET->request('GET', $this->getParameter('URL_API_ERP') . http_build_query($payload_RET), [
-        $response_RET = $client_RET->request('GET', $this->getParameter('URL_API_ERP') . 'menu=134&nosecurity=1&prenomClient=' . $payload_RET['prenomClient'] . '&nomClient=' . $payload_RET['nomClient'] . '&numRetour=' . $payload_RET['numRetour'] . '&transporteur=' . $payload_RET['transporteur'], [
+        $response_RET = $client_RET->request('GET', $this->getParameter('URL_API_ERP') . 'menu=' . $payload_RET['menu'] . '&nosecurity=' . $payload_RET['nosecurity'] . '&prenomClient=' . $payload_RET['prenomClient'] . '&nomClient=' . $payload_RET['nomClient'] . '&numRetour=' . $payload_RET['numRetour'] . '&transporteur=' . $payload_RET['transporteur'], [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token_RET,
                 'Content-Type' => 'application/json'
             ],
         ]);
-        // dd($response_RET);
+
 
         $client_NT = HttpClient::create();
         // $response_NT = $client_NT->request('GET', $this->getParameter('URL_API_ERP') . http_build_query($payload_NT), [
-        $response_NT = $client_NT->request('GET', $this->getParameter('URL_API_ERP') . 'menu=136&nosecurity=1&prenomClient=' . $payload_NT['prenomClient'] . '&nomClient=' . $payload_NT['nomClient'] . '&numRetour=' . $payload_NT['numRetour'] . '&transporteur=' . $payload_NT['transporteur'], [
+        $response_NT = $client_NT->request('GET', $this->getParameter('URL_API_ERP') . 'menu=' . $payload_NT['menu'] . '&nosecurity=' . $payload_NT['nosecurity'] . '&prenomClient=' . $payload_NT['prenomClient'] . '&nomClient=' . $payload_NT['nomClient'] . '&numRetour=' . $payload_NT['numRetour'] . '&transporteur=' . $payload_NT['transporteur'], [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token_NT,
                 'Content-Type' => 'application/json'
             ],
         ]);
 
-        // dd($response_NT);
         $content_RET = $response_RET->getContent();
         $data_RET = json_decode($content_RET, true);
 
@@ -146,7 +142,7 @@ class ListeAttendusController extends AbstractController
         if ($request->isMethod('POST') && !empty($request->request->get('cmd_id'))) {
 
             // vérification si le RETSA n'existe pas déjà ou si le RET n'existe pas déjà
-            
+
             $criteria0['num_retour'] = 'RETSA00' . $request->request->get('cmd_id');
             $criteria1['num_retour'] = 'RETSA00' . $request->request->get('cmd_id') . '-01';
             $criteria2['num_retour'] = 'RETSA00' . $request->request->get('cmd_id') . '-02';
@@ -163,9 +159,10 @@ class ListeAttendusController extends AbstractController
             $RetourExistant1 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria5);
             $RetourExistant2 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria6);
             $RetourExistant3 = $entityManager->getRepository(Retour::class)->findByCriteria($criteria7);
-            
-            if (empty($RetourExistant0) && empty($RetourExistant1) && empty($RetourExistant2) && empty($RetourExistant3)
-            && empty($RetourExistant4) && empty($RetourExistant5) && empty($RetourExistant6) && empty($RetourExistant7)
+
+            if (
+                empty($RetourExistant0) && empty($RetourExistant1) && empty($RetourExistant2) && empty($RetourExistant3)
+                && empty($RetourExistant4) && empty($RetourExistant5) && empty($RetourExistant6) && empty($RetourExistant7)
             ) {
 
                 $cmd_NT_to_RETSA = new Retour();
@@ -175,9 +172,6 @@ class ListeAttendusController extends AbstractController
                 $cmd_NT_to_RETSA->setTransporteur($request->request->get('cmd_transpoteur'));
                 $cmd_NT_to_RETSA->setNomClient($request->request->get('cmd_nom_client'));
                 $cmd_NT_to_RETSA->setPrenomClient($request->request->get('cmd_prenom_client'));
-                // ajustement pour enlever la date de traitement lors de la conversion en RETSA
-                // $currentDate = new \DateTime();
-                // $cmd_NT_to_RETSA->setDateTraitement($currentDate);
                 $entityManager->persist($cmd_NT_to_RETSA);
                 $entityManager->flush();
 

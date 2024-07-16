@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiPaletteController extends AbstractController
 {
-    #[Route('/api/palette', name: 'app_api_palette')]
+    #[Route('/api/palette', name: 'app_api_palette', methods: ['GET'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         $token = $this->getRequestToken($request);
@@ -35,8 +35,8 @@ class ApiPaletteController extends AbstractController
 
         foreach ($palettes as $palette) {
 
-            // ajout condition dépot SAV
-            if ($palette->getStatut() == 'transmise' && $palette->getDepot() !== 'SAV' ) {
+            // ajout condition dépot SAV et aussi condition sans dépot (à voir)
+            if ($palette->getStatut() == 'transmise' && $palette->getDepot() !== 'SAV' && $palette->getDepot() !== 'sans dépot' ) {
 
                 $paletteProduitArray = [];
 

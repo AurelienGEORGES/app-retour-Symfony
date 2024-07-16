@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiController extends AbstractController
 {
-    #[Route('/api', name: 'app_api')]
+    #[Route('/api', name: 'app_api', methods: ['GET'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         $token = $this->getRequestToken($request);
@@ -28,9 +28,6 @@ class ApiController extends AbstractController
         if (!$decoded) {
             return new JsonResponse(['error' => 'Token invalide'], Response::HTTP_UNAUTHORIZED);
         }
-
-        // $payload = $decoded->payload;
-        // dd($payload);
 
         $retours = $entityManager->getRepository(Retour::class)->findAll();
 

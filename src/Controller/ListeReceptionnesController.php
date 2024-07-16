@@ -23,7 +23,7 @@ class ListeReceptionnesController extends AbstractController
     }
 
     #[IsGranted("ROLE_USER")]
-    #[Route('/liste/receptionnes', name: 'app_liste_receptionnes')]
+    #[Route('/liste/receptionnes', name: 'app_liste_receptionnes', methods: ['GET'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
 

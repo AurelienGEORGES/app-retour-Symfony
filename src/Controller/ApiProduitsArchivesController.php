@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiProduitsArchivesController extends AbstractController
 {
-    #[Route('/api/produits/archives', name: 'app_api_produits_archives')]
+    #[Route('/api/produits/archives', name: 'app_api_produits_archives', methods: ['GET'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         $token = $this->getRequestToken($request);
