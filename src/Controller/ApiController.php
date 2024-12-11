@@ -29,8 +29,46 @@ class ApiController extends AbstractController
             return new JsonResponse(['error' => 'Token invalide'], Response::HTTP_UNAUTHORIZED);
         }
 
-        $retours = $entityManager->getRepository(Retour::class)->findAll();
+        $page = (int) $request->query->get('page', 1);
+        $limit = (int) $request->query->get('limit', 15);
+        $offset = ($page - 1) * $limit;
 
+        $criteria = [
+            'numRetour' => $request->query->get('numRetour', ''),
+            'prenomClient' => $request->query->get('prenomClient', ''),
+            'nomClient' => $request->query->get('nomClient', ''),
+            'transporteur' => $request->query->get('transporteur', ''),
+            'dateAutorisationDebut' => $request->query->get('dateAutorisationDebut', ''),
+            'dateAutorisationFin' => $request->query->get('dateAutorisationFin', ''),
+            'dateReceptionDebut' => $request->query->get('dateReceptionDebut', ''),
+            'dateReceptionFin' => $request->query->get('dateReceptionFin', ''),
+            'etatColis' => $request->query->get('etatColis', ''),
+            'etatProduit' => $request->query->get('etatProduit', ''),
+        ];
+        // dd($page);
+        if (!empty(array_filter($criteria))) {
+            $repository = $entityManager->getRepository(Retour::class);
+            $retours = $repository->searchRetours($criteria, $limit, $offset);
+            $total = $repository->countRetours($criteria);
+        } else if (empty(array_filter($criteria))) {
+            $retours = $entityManager->getRepository(Retour::class)->findBy([], null, $limit, $offset);
+            $total = $entityManager->getRepository(Retour::class)->count([]);
+        }
+        if ($request->query->get('export') == 'export') {
+            $retours = $entityManager->getRepository(Retour::class)->findAll();
+        }
+        if ($request->query->get('retours_archivés') == 'retours_archivés') {
+            $retours = $entityManager->getRepository(Retour::class)->findAll();
+        }
+        if ($request->query->get('produitsRetours') == 'produitsRetours') {
+            $retours = $entityManager->getRepository(Retour::class)->findAll();
+        }
+        if ($request->query->get('retoursCommande') == 'retoursCommande') {
+            $retours = $entityManager->getRepository(Retour::class)->findAll();
+        }
+        if ($request->query->get('exportRetoursArchivés') == 'exportRetoursArchivés') {
+            $retours = $entityManager->getRepository(Retour::class)->findAll();
+        }
         $retoursArray = [];
 
         foreach ($retours as $retour) {
@@ -47,7 +85,7 @@ class ApiController extends AbstractController
                     'codeCouleur' => $retourProduit->getCodeCouleur(),
                     'transporteur' => $retour->getTransporteur(),
                     'dateReception' => $retourProduit->getDateReception(),
-                    'numRetour' => $retour->getNumRetour() 
+                    'numRetour' => $retour->getNumRetour()
                 ];
             }
 
@@ -126,7 +164,18 @@ class ApiController extends AbstractController
             ];
         }
 
-        $response = new Response(json_encode($retoursArray));
+        $responseData = [
+            'data' => $retoursArray, // Vos données existantes
+            'pagination' => [
+                'current_page' => $page,
+                'per_page' => $limit,
+                'total' => $total,
+                'total_pages' => ceil($total / $limit),
+            ],
+        ];
+
+        // $response = new Response(json_encode($retoursArray));
+        $response = new Response(json_encode($responseData));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }

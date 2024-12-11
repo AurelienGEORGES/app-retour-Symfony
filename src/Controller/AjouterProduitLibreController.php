@@ -30,7 +30,7 @@ class AjouterProduitLibreController extends AbstractController
         $allpalettesForSelect = $entityManager->getRepository(Palette::class)->findAll();
         $PalettesForSelect = [];
         foreach ($allpalettesForSelect as $Palette) {
-            if ($Palette->getStatut() !== 'transmise') {
+            if ($Palette->getStatut() !== 'transmise' && $Palette->getStatut() !== 'terminée' && $Palette->getStatut() !== 'camion') {
                 $PalettesForSelect[] = $Palette;
             }
         }

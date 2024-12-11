@@ -9,6 +9,7 @@ export default function () {
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div className="navbar-nav">
                     <a className="nav-link mt-2 m-md-0" href="/login"><span className="fw-normal fs-5">Connexion</span></a>
+                    <a className="nav-link mt-2 m-md-0" href="/register"><span className="fw-normal fs-5">Utilisateur</span></a>
                     <a className="nav-link my-1 m-md-0" href="/"><span className="fw-normal fs-5">Accueil</span></a>
                     <a className="nav-link my-1 m-md-0" href="/photo/bordereau"><span className="fw-normal fs-5">Bordereau</span></a>
                     <a className="nav-link my-1 m-md-0" href="/liste/bordereaux"><span className="fw-normal fs-5">Liste bordereaux</span></a>
@@ -18,6 +19,8 @@ export default function () {
                     <a className="nav-link my-1 m-md-0" href="/liste/stock"><span className="fw-normal fs-5">Stock</span></a>
                     <a className="nav-link my-1 m-md-0" href="/creation/palette"><span className="fw-normal fs-5">Création palette</span></a>
                     <a className="nav-link mb-2 m-md-0" href="/liste/palettes"><span className="fw-normal fs-5">Liste palettes</span></a>
+                    <a className="nav-link mb-2 m-md-0" href="/camion"><span className="fw-normal fs-5">Création camion</span></a>
+                    <a className="nav-link mb-2 m-md-0" href="/liste/camion"><span className="fw-normal fs-5">Liste camions</span></a>
                 </div>
             </div>
         </div>

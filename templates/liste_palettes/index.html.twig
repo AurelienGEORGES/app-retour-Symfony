@@ -31,19 +31,9 @@
 					<select class="form-select fs-3 fw-normal border-dark border-3 rounded-3" id="recherche-statut" name="recherche-statut">
 						<option value="" class='fs-3 fw-normal'>choisir</option>
 						<option value="en cours" class='fs-3 fw-normal'>en cours</option>
-						<option value="terminée" class='fs-3 fw-normal'>terminée</option>
-					    <option value="transmise" class='fs-3 fw-normal'>transmettre</option>
-					</select>
-				</div>
-                <div class="form-group m-3">
-					<label for="recherche-depot" class="form-label">
-						<span class='fs-3 fw-normal text-warning'>Depot :</span>
-					</label>
-					<select class="form-select fs-3 fw-normal border-dark border-3 rounded-3" id="recherche-depot" name="recherche-depot">
-						<option value="" class='fs-3 fw-normal'>choisir</option>
-						<option value="abérial" class='fs-3 fw-normal'>abérial</option>
-						<option value="phyléa" class='fs-3 fw-normal'>phyléa</option>
-						<option value="SAV" class='fs-3 fw-normal'>SAV</option>
+						<option value="terminée" class='fs-3 fw-normal'>terminer</option>
+						<option value="transmise" class='fs-3 fw-normal'>transmettre</option>
+                        <option value="camion" class='fs-3 fw-normal'>camion</option>
 					</select>
 				</div>
 				<div class='d-flex justify-content-center mb-4'>
@@ -55,8 +45,9 @@
 		</div>
 	</div>
 	{% for palette in palettes %}
-		<div class="d-flex justify-content-center">
-			<form method="post" class="card my-5 mx-1 border-primary border-3 custom-width-desktop" action="{{ path('app_pdf') }}">
+		<div
+			class="d-flex justify-content-center">
+			<form method="post" class="card my-5 mx-1 border-primary border-3 custom-width-desktop" action="{{ path('app_liste_palettes') }}">
 				<div class="d-flex justify-content-center">
 					<div class="my-3">
 						<div class="card m-1 border-primary border-3">
@@ -66,7 +57,6 @@
 										<p class='fs-3 fw-normal my-3'>Palette N°
 											{{ palette.id }}
 											{{ palette.codeCouleur }}</p>
-
 										{% if palette.dateTransmise is not null %}
 											<p class='fs-3 fw-normal my-3'>transmise le :
 												{{ palette.dateTransmise|date('d/m/Y H:i:s') }}</p>
@@ -76,7 +66,7 @@
 										{% else %}
 											<p class='fs-3 fw-normal my-3'>toujours en cours</p>
 										{% endif %}
-										<input type="hidden" value="{{ palette.id }}" name="numero-palette-pdf"/>
+                                        <input type="hidden" value="{{ palette.id }}" name="numero-palette"/>
 										<div class="form-group">
 											<label for="fixer-statut" class="form-label">
 												<span class='fs-3 fw-normal'>Statut :</span>
@@ -84,30 +74,13 @@
 											<select class="form-select fs-3 fw-normal border-primary border-2 rounded-3" id="fixer-statut" name="fixer-statut">
 												<option value="{{ palette.statut }}" class='fs-3 fw-normal'>{{ palette.statut }}</option>
 												<option value="en cours" class='fs-3 fw-normal'>en cours</option>
-												<option value="terminée" class='fs-3 fw-normal'>terminée</option>
+												<option value="terminée" class='fs-3 fw-normal'>terminer</option>
 												<option value="transmise" class='fs-3 fw-normal'>transmettre</option>
 											</select>
 										</div>
-										<div class="form-group">
-											<label for="fixer-depot" class="form-label my-3">
-												<span class='fs-3 fw-normal'>Dépot :</span>
-											</label>
-											<select class="form-select fs-3 fw-normal border-primary border-2 rounded-3" id="fixer-depot" name="fixer-depot">
-												<option value="{{ palette.depot }}" class='fs-3 fw-normal'>{{ palette.depot }}</option>
-												<option value="sans dépot" class='fs-3 fw-normal'>sans dépot</option>
-												<option value="phyléa" class='fs-3 fw-normal'>phyléa</option>
-												<option value="abérial" class='fs-3 fw-normal'>abérial</option>
-												<option value="SAV" class='fs-3 fw-normal'>SAV</option>
-											</select>
-										</div>
-										<input type="hidden" value="{{ palette.codeCouleur }}" name="pdf-code-couleur"/>
+                                        <input type="hidden" value="{{ palette.codeCouleur }}" name="code-couleur"/>
 										<p class='fs-3 fw-normal my-2'>Produits * Quantité :</p>
 										{% for produitPalette in palette.getPaletteProduits %}
-											<input type="hidden" value="{{ produitPalette.idProduit }}" name="pdf-id-produit[]"/>
-											<input type="hidden" value="{{ produitPalette.quantite }}" name="pdf-quantite[]"/>
-                                            {# ajout fields id pour archiver ces produits #}
-                                            <input type="hidden" value="{{ produitPalette.id }}" name="id-produit[]"/>
-                                            {# ajout code couleur et n°palette #}
 											<p class='fs-3 fw-normal my-2'>-
 												{{ produitPalette.idProduit }}
 												*

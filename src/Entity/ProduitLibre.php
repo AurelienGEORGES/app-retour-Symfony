@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ProduitLibreRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProduitLibreRepository::class)]
 class ProduitLibre
@@ -14,15 +15,19 @@ class ProduitLibre
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column]
     private ?int $id_produit = null;
 
+    #[Assert\Choice(['vert', 'jaune', 'orange', 'rouge', 'noir', 'SAV'])]
     #[ORM\Column(length: 10)]
     private ?string $code_couleur = null;
 
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $quantite = null;
 
+    #[Assert\Length(['max' => 30])]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $transporteur = null;
 

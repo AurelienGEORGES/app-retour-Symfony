@@ -18,16 +18,15 @@ class ListePalettesController extends AbstractController
         $allpalettes = $entityManager->getRepository(Palette::class)->findAll();
         $Palettes = [];
         foreach ($allpalettes as $Palette) {
-            if ($Palette->getStatut() !== 'transmise') {
+            if ($Palette->getStatut() !== 'transmise' && $Palette->getStatut() !== 'camion') {
                 $Palettes[] = $Palette;
             }
         }
 
-        if (!empty($request->query->get('recherche-palette')) || !empty($request->query->get('recherche-statut')) || !empty($request->query->get('recherche-depot'))) {
+        if (!empty($request->query->get('recherche-palette')) || !empty($request->query->get('recherche-statut'))) {
 
             $idPalette = $request->query->get('recherche-palette');
             $statutPalette = $request->query->get('recherche-statut');
-            $depotPalette = $request->query->get('recherche-depot');
 
             $criteria = [];
 
@@ -40,22 +39,43 @@ class ListePalettesController extends AbstractController
                 $criteria['statut'] = $statutPalette;
                 $Palettes = $entityManager->getRepository(Palette::class)->findByCriteria($criteria);
             }
-
-            if ($depotPalette) {
-                $criteria['depot'] = $depotPalette;
-                $Palettes = $entityManager->getRepository(Palette::class)->findByCriteria($criteria);
-            }
-            
         }
 
         $allpalettesForSelect = $entityManager->getRepository(Palette::class)->findAll();
         $PalettesForSelect = [];
         foreach ($allpalettesForSelect as $Palette) {
-            if ($Palette->getStatut() !== 'transmise') {
+            if ($Palette->getStatut() !== 'camion' ) {
                 $PalettesForSelect[] = $Palette;
             }
         }
-        
+
+        if ($request->isMethod('POST') && !empty($request->request->get('fixer-statut'))) {
+
+            $formData = $request->request->all();
+
+            $statut = $formData['fixer-statut'];
+            $numeroPalette = $formData['numero-palette'];
+
+            $palette = $entityManager->getRepository(Palette::class)->find($numeroPalette);
+            $statutPalette = $palette->getStatut();
+            $currentDate = new \DateTime();
+            if ($statut == 'terminée' && $statutPalette !== $statut) {
+                $palette->setDateTermine($currentDate);
+                $palette->setStatut($statut);
+            }
+            if ($statut == 'transmise' && $statutPalette !== $statut) {
+                $palette->setDateTransmise($currentDate);
+                $palette->setStatut($statut);
+            }
+            $entityManager->persist($palette);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'notice',
+                'La palette bien été modifiée!'
+            );
+        }
+
         return $this->render('liste_palettes/index.html.twig', [
             'controller_name' => 'ListePalettesController',
             'palettes' => $Palettes,

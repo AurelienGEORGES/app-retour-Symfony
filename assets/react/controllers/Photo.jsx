@@ -3,10 +3,12 @@ import React from 'react'
 const Photo = (props) => {
 
     async function openCamera(nbVideo) {
-        const video = document.getElementById('video'+ nbVideo);
-
+        const video = document.getElementById('video' + nbVideo);
+    
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: { exact: "environment" } }
+            });
             video.srcObject = stream;
             video.play();
         } catch (error) {
@@ -32,7 +34,9 @@ const Photo = (props) => {
         const context = canvas.getContext('2d');
 
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: { exact: "environment" } }
+            });
             video.srcObject = stream;
 
             video.onloadedmetadata = () => {
@@ -42,8 +46,6 @@ const Photo = (props) => {
             setTimeout(async () => {
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
                 const photo = canvas.toDataURL('image/png');
-
-                // Insérer l'image capturée dans l'input file
                 const photoInput = document.getElementById('photoInput' + nbPhoto);
                 const blob = await dataURItoBlob(photo);
                 const file = new File([blob], "photo_bordereau_" + Date.now() + ".png", { type: "image/png" });
@@ -71,7 +73,6 @@ const Photo = (props) => {
         }
     }
 
-    // Convertir les données de l'URL en objet Blob
     function dataURItoBlob(dataURI) {
         return new Promise((resolve) => {
             const byteString = atob(dataURI.split(',')[1]);

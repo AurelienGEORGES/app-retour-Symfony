@@ -4,9 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\PaletteProduit;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
@@ -25,6 +25,8 @@ class PaletteProduitCrudController extends AbstractCrudController
             AssociationField::new('palette'),
             IntegerField::new('id_produit'),
             IntegerField::new('quantite'),
+            DateField::new('date_reception'),
+            TextField::new('code_couleur'),
             TextField::new('statut'),
 
         ];

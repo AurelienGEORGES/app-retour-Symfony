@@ -20,9 +20,9 @@ class RetourProduitCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm(),
-            AssociationField::new('retour'),
             IntegerField::new('id_produit'),
-            IntegerField::new('quantite'),  
+            AssociationField::new('retour'),
+            IntegerField::new('quantite'), 
         ];
     }
     

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BordereauRepository::class)]
 class Bordereau
@@ -16,15 +17,20 @@ class Bordereau
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(['max' => 400])]
     #[ORM\Column(length: 400)]
     private ?string $num_bordereau = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_reception = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(['max' => 255])]
     #[ORM\Column(length: 255)]
     private ?string $photo_1 = null;
 
+    #[Assert\Length(['max' => 255])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $commentaire = null;
 
@@ -123,5 +129,4 @@ class Bordereau
     {
         return $this->num_bordereau;
     }
-
 }

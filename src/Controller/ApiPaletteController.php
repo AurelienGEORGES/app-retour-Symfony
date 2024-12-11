@@ -5,7 +5,7 @@ namespace App\Controller;
 use stdClass;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use App\Entity\Palette;
+use App\Entity\Camion;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,36 +29,40 @@ class ApiPaletteController extends AbstractController
             return new JsonResponse(['error' => 'Token invalide'], Response::HTTP_UNAUTHORIZED);
         }
 
-        $palettes = $entityManager->getRepository(Palette::class)->findAll();
+        $camions = $entityManager->getRepository(Camion::class)->findAll();
 
-        $palettesArray = [];
+        $camionsArray = [];
 
-        foreach ($palettes as $palette) {
+        foreach ($camions as $camion) {
 
-            // ajout condition dépot SAV et aussi condition sans dépot (à voir)
-            if ($palette->getStatut() == 'transmise' && $palette->getDepot() !== 'SAV' && $palette->getDepot() !== 'sans dépot' ) {
-
-                $paletteProduitArray = [];
-
-                $paletteProduits = $palette->getPaletteProduits();
-                foreach ($paletteProduits as $paletteProduit) {
-                    $paletteProduitArray[] = [
-                        'idProduit' => $paletteProduit->getIdProduit(),
-                        'quantite' => $paletteProduit->getQuantite(),
-                    ];
+            if ($camion->getStatut() == 'envoye' && ($camion->getDepot() == 'abérial' || $camion->getDepot() == 'philéa')) {
+                $palettesCamion = $camion->getCamionPalettes();
+                $palettesCamion->initialize();
+                $produits = [];
+                foreach ($palettesCamion as $paletteCamion) {
+                    $palette = $paletteCamion->getPalette();
+                    $paletteProduits = $palette->getPaletteProduits();
+                    $paletteProduits->initialize();
+                    foreach ($paletteProduits as $paletteProduit) {
+                        $produits[] = [
+                            'idProduit' => $paletteProduit->getIdProduit(),
+                            'quantite' => $paletteProduit->getQuantite()
+                        ];
+                    }
                 }
-                $palettesArray[] = [
-                    'id' => $palette->getId(),
-                    'codeCouleur' => $palette->getCodeCouleur(),
-                    'depot' => $palette->getDepot(),
-                    'paletteProduits' => $paletteProduitArray,
-                    'statut' => $palette->getStatut(),
-                    'dateTransmise' => $palette->getDateTransmise()
+                $camionsArray[] = [
+                    'id' => $camion->getId(),
+                    'codeCouleur' => $camion->getCouleur(),
+                    'depot' => $camion->getDepot(),
+                    'paletteProduits' => $produits,
+                    'statut' => $camion->getStatut(),
+                    'dateTransmise' => $camion->getDateE(),
+                    'commentaire' => $camion->getCommentaire()
                 ];
             }
         }
 
-        $response = new Response(json_encode($palettesArray));
+        $response = new Response(json_encode($camionsArray));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }

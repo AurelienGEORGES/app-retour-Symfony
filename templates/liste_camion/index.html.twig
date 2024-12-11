@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste Camions
+{% endblock %}
+
+{% block body %}
+	{% for message in app.flashes('notice') %}
+		<div {{ react_component('FlashMessage', props={'message': message } ) }}></div>
+	{% endfor %}
+	<h1 class="text-white my-5 mx-2 fs-3 fw-normal text-center">Liste des camions</h1>
+	<div class="d-flex justify-content-center">
+		<div class='border rounded-3 border-warning border-2 mx-2 input-desktop'>
+			<form method="get" action="{{ path('app_liste_camion') }}">
+				<div class="form-group m-3">
+					<label for="recherche-statut-camion" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Statut :</span>
+					</label>
+					<select class="form-select fs-3 fw-normal border-dark border-3 rounded-3" id="recherche-statut-camion" name="recherche-statut-camion">
+						<option value="" class='fs-3 fw-normal'>choisir</option>
+						<option value="cree" class='fs-3 fw-normal'>créé</option>
+						<option value="envoye" class='fs-3 fw-normal'>envoyé</option>
+					</select>
+				</div>
+				<div class="form-group m-3">
+					<label for="recherche-couleur-camion" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Couleur :</span>
+					</label>
+					<select class="form-select fs-3 fw-normal border-dark border-3 rounded-3" id="recherche-couleur-camion" name="recherche-couleur-camion">
+						<option value="" class='fs-3 fw-normal'>choisir</option>
+						<option value="vert" class='fs-3 fw-normal'>vert</option>
+						<option value="jaune" class='fs-3 fw-normal'>jaune</option>
+						<option value="orange" class='fs-3 fw-normal'>orange</option>
+						<option value="rouge" class='fs-3 fw-normal'>rouge</option>
+						<option value="noir" class='fs-3 fw-normal'>noir</option>
+						<option value="SAV" class='fs-3 fw-normal'>SAV</option>
+					</select>
+				</div>
+				<div class="form-group m-3">
+					<label for="recherche-date-camion" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Date :</span>
+					</label>
+					<input type="date" name="recherche-date-camion" class="form-control fs-3 fw-normal border-dark border-2" id="recherche-date-camion"/>
+				</div>
+				<div class='d-flex justify-content-center mb-4'>
+					<button type="submit" class="btn btn-outline-warning my-2 border-2 rounded-5">
+						<span class='fs-3 fw-normal'>Rechercher</span>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<h2 class="text-white my-5 fs-3 fw-normal text-center mx-2">résultats Camions</h2>
+	{% for camion in camions %}
+		<form class="d-flex justify-content-center" method="post" action="{{ path('app_pdf') }}">
+			<div>
+				<div class="card my-3 border-primary border-3 custom-width-desktop">
+					<div class="card-body">
+						<p class="card-text m-0">
+							<span class='fs-3 fw-normal'>camion N°{{ camion.id }}
+								{{ camion.couleur }}</span>
+						</p>
+						<p class="card-text m-0">
+							<span class='fs-3 fw-normal'>créé le
+								{{ camion.dateC|date('Y-m-d') }}</span>
+						</p>
+						{% if camion.depot is defined and camion.depot is not null %}
+							<p class="card-text m-0">
+								<span class='fs-3 fw-normal'>envoyé à
+									{{ camion.depot }}</span>
+							</p>
+						{% else %}
+							<p class="card-text m-0">
+								<span class='fs-3 fw-normal'>pas encore envoyé</span>
+							</p>
+						{% endif %}
+						<p class="card-text m-0">
+							<span class='fs-3 fw-normal'>Palettes :</span>
+						</p>
+						{% for camionPalette in camion.getCamionPalettes %}
+							<p class="card-text m-0">
+								<span class='fs-3 fw-normal'>-
+									{{ camionPalette.getPalette.id }}</span>
+							</p>
+						{% endfor %}
+						<div class="m-1 d-flex justify-content-center flex-column">
+							<label for="depot-camion" class="form-label">
+								<span class='fs-3 fw-normal text-dark'>Choix Depot</span>
+							</label>
+							<select class="form-select fs-3 fw-normal border-dark border-2" id="depot-camion" name="depot-camion">
+								<option value="" class='fs-3 fw-normal'>choisir</option>
+								<option value="philéa" class='fs-3 fw-normal'>philéa</option>
+								<option value="abérial" class='fs-3 fw-normal'>abérial</option>
+								<option value="sans dépot" class='fs-3 fw-normal'>sans dépot</option>
+								<option value="SAV" class='fs-3 fw-normal'>SAV</option>
+								<option value="soldeur" class='fs-3 fw-normal'>soldeur</option>
+								<option value="Emmaus" class='fs-3 fw-normal'>Emmaus</option>
+							</select>
+						</div>
+						<input type="hidden" value="{{ camion.id }}" name="id-camion"/>
+						<div class='d-flex justify-content-center mx-2'>
+							<button type="submit" class="btn btn-outline-primary my-5 border-2 rounded-5">
+								<span class='fs-2 fw-normal'>Envoyer</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	{% endfor %}
+{% endblock %}

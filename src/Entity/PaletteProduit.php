@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PaletteProduitRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PaletteProduitRepository::class)]
 class PaletteProduit
@@ -17,18 +18,23 @@ class PaletteProduit
     #[ORM\ManyToOne(inversedBy: 'paletteProduits')]
     private ?Palette $palette = null;
 
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column]
     private ?int $id_produit = null;
 
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $quantite = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_reception = null;
 
+    #[Assert\Choice(['vert', 'jaune', 'orange', 'rouge', 'noir', 'SAV'])]
+    #[Assert\Length(['max' => 10])]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $code_couleur = null;
 
+    #[Assert\Length(['max' => 20])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $statut = null;
 

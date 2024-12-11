@@ -29,11 +29,11 @@ class FormulaireSansLitigeController extends AbstractController
     public function index($id, EntityManagerInterface $entityManager, Request $request): Response
     {
 
-        // modification pour récupérer uniquement les pallettes en cours ou terminées
         $allpalettesForSelect = $entityManager->getRepository(Palette::class)->findAll();
         $PalettesForSelect = [];
         foreach ($allpalettesForSelect as $Palette) {
-            if ($Palette->getStatut() !== 'transmise') {
+            
+            if ($Palette->getStatut() !== 'transmise' && $Palette->getStatut() !== 'camion' && $Palette->getStatut() !== 'terminée') {
                 $PalettesForSelect[] = $Palette;
             }
         }
@@ -44,12 +44,11 @@ class FormulaireSansLitigeController extends AbstractController
         $retourProduitsDejaReceptionnes = array_merge($retour->getRetourProduitReceptionnes()->toArray());
         $retourObj = $entityManager->getRepository(Retour::class)->find($retour->getId());
 
-        // Convertir $retourProduits en un tableau d'ID produit et quantité
         $retourProduitsFormatted = [];
         foreach ($retourProduits as $produit) {
             $idProduit = $produit->getIdProduit();
             $quantite = $produit->getQuantite();
-            // Si le produit est déjà présent dans le tableau, ajouter la quantité
+            
             if (isset($retourProduitsFormatted[$idProduit])) {
                 $retourProduitsFormatted[$idProduit] += $quantite;
             } else {
@@ -57,12 +56,11 @@ class FormulaireSansLitigeController extends AbstractController
             }
         }
 
-        // Convertir $retourProduitsDejaReceptionnes en un tableau d'ID produit et quantité
         $retourProduitsDejaReceptionnesFormatted = [];
         foreach ($retourProduitsDejaReceptionnes as $produitReceptionne) {
             $idProduit = $produitReceptionne->getIdProduit();
             $quantite = $produitReceptionne->getQuantite();
-            // Si le produit est déjà présent dans le tableau, ajouter la quantité
+            
             if (isset($retourProduitsDejaReceptionnesFormatted[$idProduit])) {
                 $retourProduitsDejaReceptionnesFormatted[$idProduit] += $quantite;
             } else {
@@ -70,17 +68,14 @@ class FormulaireSansLitigeController extends AbstractController
             }
         }
 
-        // Formatage des produits à réceptionner dans le format souhaité
         $retourProduitsAReceptionner = [];
         $idCounter = 1;
         foreach ($retourProduitsFormatted as $idProduit => $quantiteTotale) {
-            // Quantité déjà réceptionnée
+            
             $quantiteDejaReceptionnee = isset($retourProduitsDejaReceptionnesFormatted[$idProduit]) ? $retourProduitsDejaReceptionnesFormatted[$idProduit] : 0;
 
-            // Calcul de la quantité à réceptionner réellement
             $quantiteAReceptionner = max(0, $quantiteTotale - $quantiteDejaReceptionnee);
 
-            // Ajout du produit à réceptionner
             if ($quantiteAReceptionner > 0) {
                 $retourProduitsAReceptionner[] = [
                     'id' => $idCounter++,
@@ -94,16 +89,19 @@ class FormulaireSansLitigeController extends AbstractController
 
             $retourTraite = $entityManager->getRepository(Retour::class)->find($id);
             $currentDate = new \DateTime();
-            $retourTraite->setDateTraitement($currentDate);
+            
             $numRetourTraite = $retourTraite->getNumRetour();
             if (substr($numRetourTraite, -3) === '-01') {
                 $numRetourTraite = substr_replace($numRetourTraite, '-02', -3);
+                $retourTraite->setDateTraitement02($currentDate);
             } else if (substr($numRetourTraite, -3) === '-02') {
                 $numRetourTraite = substr_replace($numRetourTraite, '-03', -3);
+                $retourTraite->setDateTraitement03($currentDate);
             } else if (substr($numRetourTraite, -3) === '-03') {
                 $numRetourTraite = substr_replace($numRetourTraite, '-04', -3);
             } else {
                 $numRetourTraite .= '-01';
+                $retourTraite->setDateTraitement($currentDate);
             }
             $retourTraite->setNumretour($numRetourTraite);
             $entityManager->persist($retourTraite);

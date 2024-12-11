@@ -21,30 +21,99 @@ class RetourRepository extends ServiceEntityRepository
         parent::__construct($registry, Retour::class);
     }
 
-    //    /**
-    //     * @return Retour[] Returns an array of Retour objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function searchRetours(array $criteria, int $limit, int $offset)
+    {
+        $qb = $this->createQueryBuilder('r');
+        
+        // Ajout des critères dynamiquement
+        if (!empty($criteria['numRetour'])) {
+            $qb->andWhere('r.num_retour LIKE :numRetour')
+                ->setParameter('numRetour', '%' . $criteria['numRetour'] . '%');
+        }
+        if (!empty($criteria['prenomClient'])) {
+            $qb->andWhere('r.prenom_client LIKE :prenomClient')
+                ->setParameter('prenomClient', '%' . $criteria['prenomClient'] . '%');
+        }
+        if (!empty($criteria['nomClient'])) {
+            $qb->andWhere('r.nom_client LIKE :nomClient')
+                ->setParameter('nomClient', '%' . $criteria['nomClient'] . '%');
+        }
+        if (!empty($criteria['transporteur'])) {
+            $qb->andWhere('r.transporteur = :transporteur')
+                ->setParameter('transporteur', $criteria['transporteur']);
+        }
+        if (!empty($criteria['dateAutorisationDebut']) && !empty($criteria['dateAutorisationFin'])) {
+            $qb->andWhere('r.date_autorisation BETWEEN :dateDebutAutorisation AND :dateFinAutorisation')
+                ->setParameter('dateDebutAutorisation', $criteria['dateAutorisationDebut'])
+                ->setParameter('dateFinAutorisation', $criteria['dateAutorisationFin']);
+        }
+        if (!empty($criteria['dateReceptionDebut']) && !empty($criteria['dateReceptionFin'])) {
+            $qb->andWhere('r.date_traitement BETWEEN :dateDebutReception AND :dateFinReception')
+                ->setParameter('dateDebutReception', $criteria['dateReceptionDebut'])
+                ->setParameter('dateFinReception', $criteria['dateReceptionFin']);
+        }
+        if (!empty($criteria['etatColis'])) {
+            $qb->andWhere('r.etat = :etatColis')
+                ->setParameter('etatColis', $criteria['etatColis']);
+        }
 
-    //    public function findOneBySomeField($value): ?Retour
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if (!empty($criteria['etatProduit'])) {
+            $qb->andWhere('r.etat_produit = :etatProduit')
+                ->setParameter('etatProduit', $criteria['etatProduit']);
+        }
+
+        // Gestion de la pagination
+        $qb->setFirstResult($offset)
+            ->setMaxResults($limit);
+            
+        return $qb->getQuery()->getResult();
+    }
+
+    public function countRetours(array $criteria)
+    {
+        
+        $qb = $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)');
+        
+        // Ajout des mêmes critères que dans `searchRetours`
+        if (!empty($criteria['numRetour'])) {
+            $qb->andWhere('r.num_retour LIKE :numRetour')
+                ->setParameter('numRetour', '%' . $criteria['numRetour'] . '%');
+        }
+        if (!empty($criteria['prenomClient'])) {
+            $qb->andWhere('r.prenom_client LIKE :prenomClient')
+                ->setParameter('prenomClient', '%' . $criteria['prenomClient'] . '%');
+        }
+        if (!empty($criteria['nomClient'])) {
+            $qb->andWhere('r.nom_client LIKE :nomClient')
+                ->setParameter('nomClient', '%' . $criteria['nomClient'] . '%');
+        }
+        if (!empty($criteria['transporteur'])) {
+            $qb->andWhere('r.transporteur = :transporteur')
+                ->setParameter('transporteur', $criteria['transporteur']);
+        }
+        if (!empty($criteria['dateAutorisationDebut']) && !empty($criteria['dateAutorisationFin'])) {
+            $qb->andWhere('r.date_autorisation BETWEEN :dateDebutAutorisation AND :dateFinAutorisation')
+                ->setParameter('dateDebutAutorisation', $criteria['dateAutorisationDebut'])
+                ->setParameter('dateFinAutorisation', $criteria['dateAutorisationFin']);
+        }
+        if (!empty($criteria['dateReceptionDebut']) && !empty($criteria['dateReceptionFin'])) {
+            $qb->andWhere('r.date_traitement BETWEEN :dateDebutReception AND :dateFinReception')
+                ->setParameter('dateDebutReception', $criteria['dateReceptionDebut'])
+                ->setParameter('dateFinReception', $criteria['dateReceptionFin']);
+        }
+        if (!empty($criteria['etatColis'])) {
+            $qb->andWhere('r.etat = :etatColis')
+                ->setParameter('etatColis', $criteria['etatColis']);
+        }
+
+        if (!empty($criteria['etatProduit'])) {
+            $qb->andWhere('r.etat_produit = :etatProduit')
+                ->setParameter('etatProduit', $criteria['etatProduit']);
+        }
+        
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 
     public function findByCriteria(array $criteria = [])
     {

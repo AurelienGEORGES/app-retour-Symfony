@@ -17,6 +17,9 @@
 			<div {{ react_component('Navbar') }}></div>
 		{% endblock %}
 		{% block body %}
+			{% for message in app.flashes('notice') %}
+				<div {{ react_component('FlashMessage', props={'message': message } ) }}></div>
+			{% endfor %}
 			<h1 class="text-white my-5 fs-1 fw-bold text-center">Bienvenue sur l'app retour
 				{{ app.user.name }}</h1>
 			<div class="d-flex justify-content-center">

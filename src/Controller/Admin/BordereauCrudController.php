@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class BordereauCrudController extends AbstractCrudController
@@ -22,10 +23,10 @@ class BordereauCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('num_bordereau'),
-            DateTimeField::new('date_reception')->hideOnForm(),
+            DateTimeField::new('date_reception'),
             ImageField::new('photo_1')->setBasePath('uploads/photos')->setUploadDir('public/uploads/photos'),
-            ImageField::new('photo_2')->setBasePath('uploads/photos')->setUploadDir('public/uploads/photos'),
             TextField::new('commentaire'),
+            AssociationField::new('retours'),
         ];
     }
 

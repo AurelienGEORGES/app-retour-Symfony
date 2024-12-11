@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Camion
+{% endblock %}
+
+{% block body %}
+
+	{% set csrfTokenCamion = csrf_token('form-camion-token') %}
+
+	{% for message in app.flashes('notice') %}
+
+		<div {{ react_component('FlashMessage', props={'message': message } ) }}></div>
+
+	{% endfor %}
+
+	<h1 class="text-white my-5 mx-2 fs-1 fw-normal text-center">Création d'un camion</h1>
+	<div class="d-flex justify-content-center">
+		<div class='border rounded-3 border-warning border-2 m-3 input-desktop creation-palette-width'>
+			<form method="post" action="{{ path('app_camion') }}">
+				<p class="m-1 fs-3 fw-normal text-warning">Palettes</p>
+				<div class="m-3">
+					{% for palette in palettes %}
+						<div class="form-check fs-1 fw-normal border-dark border-2">
+							<input class="form-check-input" type="checkbox" id="inlineCheckbox-{{ palette.id }}" name="palettes[]" value="{{ palette.id }}">
+							<label class="form-check-label fs-2 fw-normal text-white" for="inlineCheckbox-{{ palette.id }}">
+								{{ palette.id }}
+								-
+								{{ palette.codeCouleur }}
+							</label>
+						</div>
+					{% endfor %}
+				</div>
+				<div class="m-1 d-flex justify-content-center flex-column">
+					<label for="code-couleur-camion" class="form-label">
+						<span class='fs-3 fw-normal text-warning'>Couleur</span>
+					</label>
+					<select class="form-select fs-3 fw-normal border-dark border-2" id="code-couleur-camion" name="code-couleur-camion">
+						<option value="" class='fs-3 fw-normal'>choisir</option>
+						<option value="vert" class='fs-3 fw-normal'>vert</option>
+						<option value="jaune" class='fs-3 fw-normal'>jaune</option>
+						<option value="orange" class='fs-3 fw-normal'>orange</option>
+						<option value="rouge" class='fs-3 fw-normal'>rouge</option>
+						<option value="noir" class='fs-3 fw-normal'>noir</option>
+						<option value="SAV" class='fs-3 fw-normal'>SAV</option>
+					</select>
+				</div>
+				<div class="m-1 d-flex justify-content-center flex-column">
+					<label for="commentaire-form-camion">
+						<span class='fs-3 fw-normal text-warning'>Commentaire</span>
+					</label>
+					<textarea class="form-control fs-3 fw-normal mt-3 border-dark border-2" id="commentaire-form-camion" name="commentaire-form-camion" rows="5" cols="33"></textarea>
+				</div>
+				<div class='my-5 d-flex justify-content-center'>
+					<button type="submit" class="btn btn-outline-warning border-2 rounded-5">
+						<span class='fs-2 fw-normal'>Créer camion</span>
+					</button>
+				</div>
+				<input type="hidden" name="_token" value="{{ csrfTokenCamion }}">
+			</form>
+		</div>
+	</div>
+{% endblock %}

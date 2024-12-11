@@ -2,18 +2,21 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\User;
+use App\Entity\Stock;
+use App\Entity\Camion;
+use App\Entity\Retour;
+use App\Entity\Palette;
 use App\Entity\Bordereau;
+use App\Entity\ProduitLibre;
+use App\Entity\CamionPalette;
+use App\Entity\RetourProduit;
+use App\Entity\PaletteProduit;
+use App\Entity\RetourProduitReceptionnes;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use App\Controller\Admin\BordereauCrudController;
-use App\Entity\Palette;
-use App\Entity\PaletteProduit;
-use App\Entity\ProduitLibre;
-use App\Entity\Retour;
-use App\Entity\RetourProduit;
-use App\Entity\RetourProduitReceptionnes;
-use App\Entity\Stock;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -87,5 +90,16 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('create produit palette', 'fas fa-plus', PaletteProduit::class)->setAction(Crud::PAGE_NEW),
             MenuItem::linkToCrud('show produits palette', 'fas fa-eye', PaletteProduit::class)
         ]); 
+        yield MenuItem::section('Camions');
+        yield MenuItem::subMenu('Actions', 'fas fa-bars')->setSubItems([
+            MenuItem::linkToCrud('create Camion', 'fas fa-plus', Camion::class)->setAction(Crud::PAGE_NEW),
+            MenuItem::linkToCrud('show Camions', 'fas fa-eye', Camion::class)
+        ]); 
+        yield MenuItem::section('Camions palettes');
+        yield MenuItem::subMenu('Actions', 'fas fa-bars')->setSubItems([
+            MenuItem::linkToCrud('create Camion palette', 'fas fa-plus', CamionPalette::class)->setAction(Crud::PAGE_NEW),
+            MenuItem::linkToCrud('show Camions palettes', 'fas fa-eye', CamionPalette::class)
+        ]); 
+        yield MenuItem::linkToCrud('Users', 'fas fa-users', User::class);
     }
 }

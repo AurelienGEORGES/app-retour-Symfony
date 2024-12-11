@@ -28,11 +28,11 @@ class FormulaireLitigeController extends AbstractController
     #[Route('/formulaire/litige/{id}', name: 'app_formulaire_litige', methods: ['GET', 'POST'])]
     public function index($id, EntityManagerInterface $entityManager, Request $request): Response
     {
-        // modification pour récupérer uniquement les pallettes en cours ou terminées
         $allpalettesForSelect = $entityManager->getRepository(Palette::class)->findAll();
         $PalettesForSelect = [];
         foreach ($allpalettesForSelect as $Palette) {
-            if ($Palette->getStatut() !== 'transmise') {
+            
+            if ($Palette->getStatut() !== 'transmise' && $Palette->getStatut() !== 'camion' && $Palette->getStatut() !== 'terminée') {
                 $PalettesForSelect[] = $Palette;
             }
         }
@@ -56,12 +56,10 @@ class FormulaireLitigeController extends AbstractController
         $retourProduits = array_merge($retour->getRetourProduits()->toArray());
         $retourProduitsDejaReceptionnes = array_merge($retour->getRetourProduitReceptionnes()->toArray());
 
-        // Convertir $retourProduits en un tableau d'ID produit et quantité
         $retourProduitsFormatted = [];
         foreach ($retourProduits as $produit) {
             $idProduit = $produit->getIdProduit();
             $quantite = $produit->getQuantite();
-            // Si le produit est déjà présent dans le tableau, ajouter la quantité
             if (isset($retourProduitsFormatted[$idProduit])) {
                 $retourProduitsFormatted[$idProduit] += $quantite;
             } else {
@@ -69,12 +67,10 @@ class FormulaireLitigeController extends AbstractController
             }
         }
 
-        // Convertir $retourProduitsDejaReceptionnes en un tableau d'ID produit et quantité
         $retourProduitsDejaReceptionnesFormatted = [];
         foreach ($retourProduitsDejaReceptionnes as $produitReceptionne) {
             $idProduit = $produitReceptionne->getIdProduit();
             $quantite = $produitReceptionne->getQuantite();
-            // Si le produit est déjà présent dans le tableau, ajouter la quantité
             if (isset($retourProduitsDejaReceptionnesFormatted[$idProduit])) {
                 $retourProduitsDejaReceptionnesFormatted[$idProduit] += $quantite;
             } else {
@@ -82,17 +78,14 @@ class FormulaireLitigeController extends AbstractController
             }
         }
 
-        // Formatage des produits à réceptionner dans le format souhaité
         $retourProduitsAReceptionner = [];
         $idCounter = 1;
         foreach ($retourProduitsFormatted as $idProduit => $quantiteTotale) {
-            // Quantité déjà réceptionnée
+            
             $quantiteDejaReceptionnee = isset($retourProduitsDejaReceptionnesFormatted[$idProduit]) ? $retourProduitsDejaReceptionnesFormatted[$idProduit] : 0;
 
-            // Calcul de la quantité à réceptionner réellement
             $quantiteAReceptionner = max(0, $quantiteTotale - $quantiteDejaReceptionnee);
 
-            // Ajout du produit à réceptionner
             if ($quantiteAReceptionner > 0) {
                 $retourProduitsAReceptionner[] = [
                     'id' => $idCounter++,

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\RetourProduitReceptionnesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RetourProduitReceptionnesRepository::class)]
 class RetourProduitReceptionnes
@@ -18,12 +19,15 @@ class RetourProduitReceptionnes
     #[ORM\JoinColumn(nullable: false)]
     private ?Retour $retour = null;
 
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column(type: Types::INTEGER)]
     private ?int $id_produit = null;
 
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $quantite = null;
 
+    #[Assert\Choice(['vert', 'jaune', 'orange', 'rouge', 'noir', 'SAV'])]
     #[ORM\Column(length: 10)]
     private ?string $code_couleur = null;
 
@@ -93,5 +97,10 @@ class RetourProduitReceptionnes
         $this->date_reception = $date_reception;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->id_produit;
     }
 }

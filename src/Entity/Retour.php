@@ -9,6 +9,7 @@ use App\Repository\RetourRepository;
 use App\Entity\RetourProduitReceptionnes;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RetourRepository::class)]
 class Retour
@@ -18,42 +19,55 @@ class Retour
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(['max' => 30])]
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $num_retour = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_autorisation = null;
 
+    #[Assert\Length(['max' => 50])]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $nom_client = null;
 
+    #[Assert\Length(['max' => 50])]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $prenom_client = null;
 
+    #[Assert\Length(['max' => 30])]
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $transporteur = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_traitement = null;
 
+    #[Assert\Choice(['ouvert', 'manquant', 'déchiré', 'troué', "pas d'info"])]
+    #[Assert\Length(['max' => 255])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $etat = null;
 
+    #[Assert\Length(['max' => 500])]
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $commentaire = null;
 
+    #[Assert\Length(['max' => 100])]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $photo_1 = null;
 
+    #[Assert\Length(['max' => 100])]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $photo_2 = null;
 
+    #[Assert\Length(['max' => 100])]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $photo_3 = null;
 
+    #[Assert\Length(['max' => 100])]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $photo_4 = null;
 
+    #[Assert\Length(['max' => 100])]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $photo_5 = null;
 
@@ -66,36 +80,47 @@ class Retour
     #[ORM\ManyToOne(inversedBy: 'retours')]
     private ?Bordereau $bordereau = null;
 
+    #[Assert\Choice(['pièce manquante', 'abimé', "pas d'info"])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $etat_produit = null;
 
+    #[Assert\Choice(['ouvert', 'manquant', 'déchiré', 'troué', "pas d'info"])]
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $etat_02 = null;
 
+    #[Assert\Choice(['pièce manquante', 'abimé', "pas d'info"])]
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $etat_produit_02 = null;
 
+    #[Assert\Choice(['ouvert', 'manquant', 'déchiré', 'troué', "pas d'info"])]
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $etat_03 = null;
 
+    #[Assert\Choice(['pièce manquante', 'abimé', "pas d'info"])]
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $etat_produit_03 = null;
 
+    #[Assert\Length(['max' => 255])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $commentaire_autorisation = null;
 
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column(nullable: true)]
     private ?int $id_produit_photo1 = null;
 
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column(nullable: true)]
     private ?int $id_produit_photo2 = null;
 
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column(nullable: true)]
     private ?int $id_produit_photo3 = null;
 
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column(nullable: true)]
     private ?int $id_produit_photo4 = null;
 
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column(nullable: true)]
     private ?int $id_produit_photo5 = null;
 

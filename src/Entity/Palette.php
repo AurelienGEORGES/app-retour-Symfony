@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PaletteRepository::class)]
 class Palette
@@ -16,9 +17,13 @@ class Palette
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Choice(['vert', 'jaune', 'orange', 'rouge', 'noir', 'SAV'])]
+    #[Assert\Length(['max' => 10])]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $code_couleur = null;
 
+    #[Assert\Choice(['abérial', 'philéa', 'SAV', 'sans dépot', 'soldeur', 'Emmaus'])]
+    #[Assert\Length(['max' => 15])]
     #[ORM\Column(length: 15, nullable: true)]
     private ?string $depot = null;
 
@@ -31,8 +36,13 @@ class Palette
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_transmise = null;
 
+    #[Assert\Choice(['en cours', 'terminée', 'transmise', 'camion'])]
+    #[Assert\Length(['max' => 20])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $statut = null;
+
+    #[ORM\OneToOne(mappedBy: 'palette', cascade: ['persist', 'remove'])]
+    private ?CamionPalette $camionPalette = null;
 
     public function __construct()
     {
@@ -135,6 +145,23 @@ class Palette
     public function setStatut(?string $statut): static
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function getCamionPalette(): ?CamionPalette
+    {
+        return $this->camionPalette;
+    }
+
+    public function setCamionPalette(CamionPalette $camionPalette): static
+    {
+        // set the owning side of the relation if necessary
+        if ($camionPalette->getPalette() !== $this) {
+            $camionPalette->setPalette($this);
+        }
+
+        $this->camionPalette = $camionPalette;
 
         return $this;
     }

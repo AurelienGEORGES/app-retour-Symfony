@@ -81,7 +81,7 @@ class ListeBordereauxController extends AbstractController
                         $retour = $entityManager->getRepository(Retour::class)->find($retourId);
 
                         if ($retour) {
-                            // Définir le Bordereau associé au Retour
+                            
                             $retour->setBordereau($bordereau);
                             $retourToModified = $retour->getNumRetour();
                             $chaine = preg_replace('/^NT/', 'RETSA', $retourToModified);

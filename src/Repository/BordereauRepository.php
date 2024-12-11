@@ -48,11 +48,31 @@ class BordereauRepository extends ServiceEntityRepository
 
     public function findByDate($date)
     {
+        $dateStart = new \DateTime($date['date_reception']);
+        // $dateEnd = (clone $dateStart)->modify('+1 day');
+
         return $this->createQueryBuilder('e')
-            ->andWhere('e.date_reception > :date')
-            ->setParameter('date', $date)
+            ->andWhere('e.date_reception >= :dateStart')
+            // ->andWhere('e.date_reception < :dateEnd')
+            ->setParameter('dateStart', $dateStart->format('Y-m-d'))
+            // ->setParameter('dateEnd', $dateEnd->format('Y-m-d'))
             ->getQuery()
             ->getResult();
     }
+//     public function findByDate($date)
+// {
+//     // Convertir la date de début fournie en objet DateTime
+//     $dateStart = new \DateTime($date['date_reception']);
     
+//     // Obtenir la date actuelle
+//     $dateEnd = new \DateTime();
+
+//     return $this->createQueryBuilder('e')
+//         ->andWhere('e.date_reception >= :dateStart')
+//         ->andWhere('e.date_reception <= :dateEnd')
+//         ->setParameter('dateStart', $dateStart->format('Y-m-d'))
+//         ->setParameter('dateEnd', $dateEnd->format('Y-m-d'))
+//         ->getQuery()
+//         ->getResult();
+// }
 }

@@ -29,19 +29,16 @@ class PhotoBordereauController extends AbstractController
 
         if ($request->getMethod() === 'POST') {
 
-            // récupération des données du formulaire
             $photo = $request->files->get('photo0');
             $commentaire = $request->request->get('commentaire');
 
-            // enregistrement de la photo sur le serveur
             $now = new \DateTime();
             $formattedNow = $now->format('Y-m-d_H-i-s');
             $fileName = 'bordereau_' . $formattedNow . '.jpeg';
             $photoPath = '/uploads/photos/' . $fileName;
-            // Déplacez le fichier téléchargé vers le répertoire de destination
+            
             $photo->move($this->getParameter('kernel.project_dir') . '/public/uploads/photos/', $fileName);
 
-            // Enregistrement du nouveau bordereau
             $photoBordereau = new Bordereau();
             $photoBordereau->setPhoto1($photoPath);
             $photoBordereau->setCommentaire($commentaire);

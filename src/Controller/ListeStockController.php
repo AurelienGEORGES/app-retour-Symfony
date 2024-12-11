@@ -23,6 +23,7 @@ class ListeStockController extends AbstractController
 
     #[IsGranted("ROLE_USER")]
     #[Route('/liste/stock', name: 'app_liste_stock', methods: ['GET', 'POST'])]
+
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
 
@@ -34,11 +35,10 @@ class ListeStockController extends AbstractController
             }
         }
 
-        // modification pour récupérer uniquement les pallettes en cours ou terminées
         $allpalettesForSelect = $entityManager->getRepository(Palette::class)->findAll();
         $PalettesForSelect = [];
         foreach ($allpalettesForSelect as $Palette) {
-            if ($Palette->getStatut() !== 'transmise') {
+            if ($Palette->getStatut() !== 'transmise' && $Palette->getStatut() !== 'camion' && $Palette->getStatut() !== 'terminée') {
                 $PalettesForSelect[] = $Palette;
             }
         }
@@ -90,7 +90,6 @@ class ListeStockController extends AbstractController
             $idProduitAModifier = $request->query->get('id-produit-form-modif-palette');
             $ProduitAModifier = $entityManager->getRepository(PaletteProduit::class)->find($idProduitAModifier);
 
-
             for ($p = $ProduitAModifier->getQuantite(); $p >= 1; $p--) {
 
                 $paletteProduit = new PaletteProduit();
@@ -112,21 +111,18 @@ class ListeStockController extends AbstractController
         }
 
         if (!empty($request->files->get('csv_file'))) {
-            // Vérifie si un fichier a été téléchargé
+            
             $file = $request->files->get('csv_file');
 
-            // Lecture du contenu du fichier CSV
             $csvData = file_get_contents($file->getPathname());
 
-            // Traitement du contenu du fichier CSV
             $lines = explode("\n", $csvData);
             foreach ($lines as $line) {
-                // Ignorer les lignes vides
+                
                 if (empty(trim($line))) {
                     continue;
                 }
 
-                // Séparer la ligne en colonnes
                 $rowData = str_getcsv($line);
                 $produitImporter = new PaletteProduit();
                 $produitImporter->setIdProduit($rowData['0']);
@@ -137,7 +133,7 @@ class ListeStockController extends AbstractController
                 $currentDate = new \DateTime();
                 $produitImporter->setDateReception($currentDate);
                 $entityManager->persist($produitImporter);
-                $entityManager->flush();    
+                $entityManager->flush();
             }
         }
 

@@ -34,7 +34,8 @@ class SearchRetourType extends AbstractType
                     'schenker' => 'schenker',
                     'dpd' => 'dpd',
                     'mazet' => 'mazet',
-                    'calberson' => 'Calberson',
+                    'geodis' => 'geodis',
+                    'calberson' => 'calberson',
                     'gls' => 'gls',
                     'vir' => 'vir'
                 ],

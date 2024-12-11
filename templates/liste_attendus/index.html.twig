@@ -115,26 +115,26 @@
 			</div>
 		</div>
 	{% endfor %}
-	{% for listeRetourNT in listeRetoursNT %}
+    {% for listeRetourNT in listeRetoursNT %}
 		<form method="post" action="{{ path('app_liste_attendus') }}" class="d-flex justify-content-center">
 			<div>
 				<div class="card my-3 border-primary border-3 custom-width-desktop">
 					<div class="card-body">
 						<p class="card-text m-0">
-							<span class='fs-1 fw-normal'>{{ listeRetourNT.retour_NT.REF_MORIN }}</span>
+							<span class='fs-1 fw-normal'>NT00{{ listeRetourNT.commande_id }}</span>
 						</p>
-						<input type="hidden" value="{{ listeRetourNT.retour_NT.ID }}" name="cmd_id"/>
+						<input type="hidden" value="{{ listeRetourNT.commande_id }}" name="cmd_id"/>
 						<p class="card-text m-0">
-							<span class='fs-1 fw-normal'>{{ listeRetourNT.retour_NT.CLIENT.NOM}}
-								{{ listeRetourNT.retour_NT.CLIENT.PRENOM}}</span>
+							<span class='fs-1 fw-normal'>{{ listeRetourNT.nom_client}}
+								{{ listeRetourNT.prenom_client}}</span>
 						</p>
-						<input type="hidden" value="{{ listeRetourNT.retour_NT.CLIENT.NOM }}" name="cmd_nom_client"/>
-						<input type="hidden" value="{{ listeRetourNT.retour_NT.CLIENT.PRENOM }}" name="cmd_prenom_client"/>
+						<input type="hidden" value="{{ listeRetourNT.nom_client }}" name="cmd_nom_client"/>
+						<input type="hidden" value="{{ listeRetourNT.prenom_client }}" name="cmd_prenom_client"/>
 						<p class="card-text m-0">
-							<span class='fs-1 fw-normal'>{{ listeRetourNT.retour_NT.TRANSPORTEUR.LIBELLE }}</span>
+							<span class='fs-1 fw-normal'>{{ listeRetourNT.transporteur }}</span>
 						</p>
-						<input type="hidden" value="{{ listeRetourNT.retour_NT.TRANSPORTEUR.LIBELLE }}" name="cmd_transpoteur"/>
-						{% for produit in listeRetourNT.produits_NT.0 %}
+						<input type="hidden" value="{{ listeRetourNT.transporteur }}" name="cmd_transpoteur"/>
+						{% for produit in listeRetourNT.produits %}
 							{% if produit.COMPOSANTS is not defined %}
 								<p class="card-text m-0">
 									<span class='fs-1 fw-normal'>{{ produit.ID_PRODUIT }}

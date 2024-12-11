@@ -6,7 +6,7 @@ use App\Entity\Stock;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class StockCrudController extends AbstractCrudController
@@ -24,6 +24,7 @@ class StockCrudController extends AbstractCrudController
             IntegerField::new('id_produit'),
             IntegerField::new('quantite'),
             TextField::new('code_couleur'),
+            DateTimeField::new('date_reception')
         ];
     }
     

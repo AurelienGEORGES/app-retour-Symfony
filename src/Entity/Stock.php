@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\StockRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: StockRepository::class)]
 class Stock
@@ -14,12 +15,15 @@ class Stock
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column]
     private ?int $id_produit = null;
 
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $quantite = null;
 
+    #[Assert\Choice(['vert', 'jaune', 'orange', 'rouge', 'noir', 'SAV'])]
     #[ORM\Column(length: 10)]
     private ?string $code_couleur = null;
 

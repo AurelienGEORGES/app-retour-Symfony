@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Dompdf\Dompdf;
 use Twig\Environment;
-use App\Entity\Palette;
+use App\Entity\Camion;
 use App\Entity\PaletteProduit;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,87 +18,76 @@ class PdfController extends AbstractController
     public function generatePdf(Request $request, Environment $twig, EntityManagerInterface $entityManager): Response
     {
 
-        // Validate and process form data (optional)
-        $formData = $request->request->all();
+        if ($request->isMethod('POST') && !empty($request->request->get('depot-camion'))) {
+            $formData = $request->request->all();
 
-        // Extract relevant data for PDF generation
-        $depot = $formData['fixer-depot'];
-        $statut = $formData['fixer-statut'];
-        $numeroPalette = $formData['numero-palette-pdf'];
-        $codeCouleur = $formData['pdf-code-couleur'];
-        $produits = []; // Array to store product data
+            $depot = $formData['depot-camion'];
+            $idCamion = $formData['id-camion'];
 
-        // Process product data (assuming an ID-quantity format)
-        foreach ($formData['pdf-id-produit'] as $key => $idProduit) {
-            $produits[] = [
-                'idProduit' => $idProduit,
-                'quantite' => $formData['pdf-quantite'][$key],
-                'codeCouleur' => $formData['id-produit']
-            ];
+            $camion = $entityManager->getRepository(Camion::class)->find($idCamion);
+            $palettesCamion = $camion->getCamionPalettes();
+            $palettesCamion->initialize(); 
+            $palette = [];
+            foreach ($palettesCamion as $paletteCamion) {
+                $palette = $paletteCamion->getPalette();
+                $paletteProduits = $palette->getPaletteProduits();
+                $paletteProduits->initialize();
+                $numeroPalette = $palette->getId();
+                foreach ($paletteProduits as $paletteProduit) {
+                    $produits[$numeroPalette][] = [
+                        'idProduit' => $paletteProduit->getIdProduit(),
+                        'quantite' => $paletteProduit->getQuantite(),
+                        'codeCouleur' => $paletteProduit->getCodeCouleur(),
+                        'idProduitAarchiver' => $paletteProduit->getId()
+                    ];
+                }
+            }
+
+            $html = $twig->render('pdf/index.html.twig', [
+                'depot' => $depot,
+                'codeCouleur' => $camion->getCouleur(),
+                'produits' => $produits,
+                'numero' => $idCamion
+            ]);
+
+            $dompdf = new Dompdf();
+            $dompdf->loadHtml($html);
+            $dompdf->render();
+
+            $currentDate = new \DateTime();
+            $camion->setDateE($currentDate);
+            $camion->setStatut('envoye');
+            $camion->setDepot($depot);
+            $entityManager->persist($camion);
+            $entityManager->flush();    
         }
-
-        foreach ($formData['id-produit'] as $idProduitAarchiver) {
-            $produitsAarchiver[] = [
-                'idProduitAarchiver' => $idProduitAarchiver,
-            ];
-        }
-
-        // Generate PDF content (replace with your actual logic)
-        $html = $twig->render('pdf/index.html.twig', [
-            'depot' => $depot,
-            'codeCouleur' => $codeCouleur,
-            'produits' => $produits,
-            'numero' => $numeroPalette
-        ]);
-
-        // Generate the PDF
-        $dompdf = new Dompdf();
-        $dompdf->loadHtml($html);
-        $dompdf->render();
-
-        $palette = $entityManager->getRepository(Palette::class)->find($numeroPalette);
-        $statutPalette = $palette->getStatut();
-        $depotPalette = $palette->getDepot();
-        $currentDate = new \DateTime();
-        if ($statut == 'terminée' && $statutPalette !== $statut) {
-            $palette->setDateTermine($currentDate);
-            $palette->setStatut($statut);
-        }
-        if ($statut == 'transmise' && $statutPalette !== $statut) {
-            $palette->setDateTransmise($currentDate);
-            $palette->setStatut($statut);
-        }
-        if ($depot !== $depotPalette) {
-            $palette->setDepot($depot);
-        }
-        $entityManager->persist($palette);
-        $entityManager->flush();
 
         $this->addFlash(
             'notice',
-            'La palette bien été modifiée!'
+            'Le camion a bien été envoyé!'
         );
 
-        if ($statut === 'transmise') {
+        if ($camion->getStatut() === 'envoye') {
 
-            //on archive les produits contenu dans la palette transmise
-            foreach ($produitsAarchiver as $produitAarchiver) {
-                
-                $produitAmodifierLeStatut = $entityManager->getRepository(PaletteProduit::class)->find($produitAarchiver['idProduitAarchiver']);
-                $produitAmodifierLeStatut->setStatut('archive');
-                $entityManager->persist($produitAmodifierLeStatut);
-                $entityManager->flush();
+            foreach ($produits as $paletteProduits) {
+
+                foreach ($paletteProduits as $produitAarchiver) {
+                    $produitAmodifierLeStatut = $entityManager->getRepository(PaletteProduit::class)->find($produitAarchiver['idProduitAarchiver']);
+                    $produitAmodifierLeStatut->setStatut('archive');
+                    $entityManager->persist($produitAmodifierLeStatut);
+                }
             }
+            $entityManager->flush();
 
             $response = new Response();
             $response->setContent($dompdf->output());
             $response->headers->set('Content-Type', 'application/pdf');
-            $response->headers->set('Content-Disposition', 'attachment; filename=palette_' . $numeroPalette . '_negolux.pdf');
+            $response->headers->set('Content-Disposition', 'attachment; filename=camion_' . $idCamion . '_negolux.pdf');
 
             return $response;
+            
         } else {
-            // Redirigez vers une autre page
-            return $this->redirectToRoute('app_liste_palettes');
+            return $this->redirectToRoute('app_liste_camion');
         }
     }
 }

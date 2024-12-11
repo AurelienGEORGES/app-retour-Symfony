@@ -5,14 +5,21 @@
 
 {% block body %}
 	<h1>Bordereau Negolux</h1>
-	<h2>Destination : {{ depot }}</h2>
-    <h2>couleur : {{ codeCouleur }}</h2> 
-    <h2>N° palette : {{ numero }}</h2>
-	<h2>Liste des produits : </h2>
-	{% for produit in produits %}
-		<h3>- id produit :
-			{{ produit.idProduit }}
-			* quantité
-			{{ produit.quantite }}</h3>
+	<h2>Destination :
+		{{ depot }}</h2>
+	<h2>couleur :
+		{{ codeCouleur }}</h2>
+	<h2>N° camion :
+		{{ numero }}</h2>
+	{% for numeroPalette, palette in produits %}
+		<h2>Palette N°{{ numeroPalette }}</h2>
+		<h2>Liste des produits :
+		</h2>
+		{% for produit in palette %}
+			<h3>- id produit :
+				{{ produit.idProduit }}
+				* quantité
+				{{ produit.quantite }}</h3>
+		{% endfor %}
 	{% endfor %}
 {% endblock %}

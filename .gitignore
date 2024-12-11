@@ -20,3 +20,13 @@ yarn-error.log
 !/public/uploads/photos/.gitkeep
 /public/litiges/photos/*
 !/public/litiges/photos/.gitkeep
+user.sql
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
